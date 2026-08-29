@@ -16,9 +16,18 @@ import {
 import {
   getFirestore,
   doc,
-  setDoc
+  setDoc,
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+
+// ===============================
+// FIREBASE
+// ===============================
 
 const firebaseConfig = {
   apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
@@ -30,8 +39,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 const db = getFirestore(app);
+
 const googleProvider = new GoogleAuthProvider();
 
 
@@ -75,15 +86,14 @@ window.searchVideos = function () {
     .toLowerCase()
     .trim();
 
-  document.querySelectorAll(".video-card")
-    .forEach(video => {
+  document.querySelectorAll(".video-card").forEach(video => {
 
-      const title =
-        video.dataset.title.toLowerCase();
+    const title =
+      (video.dataset.title || "").toLowerCase();
 
-      video.style.display =
-        title.includes(search) ? "" : "none";
-    });
+    video.style.display =
+      title.includes(search) ? "" : "none";
+  });
 };
 
 
@@ -154,7 +164,6 @@ document
       alert(error.message);
 
     }
-
   });
 
 
@@ -186,6 +195,7 @@ document
       );
 
       alert("Login successful! 👋");
+
       closeModals();
 
     } catch (error) {
@@ -194,7 +204,6 @@ document
       alert(error.message);
 
     }
-
   });
 
 
@@ -228,6 +237,7 @@ async function googleLogin() {
     );
 
     alert("Google Sign-In successful! 🔵");
+
     closeModals();
 
   } catch (error) {
@@ -236,7 +246,6 @@ async function googleLogin() {
     alert(error.message);
 
   }
-
 }
 
 document
@@ -282,9 +291,7 @@ function showProfile(user) {
       encodeURIComponent(
         user.displayName || "User"
       );
-
   }
-
 }
 
 function hideProfile() {
@@ -330,7 +337,6 @@ window.logoutUser = async function () {
     alert(error.message);
 
   }
-
 };
 
 
@@ -348,7 +354,9 @@ window.openChannel = function () {
   }
 
   document.getElementById("homePage").style.display = "none";
+
   document.getElementById("uploadPage").style.display = "none";
+
   document.getElementById("channelPage").style.display = "block";
 
   document.getElementById("profileMenu")
@@ -434,7 +442,9 @@ videoFile.addEventListener("change", () => {
   const file = videoFile.files[0];
 
   if (!file) {
+
     videoPreview.style.display = "none";
+
     return;
   }
 
@@ -442,47 +452,68 @@ videoFile.addEventListener("change", () => {
     URL.createObjectURL(file);
 
   videoPreview.style.display = "block";
-
 });
 
 
 // ===============================
-// CLOUDINARY UPLOAD
+// CLOUDINARY + FIRESTORE UPLOAD
 // ===============================
 
 window.previewUpload = async function () {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+
+    alert("Please login first.");
+
+    return;
+  }
 
   const file =
     videoFile.files[0];
 
   const title =
-    document.getElementById("videoTitle")
+    document
+      .getElementById("videoTitle")
       .value
       .trim();
 
   const description =
-    document.getElementById("videoDescription")
+    document
+      .getElementById("videoDescription")
       .value
       .trim();
 
   if (!file) {
+
     alert("Please select a video first.");
+
     return;
   }
 
   if (!title) {
+
     alert("Please enter a video title.");
+
     return;
   }
+
 
   const button =
     document.querySelector(".upload-btn");
 
   button.disabled = true;
-  button.textContent = "Uploading... ⏳";
+
+  button.textContent =
+    "Uploading... ⏳";
 
 
   try {
+
+    // =========================
+    // CLOUDINARY
+    // =========================
 
     const formData =
       new FormData();
@@ -500,11 +531,6 @@ window.previewUpload = async function () {
     formData.append(
       "asset_folder",
       "MiniTube"
-    );
-
-    formData.append(
-      "context",
-      `title=${title}|description=${description}`
     );
 
 
@@ -528,15 +554,45 @@ window.previewUpload = async function () {
 
       throw new Error(
         data.error?.message ||
-        "Upload failed."
+        "Cloudinary upload failed."
       );
-
     }
 
 
-    console.log(
-      "Cloudinary upload:",
-      data
+    const videoURL =
+      data.secure_url;
+
+
+    // =========================
+    // FIRESTORE
+    // =========================
+
+    await addDoc(
+      collection(db, "videos"),
+      {
+
+        title: title,
+
+        description: description,
+
+        videoURL: videoURL,
+
+        creatorName:
+          user.displayName ||
+          "MiniTube User",
+
+        creatorEmail:
+          user.email || "",
+
+        creatorUID:
+          user.uid,
+
+        creatorPhoto:
+          user.photoURL || "",
+
+        createdAt:
+          new Date().toISOString()
+      }
     );
 
 
@@ -545,14 +601,33 @@ window.previewUpload = async function () {
 
 
     alert(
-      "Video successfully uploaded to Cloudinary! 🎉"
+      "Video uploaded and saved to MiniTube! 🎉"
     );
 
 
-    console.log(
-      "Video URL:",
-      data.secure_url
-    );
+    // Clear fields
+
+    document.getElementById("videoTitle")
+      .value = "";
+
+    document.getElementById("videoDescription")
+      .value = "";
+
+    videoFile.value = "";
+
+    videoPreview.src = "";
+
+    videoPreview.style.display = "none";
+
+
+    // Load videos
+
+    await loadVideos();
+
+
+    // Go home
+
+    closeUpload();
 
 
   } catch (error) {
@@ -568,10 +643,247 @@ window.previewUpload = async function () {
 
     button.textContent =
       "🎬 Upload Video";
-
   }
-
 };
+
+
+// ===============================
+// LOAD VIDEOS FROM FIRESTORE
+// ===============================
+
+async function loadVideos() {
+
+  const videoGrid =
+    document.getElementById("videoGrid");
+
+  if (!videoGrid) return;
+
+
+  try {
+
+    const videosQuery =
+      query(
+        collection(db, "videos"),
+        orderBy("createdAt", "desc")
+      );
+
+    const snapshot =
+      await getDocs(videosQuery);
+
+
+    snapshot.forEach(videoDoc => {
+
+      const video =
+        videoDoc.data();
+
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "video-card";
+
+      card.dataset.title =
+        video.title || "";
+
+
+      card.innerHTML = `
+
+        <div class="thumbnail">
+
+          <video
+            src="${video.videoURL}"
+            muted
+            preload="metadata"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+            "
+          ></video>
+
+        </div>
+
+        <div class="video-info">
+
+          <div class="channel-avatar">
+
+            ${
+              video.creatorName
+                ? video.creatorName
+                    .charAt(0)
+                    .toUpperCase()
+                : "M"
+            }
+
+          </div>
+
+          <div>
+
+            <h3>
+              ${escapeHTML(video.title || "Untitled Video")}
+            </h3>
+
+            <p>
+              ${escapeHTML(video.creatorName || "MiniTube Creator")}
+            </p>
+
+            <p>
+              MiniTube • Uploaded recently
+            </p>
+
+          </div>
+
+        </div>
+      `;
+
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          openVideoPlayer(
+            video.videoURL,
+            video.title,
+            video.description,
+            video.creatorName
+          );
+
+        }
+      );
+
+
+      videoGrid.prepend(card);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Could not load videos:",
+      error
+    );
+  }
+}
+
+
+// ===============================
+// VIDEO PLAYER
+// ===============================
+
+function openVideoPlayer(
+  url,
+  title,
+  description,
+  creator
+) {
+
+  const player =
+    document.createElement("div");
+
+  player.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    z-index:5000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  `;
+
+
+  player.innerHTML = `
+
+    <div style="
+      width:95%;
+      max-width:900px;
+      background:white;
+      border-radius:15px;
+      padding:20px;
+      position:relative;
+    ">
+
+      <button
+        id="closePlayer"
+        style="
+          position:absolute;
+          right:15px;
+          top:10px;
+          border:none;
+          background:none;
+          font-size:30px;
+          cursor:pointer;
+        "
+      >
+        ×
+      </button>
+
+
+      <video
+        src="${url}"
+        controls
+        autoplay
+        style="
+          width:100%;
+          max-height:70vh;
+          background:black;
+          border-radius:10px;
+        "
+      ></video>
+
+
+      <h2 style="margin-top:15px;">
+        ${escapeHTML(title || "Video")}
+      </h2>
+
+
+      <p style="
+        margin-top:8px;
+        color:#666;
+      ">
+        ${escapeHTML(creator || "MiniTube Creator")}
+      </p>
+
+
+      <p style="
+        margin-top:10px;
+      ">
+        ${escapeHTML(description || "")}
+      </p>
+
+    </div>
+  `;
+
+
+  document.body.appendChild(player);
+
+
+  document
+    .getElementById("closePlayer")
+    .onclick = () => {
+
+      player.remove();
+
+    };
+}
+
+
+// ===============================
+// SECURITY HELPER
+// ===============================
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text;
+
+  return div.innerHTML;
+}
 
 
 // ===============================
@@ -602,3 +914,10 @@ onAuthStateChanged(
 
   }
 );
+
+
+// ===============================
+// LOAD SAVED VIDEOS
+// ===============================
+
+loadVideos();
