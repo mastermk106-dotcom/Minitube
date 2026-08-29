@@ -1,5 +1,5 @@
 // ==========================================
-// FIREBASE IMPORTS
+// FIREBASE
 // ==========================================
 
 import {
@@ -24,36 +24,39 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-// ==========================================
-// FIREBASE CONFIG
-// ==========================================
-
 const firebaseConfig = {
+
   apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
-  authDomain: "minitube-9317a.firebaseapp.com",
-  projectId: "minitube-9317a",
-  storageBucket: "minitube-9317a.firebasestorage.app",
-  messagingSenderId: "176876768704",
-  appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
+
+  authDomain:
+    "minitube-9317a.firebaseapp.com",
+
+  projectId:
+    "minitube-9317a",
+
+  storageBucket:
+    "minitube-9317a.firebasestorage.app",
+
+  messagingSenderId:
+    "176876768704",
+
+  appId:
+    "1:176876768704:web:051bd6a6ba27325e22cc25"
+
 };
 
 
-// ==========================================
-// FIREBASE INITIALIZE
-// ==========================================
+const app =
+  initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
+const auth =
+  getAuth(app);
 
-const auth = getAuth(app);
-
-const db = getFirestore(app);
+const db =
+  getFirestore(app);
 
 const googleProvider =
   new GoogleAuthProvider();
-
-console.log(
-  "Firebase connected successfully! 🔥"
-);
 
 
 // ==========================================
@@ -62,12 +65,10 @@ console.log(
 
 window.openLogin = function () {
 
-  document
-    .getElementById("signupModal")
+  document.getElementById("signupModal")
     .style.display = "none";
 
-  document
-    .getElementById("loginModal")
+  document.getElementById("loginModal")
     .style.display = "flex";
 
 };
@@ -75,12 +76,10 @@ window.openLogin = function () {
 
 window.openSignup = function () {
 
-  document
-    .getElementById("loginModal")
+  document.getElementById("loginModal")
     .style.display = "none";
 
-  document
-    .getElementById("signupModal")
+  document.getElementById("signupModal")
     .style.display = "flex";
 
 };
@@ -88,28 +87,22 @@ window.openSignup = function () {
 
 window.closeModals = function () {
 
-  document
-    .getElementById("loginModal")
+  document.getElementById("loginModal")
     .style.display = "none";
 
-  document
-    .getElementById("signupModal")
+  document.getElementById("signupModal")
     .style.display = "none";
 
 };
 
 
 window.switchToSignup = function () {
-
   openSignup();
-
 };
 
 
 window.switchToLogin = function () {
-
   openLogin();
-
 };
 
 
@@ -120,18 +113,13 @@ window.switchToLogin = function () {
 window.searchVideos = function () {
 
   const search =
-    document
-      .getElementById("searchInput")
+    document.getElementById("searchInput")
       .value
       .toLowerCase()
       .trim();
 
-
   const videos =
-    document.querySelectorAll(
-      ".video-card"
-    );
-
+    document.querySelectorAll(".video-card");
 
   videos.forEach(video => {
 
@@ -139,16 +127,10 @@ window.searchVideos = function () {
       video.dataset.title
         .toLowerCase();
 
-
-    if (title.includes(search)) {
-
-      video.style.display = "";
-
-    } else {
-
-      video.style.display = "none";
-
-    }
+    video.style.display =
+      title.includes(search)
+        ? ""
+        : "none";
 
   });
 
@@ -156,199 +138,173 @@ window.searchVideos = function () {
 
 
 // ==========================================
-// EMAIL SIGNUP
+// SIGNUP
 // ==========================================
 
 document
   .getElementById("signupBtn")
-  .addEventListener(
-    "click",
-    async () => {
+  .addEventListener("click", async () => {
 
-      const name =
-        document
-          .getElementById("signupName")
-          .value
-          .trim();
+    const name =
+      document.getElementById("signupName")
+        .value
+        .trim();
 
+    const username =
+      document.getElementById("signupUsername")
+        .value
+        .trim();
 
-      const username =
-        document
-          .getElementById("signupUsername")
-          .value
-          .trim();
+    const email =
+      document.getElementById("signupEmail")
+        .value
+        .trim();
 
-
-      const email =
-        document
-          .getElementById("signupEmail")
-          .value
-          .trim();
+    const password =
+      document.getElementById("signupPassword")
+        .value;
 
 
-      const password =
-        document
-          .getElementById("signupPassword")
-          .value;
+    if (
+      !name ||
+      !username ||
+      !email ||
+      !password
+    ) {
 
+      alert(
+        "Please fill all fields."
+      );
 
-      if (
-        !name ||
-        !username ||
-        !email ||
-        !password
-      ) {
-
-        alert(
-          "Please fill all fields."
-        );
-
-        return;
-
-      }
-
-
-      if (password.length < 6) {
-
-        alert(
-          "Password must be at least 6 characters."
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        const result =
-          await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-
-        const user =
-          result.user;
-
-
-        await updateProfile(
-          user,
-          {
-            displayName: name
-          }
-        );
-
-
-        await setDoc(
-          doc(
-            db,
-            "users",
-            user.uid
-          ),
-          {
-
-            name: name,
-
-            username: username,
-
-            email: email,
-
-            uid: user.uid,
-
-            photoURL: "",
-
-            createdAt:
-              new Date().toISOString()
-
-          }
-        );
-
-
-        alert(
-          "Account created successfully! 🎉"
-        );
-
-
-        closeModals();
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-        alert(error.message);
-
-      }
-
+      return;
     }
-  );
 
 
-// ==========================================
-// EMAIL LOGIN
-// ==========================================
+    if (password.length < 6) {
 
-document
-  .getElementById("loginBtn")
-  .addEventListener(
-    "click",
-    async () => {
+      alert(
+        "Password must be at least 6 characters."
+      );
 
-      const email =
-        document
-          .getElementById("loginEmail")
-          .value
-          .trim();
+      return;
+    }
 
 
-      const password =
-        document
-          .getElementById("loginPassword")
-          .value;
+    try {
 
-
-      if (!email || !password) {
-
-        alert(
-          "Please enter email and password."
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        await signInWithEmailAndPassword(
+      const result =
+        await createUserWithEmailAndPassword(
           auth,
           email,
           password
         );
 
 
-        alert(
-          "Login successful! 👋"
-        );
+      const user =
+        result.user;
 
 
-        closeModals();
+      await updateProfile(
+        user,
+        {
+          displayName: name
+        }
+      );
 
-      }
 
-      catch (error) {
+      await setDoc(
+        doc(
+          db,
+          "users",
+          user.uid
+        ),
+        {
 
-        console.error(error);
+          name,
+          username,
+          email,
+          uid: user.uid,
+          photoURL: "",
+          createdAt:
+            new Date().toISOString()
 
-        alert(error.message);
+        }
+      );
 
-      }
+
+      alert(
+        "Account created successfully! 🎉"
+      );
+
+      closeModals();
 
     }
-  );
+
+    catch (error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+document
+  .getElementById("loginBtn")
+  .addEventListener("click", async () => {
+
+    const email =
+      document.getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+      document.getElementById("loginPassword")
+        .value;
+
+
+    if (!email || !password) {
+
+      alert(
+        "Please enter email and password."
+      );
+
+      return;
+    }
+
+
+    try {
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+      alert(
+        "Login successful! 👋"
+      );
+
+      closeModals();
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+    }
+
+  });
 
 
 // ==========================================
@@ -365,7 +321,6 @@ async function googleLogin() {
         googleProvider
       );
 
-
     const user =
       result.user;
 
@@ -381,8 +336,7 @@ async function googleLogin() {
         name:
           user.displayName || "",
 
-        username:
-          "",
+        username: "",
 
         email:
           user.email || "",
@@ -397,18 +351,15 @@ async function googleLogin() {
           new Date().toISOString()
 
       },
-
       {
         merge: true
       }
-
     );
 
 
     alert(
       "Google Sign-In successful! 🔵"
     );
-
 
     closeModals();
 
@@ -447,63 +398,45 @@ document
 
 function showProfile(user) {
 
-  const headerButtons =
-    document.getElementById(
-      "headerButtons"
-    );
+  document.getElementById(
+    "headerButtons"
+  ).style.display = "none";
 
 
-  const profileArea =
-    document.getElementById(
-      "profileArea"
-    );
+  document.getElementById(
+    "profileArea"
+  ).style.display = "block";
 
 
-  const profilePhoto =
+  document.getElementById(
+    "profileName"
+  ).textContent =
+    user.displayName ||
+    "MiniTube User";
+
+
+  document.getElementById(
+    "profileEmail"
+  ).textContent =
+    user.email || "";
+
+
+  const photo =
     document.getElementById(
       "profilePhoto"
     );
 
 
-  const profileName =
-    document.getElementById(
-      "profileName"
-    );
-
-
-  const profileEmail =
-    document.getElementById(
-      "profileEmail"
-    );
-
-
-  headerButtons.style.display =
-    "none";
-
-
-  profileArea.style.display =
-    "block";
-
-
-  profileName.textContent =
-    user.displayName ||
-    "MiniTube User";
-
-
-  profileEmail.textContent =
-    user.email || "";
-
-
   if (user.photoURL) {
 
-    profilePhoto.src =
+    photo.src =
       user.photoURL;
 
   }
 
   else {
 
-    profilePhoto.src =
+    photo.src =
       "https://ui-avatars.com/api/?name=" +
       encodeURIComponent(
         user.displayName ||
@@ -515,24 +448,16 @@ function showProfile(user) {
 }
 
 
-// ==========================================
-// HIDE PROFILE
-// ==========================================
-
 function hideProfile() {
 
-  document
-    .getElementById(
-      "headerButtons"
-    )
-    .style.display = "flex";
+  document.getElementById(
+    "headerButtons"
+  ).style.display = "flex";
 
 
-  document
-    .getElementById(
-      "profileArea"
-    )
-    .style.display = "none";
+  document.getElementById(
+    "profileArea"
+  ).style.display = "none";
 
 }
 
@@ -543,20 +468,13 @@ function hideProfile() {
 
 document
   .getElementById("profilePhoto")
-  .addEventListener(
-    "click",
-    () => {
+  .addEventListener("click", () => {
 
-      document
-        .getElementById(
-          "profileMenu"
-        )
-        .classList.toggle(
-          "show"
-        );
+    document
+      .getElementById("profileMenu")
+      .classList.toggle("show");
 
-    }
-  );
+  });
 
 
 // ==========================================
@@ -568,16 +486,6 @@ window.logoutUser = async function () {
   try {
 
     await signOut(auth);
-
-
-    document
-      .getElementById(
-        "profileMenu"
-      )
-      .classList.remove(
-        "show"
-      );
-
 
     alert(
       "Logged out successfully! 👋"
@@ -597,7 +505,7 @@ window.logoutUser = async function () {
 
 
 // ==========================================
-// CHANNEL PAGE
+// CHANNEL
 // ==========================================
 
 window.openChannel = function () {
@@ -617,69 +525,60 @@ window.openChannel = function () {
   }
 
 
-  document
-    .getElementById(
-      "homePage"
-    )
-    .style.display = "none";
+  document.getElementById(
+    "homePage"
+  ).style.display = "none";
 
 
-  document
-    .getElementById(
-      "channelPage"
-    )
-    .style.display = "block";
+  document.getElementById(
+    "uploadPage"
+  ).style.display = "none";
 
 
-  document
-    .getElementById(
-      "profileMenu"
-    )
-    .classList.remove(
-      "show"
+  document.getElementById(
+    "channelPage"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "profileMenu"
+  ).classList.remove("show");
+
+
+  document.getElementById(
+    "channelName"
+  ).textContent =
+    user.displayName ||
+    "MiniTube User";
+
+
+  document.getElementById(
+    "channelEmail"
+  ).textContent =
+    user.email || "";
+
+
+  const photo =
+    document.getElementById(
+      "channelPhoto"
     );
-
-
-  document
-    .getElementById(
-      "channelName"
-    )
-    .textContent =
-      user.displayName ||
-      "MiniTube User";
-
-
-  document
-    .getElementById(
-      "channelEmail"
-    )
-    .textContent =
-      user.email || "";
 
 
   if (user.photoURL) {
 
-    document
-      .getElementById(
-        "channelPhoto"
-      )
-      .src =
-        user.photoURL;
+    photo.src =
+      user.photoURL;
 
   }
 
   else {
 
-    document
-      .getElementById(
-        "channelPhoto"
-      )
-      .src =
-        "https://ui-avatars.com/api/?name=" +
-        encodeURIComponent(
-          user.displayName ||
-          "User"
-        );
+    photo.src =
+      "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(
+        user.displayName ||
+        "User"
+      );
 
   }
 
@@ -688,18 +587,165 @@ window.openChannel = function () {
 
 window.closeChannel = function () {
 
-  document
-    .getElementById(
-      "channelPage"
-    )
-    .style.display = "none";
+  document.getElementById(
+    "channelPage"
+  ).style.display = "none";
 
 
-  document
-    .getElementById(
-      "homePage"
-    )
-    .style.display = "block";
+  document.getElementById(
+    "homePage"
+  ).style.display = "block";
+
+};
+
+
+// ==========================================
+// UPLOAD PAGE
+// ==========================================
+
+window.openUpload = function () {
+
+  const user =
+    auth.currentUser;
+
+
+  if (!user) {
+
+    alert(
+      "Please login first."
+    );
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "homePage"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "channelPage"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "uploadPage"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "profileMenu"
+  ).classList.remove("show");
+
+};
+
+
+window.closeUpload = function () {
+
+  document.getElementById(
+    "uploadPage"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "homePage"
+  ).style.display = "block";
+
+};
+
+
+// ==========================================
+// VIDEO PREVIEW
+// ==========================================
+
+const videoFile =
+  document.getElementById(
+    "videoFile"
+  );
+
+
+const videoPreview =
+  document.getElementById(
+    "videoPreview"
+  );
+
+
+videoFile.addEventListener(
+  "change",
+  () => {
+
+    const file =
+      videoFile.files[0];
+
+
+    if (!file) {
+
+      videoPreview.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    const videoURL =
+      URL.createObjectURL(file);
+
+
+    videoPreview.src =
+      videoURL;
+
+
+    videoPreview.style.display =
+      "block";
+
+  }
+);
+
+
+// ==========================================
+// PREVIEW UPLOAD
+// ==========================================
+
+window.previewUpload = function () {
+
+  const file =
+    videoFile.files[0];
+
+
+  const title =
+    document.getElementById(
+      "videoTitle"
+    ).value.trim();
+
+
+  if (!file) {
+
+    alert(
+      "Please select a video first."
+    );
+
+    return;
+
+  }
+
+
+  if (!title) {
+
+    alert(
+      "Please enter a video title."
+    );
+
+    return;
+
+  }
+
+
+  alert(
+    "Video preview is ready! 🎬\n\nActual online upload will be added when we connect a free video-storage service."
+  );
 
 };
 
@@ -710,15 +756,9 @@ window.closeChannel = function () {
 
 onAuthStateChanged(
   auth,
-  (user) => {
+  user => {
 
     if (user) {
-
-      console.log(
-        "Logged in:",
-        user.email
-      );
-
 
       showProfile(user);
 
@@ -726,26 +766,19 @@ onAuthStateChanged(
 
     else {
 
-      console.log(
-        "No user logged in."
-      );
-
-
       hideProfile();
 
+      document.getElementById(
+        "channelPage"
+      ).style.display = "none";
 
-      document
-        .getElementById(
-          "channelPage"
-        )
-        .style.display = "none";
+      document.getElementById(
+        "uploadPage"
+      ).style.display = "none";
 
-
-      document
-        .getElementById(
-          "homePage"
-        )
-        .style.display = "block";
+      document.getElementById(
+        "homePage"
+      ).style.display = "block";
 
     }
 
