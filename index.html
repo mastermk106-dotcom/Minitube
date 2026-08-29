@@ -28,13 +28,22 @@
       <button onclick="searchVideos()">🔍</button>
     </div>
 
+    <!-- LOGIN / SIGNUP -->
     <div class="header-buttons" id="headerButtons">
-      <button class="login-btn" onclick="openLogin()">Login</button>
-      <button class="signup-btn" onclick="openSignup()">Sign Up</button>
+
+      <button class="login-btn" onclick="openLogin()">
+        Login
+      </button>
+
+      <button class="signup-btn" onclick="openSignup()">
+        Sign Up
+      </button>
+
     </div>
 
+
     <!-- PROFILE -->
-    <div class="profile-area" id="profileArea" style="display:none;">
+    <div class="profile-area" id="profileArea">
 
       <img
         id="profilePhoto"
@@ -43,15 +52,28 @@
         alt="Profile"
       >
 
-      <div class="profile-menu" id="profileMenu">
+      <div
+        class="profile-menu"
+        id="profileMenu"
+      >
 
-        <div class="profile-name" id="profileName">
+        <div
+          class="profile-name"
+          id="profileName"
+        >
           User
         </div>
 
-        <div class="profile-email" id="profileEmail">
+        <div
+          class="profile-email"
+          id="profileEmail"
+        >
           user@email.com
         </div>
+
+        <button onclick="openChannel()">
+          👤 My Channel
+        </button>
 
         <button onclick="logoutUser()">
           🚪 Logout
@@ -64,11 +86,12 @@
   </header>
 
 
-  <!-- MAIN -->
-  <main>
+  <!-- MAIN HOME -->
+  <main id="homePage">
 
     <!-- CATEGORY BAR -->
     <div class="categories">
+
       <button class="active">All</button>
       <button>Gaming</button>
       <button>Islamic</button>
@@ -77,6 +100,7 @@
       <button>Sports</button>
       <button>News</button>
       <button>Music</button>
+
     </div>
 
 
@@ -84,16 +108,23 @@
     <section class="hero">
 
       <div>
-        <h1>Welcome to MiniTube 🎬</h1>
+
+        <h1>
+          Welcome to MiniTube 🎬
+        </h1>
 
         <p>
           Watch, upload and share your favorite videos.
           Create your own channel and become a MiniTube creator.
         </p>
 
-        <button class="start-btn" onclick="openSignup()">
+        <button
+          class="start-btn"
+          onclick="openSignup()"
+        >
           Get Started
         </button>
+
       </div>
 
     </section>
@@ -103,76 +134,162 @@
     <section class="video-section">
 
       <div class="section-title">
-        <h2>🔥 Recommended Videos</h2>
+        <h2>
+          🔥 Recommended Videos
+        </h2>
       </div>
 
-      <div class="video-grid" id="videoGrid">
 
-        <div class="video-card" data-title="Amazing Gaming Video">
+      <div
+        class="video-grid"
+        id="videoGrid"
+      >
+
+        <!-- VIDEO 1 -->
+        <div
+          class="video-card"
+          data-title="Amazing Gaming Video"
+        >
+
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-            <div class="channel-avatar">M</div>
+
+            <div class="channel-avatar">
+              M
+            </div>
 
             <div>
-              <h3>Amazing Gaming Video 🎮</h3>
-              <p>Mini Gamer</p>
-              <p>12K views • 2 days ago</p>
+
+              <h3>
+                Amazing Gaming Video 🎮
+              </h3>
+
+              <p>
+                Mini Gamer
+              </p>
+
+              <p>
+                12K views • 2 days ago
+              </p>
+
             </div>
+
           </div>
+
         </div>
 
 
-        <div class="video-card" data-title="Beautiful Islamic Reminder">
+        <!-- VIDEO 2 -->
+        <div
+          class="video-card"
+          data-title="Beautiful Islamic Reminder"
+        >
+
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-            <div class="channel-avatar">I</div>
+
+            <div class="channel-avatar">
+              I
+            </div>
 
             <div>
-              <h3>Beautiful Islamic Reminder 🕌</h3>
-              <p>Islamic Channel</p>
-              <p>25K views • 1 day ago</p>
+
+              <h3>
+                Beautiful Islamic Reminder 🕌
+              </h3>
+
+              <p>
+                Islamic Channel
+              </p>
+
+              <p>
+                25K views • 1 day ago
+              </p>
+
             </div>
+
           </div>
+
         </div>
 
 
-        <div class="video-card" data-title="Learn Something New">
+        <!-- VIDEO 3 -->
+        <div
+          class="video-card"
+          data-title="Learn Something New"
+        >
+
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-            <div class="channel-avatar">E</div>
+
+            <div class="channel-avatar">
+              E
+            </div>
 
             <div>
-              <h3>Learn Something New 📚</h3>
-              <p>Knowledge Hub</p>
-              <p>8K views • 5 hours ago</p>
+
+              <h3>
+                Learn Something New 📚
+              </h3>
+
+              <p>
+                Knowledge Hub
+              </p>
+
+              <p>
+                8K views • 5 hours ago
+              </p>
+
             </div>
+
           </div>
+
         </div>
 
 
-        <div class="video-card" data-title="Best Football Moments">
+        <!-- VIDEO 4 -->
+        <div
+          class="video-card"
+          data-title="Best Football Moments"
+        >
+
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-            <div class="channel-avatar">S</div>
+
+            <div class="channel-avatar">
+              S
+            </div>
 
             <div>
-              <h3>Best Football Moments ⚽</h3>
-              <p>Sports World</p>
-              <p>45K views • 3 days ago</p>
+
+              <h3>
+                Best Football Moments ⚽
+              </h3>
+
+              <p>
+                Sports World
+              </p>
+
+              <p>
+                45K views • 3 days ago
+              </p>
+
             </div>
+
           </div>
+
         </div>
 
       </div>
@@ -182,14 +299,111 @@
   </main>
 
 
+  <!-- CHANNEL PAGE -->
+  <section
+    class="channel-page"
+    id="channelPage"
+  >
+
+    <button
+      class="back-btn"
+      onclick="closeChannel()"
+    >
+      ← Back to MiniTube
+    </button>
+
+
+    <!-- CHANNEL HEADER -->
+    <div class="channel-header">
+
+      <img
+        id="channelPhoto"
+        class="channel-photo"
+        src=""
+        alt="Channel Photo"
+      >
+
+
+      <div class="channel-details">
+
+        <h1 id="channelName">
+          MiniTube User
+        </h1>
+
+        <p id="channelUsername">
+          @username
+        </p>
+
+        <p id="channelEmail">
+          user@email.com
+        </p>
+
+        <p class="channel-stats">
+          🎬 0 videos
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- CHANNEL TABS -->
+    <div class="channel-tabs">
+
+      <button class="active">
+        Videos
+      </button>
+
+      <button>
+        Shorts
+      </button>
+
+      <button>
+        About
+      </button>
+
+    </div>
+
+
+    <!-- EMPTY CHANNEL -->
+    <div class="empty-channel">
+
+      <div class="empty-icon">
+        📹
+      </div>
+
+      <h2>
+        No videos yet
+      </h2>
+
+      <p>
+        Upload your first video and start your MiniTube channel!
+      </p>
+
+    </div>
+
+  </section>
+
+
   <!-- LOGIN POPUP -->
-  <div class="modal" id="loginModal">
+  <div
+    class="modal"
+    id="loginModal"
+  >
 
     <div class="modal-box">
 
-      <button class="close" onclick="closeModals()">×</button>
+      <button
+        class="close"
+        onclick="closeModals()"
+      >
+        ×
+      </button>
 
-      <h2>Login to MiniTube</h2>
+      <h2>
+        Login to MiniTube
+      </h2>
+
 
       <input
         type="email"
@@ -197,23 +411,37 @@
         placeholder="Email"
       >
 
+
       <input
         type="password"
         id="loginPassword"
         placeholder="Password"
       >
 
-      <button class="modal-btn" id="loginBtn">
+
+      <button
+        class="modal-btn"
+        id="loginBtn"
+      >
         Login
       </button>
 
-      <button class="modal-btn" id="googleLoginBtn">
+
+      <button
+        class="modal-btn google-btn"
+        id="googleLoginBtn"
+      >
         🔵 Continue with Google
       </button>
 
+
       <p>
         Don't have an account?
-        <span onclick="switchToSignup()">Sign Up</span>
+
+        <span onclick="switchToSignup()">
+          Sign Up
+        </span>
+
       </p>
 
     </div>
@@ -222,13 +450,24 @@
 
 
   <!-- SIGNUP POPUP -->
-  <div class="modal" id="signupModal">
+  <div
+    class="modal"
+    id="signupModal"
+  >
 
     <div class="modal-box">
 
-      <button class="close" onclick="closeModals()">×</button>
+      <button
+        class="close"
+        onclick="closeModals()"
+      >
+        ×
+      </button>
 
-      <h2>Create MiniTube Account</h2>
+      <h2>
+        Create MiniTube Account
+      </h2>
+
 
       <input
         type="text"
@@ -236,11 +475,13 @@
         placeholder="Your Name"
       >
 
+
       <input
         type="text"
         id="signupUsername"
         placeholder="Choose Username"
       >
+
 
       <input
         type="email"
@@ -248,23 +489,38 @@
         placeholder="Email"
       >
 
+
       <input
         type="password"
         id="signupPassword"
         placeholder="Create Password"
       >
 
-      <button class="modal-btn" id="signupBtn">
+
+      <button
+        class="modal-btn"
+        id="signupBtn"
+      >
         Create Account
       </button>
 
-      <button class="modal-btn" id="googleSignupBtn">
+
+      <button
+        class="modal-btn google-btn"
+        id="googleSignupBtn"
+      >
         🔵 Sign up with Google
       </button>
 
+
       <p>
+
         Already have an account?
-        <span onclick="switchToLogin()">Login</span>
+
+        <span onclick="switchToLogin()">
+          Login
+        </span>
+
       </p>
 
     </div>
@@ -273,7 +529,10 @@
 
 
   <!-- FIREBASE SCRIPT -->
-  <script type="module" src="script.js"></script>
+  <script
+    type="module"
+    src="script.js"
+  ></script>
 
 </body>
 </html>
