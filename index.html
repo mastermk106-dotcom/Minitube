@@ -1,499 +1,556 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #111;
-}
-
-/* HEADER */
-
-.header {
-  height: 70px;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-  border-bottom: 1px solid #ddd;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 25px;
-  font-weight: bold;
-  color: #ff0000;
-}
-
-.logo-icon {
-  background: #ff0000;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 8px;
-}
-
-
-/* SEARCH */
-
-.search-box {
-  display: flex;
-  width: 40%;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 12px 18px;
-  border: 1px solid #ccc;
-  border-radius: 25px 0 0 25px;
-  outline: none;
-  font-size: 15px;
-}
-
-.search-box button {
-  width: 55px;
-  border: none;
-  background: #eee;
-  border-radius: 0 25px 25px 0;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-
-/* HEADER BUTTONS */
-
-.header-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.header-buttons button,
-.start-btn,
-.modal-btn {
-  border: none;
-  padding: 11px 18px;
-  border-radius: 22px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.login-btn {
-  background: #eee;
-}
-
-.signup-btn,
-.start-btn,
-.modal-btn {
-  background: #ff0000;
-  color: white;
-}
-
-
-/* PROFILE */
-
-.profile-area {
-  display: none;
-  position: relative;
-}
-
-.profile-photo {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  object-fit: cover;
-  cursor: pointer;
-  border: 2px solid #eee;
-}
-
-.profile-menu {
-  display: none;
-  position: absolute;
-  right: 0;
-  top: 55px;
-  width: 230px;
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.18);
-  border: 1px solid #eee;
-}
-
-.profile-menu.show {
-  display: block;
-}
-
-.profile-name {
-  font-size: 17px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.profile-email {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 12px;
-  word-break: break-word;
-}
-
-.profile-menu button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
-  border: none;
-  border-radius: 8px;
-  background: #f1f1f1;
-  cursor: pointer;
-  text-align: left;
-  font-weight: bold;
-}
-
-.profile-menu button:hover {
-  background: #e5e5e5;
-}
-
-
-/* CATEGORIES */
-
-.categories {
-  display: flex;
-  gap: 10px;
-  padding: 18px 5%;
-  overflow-x: auto;
-  background: white;
-}
-
-.categories button {
-  border: none;
-  padding: 9px 17px;
-  border-radius: 20px;
-  background: #eee;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.categories button.active {
-  background: #111;
-  color: white;
-}
-
-
-/* HERO */
-
-.hero {
-  margin: 25px 5%;
-  padding: 55px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #111, #444);
-  color: white;
-}
-
-.hero h1 {
-  font-size: 42px;
-  margin-bottom: 15px;
-}
-
-.hero p {
-  max-width: 650px;
-  font-size: 17px;
-  line-height: 1.6;
-  margin-bottom: 25px;
-}
-
-
-/* VIDEOS */
-
-.video-section {
-  padding: 10px 5% 50px;
-}
-
-.section-title {
-  margin-bottom: 20px;
-}
-
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
-}
-
-.video-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.video-card:hover {
-  transform: translateY(-4px);
-}
-
-.thumbnail {
-  height: 180px;
-  background: linear-gradient(135deg, #222, #666);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 45px;
-}
-
-.video-info {
-  display: flex;
-  gap: 12px;
-  padding: 14px;
-}
-
-.video-info h3 {
-  font-size: 16px;
-  margin-bottom: 7px;
-}
-
-.video-info p {
-  color: #666;
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.channel-avatar {
-  min-width: 40px;
-  height: 40px;
-  background: #ddd;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-}
-
-
-/* CHANNEL PAGE */
-
-.channel-page {
-  display: none;
-  padding: 30px 5% 60px;
-}
-
-.back-btn {
-  border: none;
-  background: white;
-  padding: 11px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 25px;
-}
-
-.channel-header {
-  background: white;
-  border-radius: 18px;
-  padding: 30px;
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-.channel-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #eee;
-}
-
-.channel-details h1 {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.channel-details p {
-  color: #666;
-  margin-top: 7px;
-}
-
-.channel-stats {
-  font-weight: bold;
-}
-
-.channel-tabs {
-  display: flex;
-  gap: 25px;
-  background: white;
-  margin-top: 18px;
-  padding: 15px 20px;
-  border-radius: 12px;
-}
-
-.channel-tabs button {
-  border: none;
-  background: none;
-  padding: 10px 5px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.channel-tabs button.active {
-  color: #ff0000;
-  border-bottom: 3px solid #ff0000;
-}
-
-.empty-channel {
-  background: white;
-  text-align: center;
-  padding: 70px 20px;
-  margin-top: 18px;
-  border-radius: 18px;
-}
-
-.empty-icon {
-  font-size: 50px;
-  margin-bottom: 15px;
-}
-
-.empty-channel h2 {
-  margin-bottom: 10px;
-}
-
-.empty-channel p {
-  color: #666;
-}
-
-
-/* MODAL */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modal-box {
-  width: 90%;
-  max-width: 420px;
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  position: relative;
-}
-
-.modal-box h2 {
-  margin-bottom: 20px;
-}
-
-.modal-box input {
-  width: 100%;
-  padding: 13px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.modal-btn {
-  width: 100%;
-  margin-top: 5px;
-}
-
-.google-btn {
-  background: #333;
-}
-
-.modal-box p {
-  text-align: center;
-  margin-top: 18px;
-  color: #666;
-}
-
-.modal-box p span {
-  color: #ff0000;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.close {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  border: none;
-  background: none;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 900px) {
-
-  .video-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .search-box {
-    width: 35%;
-  }
-
-}
-
-
-@media (max-width: 600px) {
-
-  .header {
-    height: auto;
-    padding: 15px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .search-box {
-    width: 100%;
-    order: 3;
-  }
-
-  .header-buttons {
-    margin-left: auto;
-  }
-
-  .logo {
-    font-size: 21px;
-  }
-
-  .hero {
-    padding: 30px 20px;
-  }
-
-  .hero h1 {
-    font-size: 30px;
-  }
-
-  .video-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .channel-header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .channel-details h1 {
-    font-size: 26px;
-  }
-
-  .profile-menu {
-    right: 0;
-  }
-
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MiniTube</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="logo">
+      <span class="logo-icon">▶</span>
+      <span>MiniTube</span>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search MiniTube..."
+      >
+      <button onclick="searchVideos()">🔍</button>
+    </div>
+
+    <div class="header-buttons" id="headerButtons">
+      <button class="login-btn" onclick="openLogin()">Login</button>
+      <button class="signup-btn" onclick="openSignup()">Sign Up</button>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile-area" id="profileArea">
+
+      <img
+        id="profilePhoto"
+        class="profile-photo"
+        src=""
+        alt="Profile"
+      >
+
+      <div class="profile-menu" id="profileMenu">
+
+        <div class="profile-name" id="profileName">
+          User
+        </div>
+
+        <div class="profile-email" id="profileEmail">
+          user@email.com
+        </div>
+
+        <button onclick="openChannel()">
+          👤 My Channel
+        </button>
+
+        <button onclick="openUpload()">
+          📤 Upload Video
+        </button>
+
+        <button onclick="logoutUser()">
+          🚪 Logout
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- HOME PAGE -->
+  <main id="homePage">
+
+    <!-- CATEGORIES -->
+    <div class="categories">
+
+      <button class="active">All</button>
+      <button>Gaming</button>
+      <button>Islamic</button>
+      <button>Education</button>
+      <button>Entertainment</button>
+      <button>Sports</button>
+      <button>News</button>
+      <button>Music</button>
+
+    </div>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <h1>Welcome to MiniTube 🎬</h1>
+
+      <p>
+        Watch, upload and share your favorite videos.
+        Create your own channel and become a MiniTube creator.
+      </p>
+
+      <button
+        class="start-btn"
+        onclick="openSignup()"
+      >
+        Get Started
+      </button>
+
+    </section>
+
+
+    <!-- VIDEOS -->
+    <section class="video-section">
+
+      <div class="section-title">
+        <h2>🔥 Recommended Videos</h2>
+      </div>
+
+      <div class="video-grid" id="videoGrid">
+
+        <div
+          class="video-card"
+          data-title="Amazing Gaming Video"
+        >
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">
+              M
+            </div>
+
+            <div>
+
+              <h3>Amazing Gaming Video 🎮</h3>
+
+              <p>Mini Gamer</p>
+
+              <p>
+                12K views • 2 days ago
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="video-card"
+          data-title="Beautiful Islamic Reminder"
+        >
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">
+              I
+            </div>
+
+            <div>
+
+              <h3>
+                Beautiful Islamic Reminder 🕌
+              </h3>
+
+              <p>Islamic Channel</p>
+
+              <p>
+                25K views • 1 day ago
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="video-card"
+          data-title="Learn Something New"
+        >
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">
+              E
+            </div>
+
+            <div>
+
+              <h3>
+                Learn Something New 📚
+              </h3>
+
+              <p>Knowledge Hub</p>
+
+              <p>
+                8K views • 5 hours ago
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="video-card"
+          data-title="Best Football Moments"
+        >
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">
+              S
+            </div>
+
+            <div>
+
+              <h3>
+                Best Football Moments ⚽
+              </h3>
+
+              <p>Sports World</p>
+
+              <p>
+                45K views • 3 days ago
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- CHANNEL PAGE -->
+  <section
+    class="channel-page"
+    id="channelPage"
+  >
+
+    <button
+      class="back-btn"
+      onclick="closeChannel()"
+    >
+      ← Back to MiniTube
+    </button>
+
+
+    <div class="channel-header">
+
+      <img
+        id="channelPhoto"
+        class="channel-photo"
+        src=""
+        alt="Channel Photo"
+      >
+
+      <div class="channel-details">
+
+        <h1 id="channelName">
+          MiniTube User
+        </h1>
+
+        <p id="channelUsername">
+          @username
+        </p>
+
+        <p id="channelEmail">
+          user@email.com
+        </p>
+
+        <p class="channel-stats">
+          🎬 0 videos
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="channel-tabs">
+
+      <button class="active">
+        Videos
+      </button>
+
+      <button>
+        Shorts
+      </button>
+
+      <button>
+        About
+      </button>
+
+    </div>
+
+
+    <div class="empty-channel">
+
+      <div class="empty-icon">
+        📹
+      </div>
+
+      <h2>
+        No videos yet
+      </h2>
+
+      <p>
+        Upload your first video and start your MiniTube channel!
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- UPLOAD PAGE -->
+  <section
+    class="upload-page"
+    id="uploadPage"
+  >
+
+    <button
+      class="back-btn"
+      onclick="closeUpload()"
+    >
+      ← Back to MiniTube
+    </button>
+
+
+    <div class="upload-box">
+
+      <h1>
+        📤 Upload Video
+      </h1>
+
+      <p class="upload-note">
+        Video upload is currently available for preview only.
+      </p>
+
+
+      <label class="upload-label">
+        Select Video
+      </label>
+
+      <input
+        type="file"
+        id="videoFile"
+        accept="video/*"
+      >
+
+
+      <video
+        id="videoPreview"
+        class="video-preview"
+        controls
+        style="display:none;"
+      ></video>
+
+
+      <label class="upload-label">
+        Video Title
+      </label>
+
+      <input
+        type="text"
+        id="videoTitle"
+        class="upload-input"
+        placeholder="Enter video title"
+      >
+
+
+      <label class="upload-label">
+        Description
+      </label>
+
+      <textarea
+        id="videoDescription"
+        class="upload-input description-input"
+        placeholder="Write a description..."
+      ></textarea>
+
+
+      <button
+        class="upload-btn"
+        onclick="previewUpload()"
+      >
+        🎬 Preview Video
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- LOGIN POPUP -->
+  <div
+    class="modal"
+    id="loginModal"
+  >
+
+    <div class="modal-box">
+
+      <button
+        class="close"
+        onclick="closeModals()"
+      >
+        ×
+      </button>
+
+      <h2>
+        Login to MiniTube
+      </h2>
+
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
+
+      <button
+        class="modal-btn"
+        id="loginBtn"
+      >
+        Login
+      </button>
+
+      <button
+        class="modal-btn google-btn"
+        id="googleLoginBtn"
+      >
+        🔵 Continue with Google
+      </button>
+
+      <p>
+        Don't have an account?
+        <span onclick="switchToSignup()">
+          Sign Up
+        </span>
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SIGNUP POPUP -->
+  <div
+    class="modal"
+    id="signupModal"
+  >
+
+    <div class="modal-box">
+
+      <button
+        class="close"
+        onclick="closeModals()"
+      >
+        ×
+      </button>
+
+      <h2>
+        Create MiniTube Account
+      </h2>
+
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Your Name"
+      >
+
+      <input
+        type="text"
+        id="signupUsername"
+        placeholder="Choose Username"
+      >
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create Password"
+      >
+
+      <button
+        class="modal-btn"
+        id="signupBtn"
+      >
+        Create Account
+      </button>
+
+      <button
+        class="modal-btn google-btn"
+        id="googleSignupBtn"
+      >
+        🔵 Sign up with Google
+      </button>
+
+      <p>
+        Already have an account?
+        <span onclick="switchToLogin()">
+          Login
+        </span>
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- JAVASCRIPT -->
+  <script
+    type="module"
+    src="script.js"
+  ></script>
+
+</body>
+</html>
