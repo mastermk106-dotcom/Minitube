@@ -1,123 +1,356 @@
-// ===============================
-// MiniTube JavaScript
-// ===============================
+// ==========================================
+// FIREBASE IMPORTS
+// ==========================================
 
-// LOGIN MODAL
-function openLogin() {
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  updateProfile,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+// ==========================================
+// FIREBASE CONFIG
+// ==========================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
+  authDomain: "minitube-9317a.firebaseapp.com",
+  projectId: "minitube-9317a",
+  storageBucket: "minitube-9317a.firebasestorage.app",
+  messagingSenderId: "176876768704",
+  appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
+};
+
+
+// ==========================================
+// INITIALIZE FIREBASE
+// ==========================================
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const googleProvider = new GoogleAuthProvider();
+
+console.log("Firebase connected successfully! 🔥");
+
+
+// ==========================================
+// LOGIN / SIGNUP POPUPS
+// ==========================================
+
+window.openLogin = function () {
+
+  document.getElementById("signupModal").style.display = "none";
   document.getElementById("loginModal").style.display = "flex";
-}
 
-// SIGNUP MODAL
-function openSignup() {
+};
+
+
+window.openSignup = function () {
+
+  document.getElementById("loginModal").style.display = "none";
   document.getElementById("signupModal").style.display = "flex";
-}
 
-// CLOSE MODALS
-function closeModals() {
+};
+
+
+window.closeModals = function () {
+
   document.getElementById("loginModal").style.display = "none";
   document.getElementById("signupModal").style.display = "none";
-}
 
-// SWITCH TO SIGNUP
-function switchToSignup() {
-  document.getElementById("loginModal").style.display = "none";
-  document.getElementById("signupModal").style.display = "flex";
-}
-
-// SWITCH TO LOGIN
-function switchToLogin() {
-  document.getElementById("signupModal").style.display = "none";
-  document.getElementById("loginModal").style.display = "flex";
-}
+};
 
 
-// ===============================
+window.switchToSignup = function () {
+
+  openSignup();
+
+};
+
+
+window.switchToLogin = function () {
+
+  openLogin();
+
+};
+
+
+// ==========================================
 // SEARCH
-// ===============================
+// ==========================================
 
-function searchVideos() {
+window.searchVideos = function () {
 
-  const searchText =
-    document.getElementById("searchInput").value.toLowerCase().trim();
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
 
   const videos =
     document.querySelectorAll(".video-card");
 
-  if (searchText === "") {
-    videos.forEach(video => {
-      video.style.display = "block";
-    });
-    return;
-  }
-
   videos.forEach(video => {
 
     const title =
-      video.getAttribute("data-title").toLowerCase();
+      video.dataset.title.toLowerCase();
 
-    if (title.includes(searchText)) {
-      video.style.display = "block";
+    if (title.includes(search)) {
+
+      video.style.display = "";
+
     } else {
+
       video.style.display = "none";
+
     }
 
   });
+
+};
+
+
+// ==========================================
+// EMAIL SIGN UP
+// ==========================================
+
+document
+  .getElementById("signupBtn")
+  .addEventListener("click", async () => {
+
+    const name =
+      document.getElementById("signupName")
+        .value
+        .trim();
+
+    const username =
+      document.getElementById("signupUsername")
+        .value
+        .trim();
+
+    const email =
+      document.getElementById("signupEmail")
+        .value
+        .trim();
+
+    const password =
+      document.getElementById("signupPassword")
+        .value;
+
+
+    if (!name || !username || !email || !password) {
+
+      alert("Please fill all fields.");
+
+      return;
+
+    }
+
+
+    if (password.length < 6) {
+
+      alert("Password must be at least 6 characters.");
+
+      return;
+
+    }
+
+
+    try {
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      const user =
+        userCredential.user;
+
+
+      await updateProfile(user, {
+        displayName: name
+      });
+
+
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          name: name,
+          username: username,
+          email: email,
+          uid: user.uid,
+          photoURL: "",
+          createdAt: new Date().toISOString()
+        }
+      );
+
+
+      alert("Account created successfully! 🎉");
+
+      closeModals();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+// ==========================================
+// EMAIL LOGIN
+// ==========================================
+
+document
+  .getElementById("loginBtn")
+  .addEventListener("click", async () => {
+
+    const email =
+      document.getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+      document.getElementById("loginPassword")
+        .value;
+
+
+    if (!email || !password) {
+
+      alert("Please enter email and password.");
+
+      return;
+
+    }
+
+
+    try {
+
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+
+      alert("Login successful! 👋");
+
+      closeModals();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(error.message);
+
+    }
+
+  });
+
+
+// ==========================================
+// GOOGLE LOGIN
+// ==========================================
+
+async function googleLogin() {
+
+  try {
+
+    const result =
+      await signInWithPopup(
+        auth,
+        googleProvider
+      );
+
+
+    const user =
+      result.user;
+
+
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        name: user.displayName || "",
+        username: "",
+        email: user.email || "",
+        uid: user.uid,
+        photoURL: user.photoURL || "",
+        createdAt: new Date().toISOString()
+      },
+      {
+        merge: true
+      }
+    );
+
+
+    alert("Google Sign-In successful! 🔵");
+
+    closeModals();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(error.message);
+
+  }
+
 }
 
 
-// ===============================
-// SEARCH WITH ENTER KEY
-// ===============================
+document
+  .getElementById("googleLoginBtn")
+  .addEventListener("click", googleLogin);
+
 
 document
-  .getElementById("searchInput")
-  .addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-      searchVideos();
-    }
-
-  });
+  .getElementById("googleSignupBtn")
+  .addEventListener("click", googleLogin);
 
 
-// ===============================
-// CATEGORY BUTTONS
-// ===============================
+// ==========================================
+// AUTH STATE
+// ==========================================
 
-const categoryButtons =
-  document.querySelectorAll(".categories button");
+onAuthStateChanged(auth, (user) => {
 
-categoryButtons.forEach(button => {
+  if (user) {
 
-  button.addEventListener("click", function() {
-
-    categoryButtons.forEach(btn =>
-      btn.classList.remove("active")
+    console.log(
+      "Logged in:",
+      user.email
     );
 
-    this.classList.add("active");
+  } else {
 
-  });
-
-});
-
-
-// ===============================
-// CLOSE MODAL WHEN CLICKING OUTSIDE
-// ===============================
-
-window.addEventListener("click", function(event) {
-
-  const loginModal =
-    document.getElementById("loginModal");
-
-  const signupModal =
-    document.getElementById("signupModal");
-
-  if (event.target === loginModal ||
-      event.target === signupModal) {
-
-    closeModals();
+    console.log("No user logged in.");
 
   }
 
