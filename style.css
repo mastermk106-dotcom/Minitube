@@ -10,6 +10,7 @@ body {
   color: #111;
 }
 
+
 /* HEADER */
 
 .header {
@@ -275,7 +276,7 @@ body {
 }
 
 
-/* CHANNEL PAGE */
+/* CHANNEL */
 
 .channel-page {
   display: none;
@@ -369,6 +370,81 @@ body {
 }
 
 
+/* UPLOAD */
+
+.upload-page {
+  display: none;
+  padding: 30px 5% 60px;
+}
+
+.upload-box {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+.upload-box h1 {
+  margin-bottom: 10px;
+}
+
+.upload-note {
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.upload-label {
+  display: block;
+  font-weight: bold;
+  margin: 18px 0 8px;
+}
+
+.upload-box input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.upload-input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+}
+
+.description-input {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.video-preview {
+  width: 100%;
+  max-height: 400px;
+  margin-top: 20px;
+  border-radius: 12px;
+  background: #111;
+}
+
+.upload-btn {
+  width: 100%;
+  border: none;
+  background: #ff0000;
+  color: white;
+  padding: 13px;
+  border-radius: 24px;
+  margin-top: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
 /* MODAL */
 
 .modal {
@@ -448,7 +524,6 @@ body {
 
 }
 
-
 @media (max-width: 600px) {
 
   .header {
@@ -490,10 +565,6 @@ body {
 
   .channel-details h1 {
     font-size: 26px;
-  }
-
-  .profile-menu {
-    right: 0;
   }
 
 }
