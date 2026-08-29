@@ -1,1 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>MiniTube</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+
+    <div class="logo">
+      <span class="logo-icon">▶</span>
+      <span>MiniTube</span>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search MiniTube..."
+      >
+      <button onclick="searchVideos()">🔍</button>
+    </div>
+
+    <div class="header-buttons">
+      <button class="login-btn" onclick="openLogin()">Login</button>
+      <button class="signup-btn" onclick="openSignup()">Sign Up</button>
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- CATEGORY BAR -->
+    <div class="categories">
+      <button class="active">All</button>
+      <button>Gaming</button>
+      <button>Islamic</button>
+      <button>Education</button>
+      <button>Entertainment</button>
+      <button>Sports</button>
+      <button>News</button>
+      <button>Music</button>
+    </div>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div>
+        <h1>Welcome to MiniTube 🎬</h1>
+
+        <p>
+          Watch, upload and share your favorite videos.
+          Create your own channel and become a MiniTube creator.
+        </p>
+
+        <button class="start-btn" onclick="openSignup()">
+          Get Started
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- VIDEOS -->
+    <section class="video-section">
+
+      <div class="section-title">
+        <h2>🔥 Recommended Videos</h2>
+      </div>
+
+      <div class="video-grid" id="videoGrid">
+
+        <div class="video-card" data-title="Amazing Gaming Video">
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">M</div>
+
+            <div>
+              <h3>Amazing Gaming Video 🎮</h3>
+              <p>Mini Gamer</p>
+              <p>12K views • 2 days ago</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="video-card" data-title="Beautiful Islamic Reminder">
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">I</div>
+
+            <div>
+              <h3>Beautiful Islamic Reminder 🕌</h3>
+              <p>Islamic Channel</p>
+              <p>25K views • 1 day ago</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="video-card" data-title="Learn Something New">
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">E</div>
+
+            <div>
+              <h3>Learn Something New 📚</h3>
+              <p>Knowledge Hub</p>
+              <p>8K views • 5 hours ago</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="video-card" data-title="Best Football Moments">
+
+          <div class="thumbnail">
+            <span>▶</span>
+          </div>
+
+          <div class="video-info">
+
+            <div class="channel-avatar">S</div>
+
+            <div>
+              <h3>Best Football Moments ⚽</h3>
+              <p>Sports World</p>
+              <p>45K views • 3 days ago</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- LOGIN POPUP -->
+  <div class="modal" id="loginModal">
+
+    <div class="modal-box">
+
+      <button class="close" onclick="closeModals()">×</button>
+
+      <h2>Login to MiniTube</h2>
+
+      <input type="text" placeholder="Username or Email">
+      <input type="password" placeholder="Password">
+
+      <button class="modal-btn">Login</button>
+
+      <p>
+        Don't have an account?
+        <span onclick="switchToSignup()">Sign Up</span>
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- SIGNUP POPUP -->
+  <div class="modal" id="signupModal">
+
+    <div class="modal-box">
+
+      <button class="close" onclick="closeModals()">×</button>
+
+      <h2>Create MiniTube Account</h2>
+
+      <input type="text" placeholder="Your Name">
+      <input type="text" placeholder="Choose Username">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Create Password">
+
+      <button class="modal-btn">Create Account</button>
+
+      <p>
+        Already have an account?
+        <span onclick="switchToLogin()">Login</span>
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
