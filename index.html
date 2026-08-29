@@ -179,10 +179,25 @@
 
       <h2>Login to MiniTube</h2>
 
-      <input type="text" placeholder="Username or Email">
-      <input type="password" placeholder="Password">
+      <input
+        type="email"
+        id="loginEmail"
+        placeholder="Email"
+      >
 
-      <button class="modal-btn">Login</button>
+      <input
+        type="password"
+        id="loginPassword"
+        placeholder="Password"
+      >
+
+      <button class="modal-btn" id="loginBtn">
+        Login
+      </button>
+
+      <button class="modal-btn" id="googleLoginBtn">
+        🔵 Continue with Google
+      </button>
 
       <p>
         Don't have an account?
@@ -203,12 +218,37 @@
 
       <h2>Create MiniTube Account</h2>
 
-      <input type="text" placeholder="Your Name">
-      <input type="text" placeholder="Choose Username">
-      <input type="email" placeholder="Email">
-      <input type="password" placeholder="Create Password">
+      <input
+        type="text"
+        id="signupName"
+        placeholder="Your Name"
+      >
 
-      <button class="modal-btn">Create Account</button>
+      <input
+        type="text"
+        id="signupUsername"
+        placeholder="Choose Username"
+      >
+
+      <input
+        type="email"
+        id="signupEmail"
+        placeholder="Email"
+      >
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="Create Password"
+      >
+
+      <button class="modal-btn" id="signupBtn">
+        Create Account
+      </button>
+
+      <button class="modal-btn" id="googleSignupBtn">
+        🔵 Sign up with Google
+      </button>
 
       <p>
         Already have an account?
@@ -220,29 +260,8 @@
   </div>
 
 
-  <!-- EXISTING JAVASCRIPT -->
-  <script src="script.js"></script>
-
-
-  <!-- FIREBASE -->
-  <script type="module">
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
-      authDomain: "minitube-9317a.firebaseapp.com",
-      projectId: "minitube-9317a",
-      storageBucket: "minitube-9317a.firebasestorage.app",
-      messagingSenderId: "176876768704",
-      appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
-    };
-
-    const app = initializeApp(firebaseConfig);
-
-    console.log("Firebase connected successfully! 🔥");
-
-  </script>
+  <!-- FIREBASE SCRIPT -->
+  <script type="module" src="script.js"></script>
 
 </body>
 </html>
