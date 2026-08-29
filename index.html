@@ -28,9 +28,37 @@
       <button onclick="searchVideos()">🔍</button>
     </div>
 
-    <div class="header-buttons">
+    <div class="header-buttons" id="headerButtons">
       <button class="login-btn" onclick="openLogin()">Login</button>
       <button class="signup-btn" onclick="openSignup()">Sign Up</button>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="profile-area" id="profileArea" style="display:none;">
+
+      <img
+        id="profilePhoto"
+        class="profile-photo"
+        src=""
+        alt="Profile"
+      >
+
+      <div class="profile-menu" id="profileMenu">
+
+        <div class="profile-name" id="profileName">
+          User
+        </div>
+
+        <div class="profile-email" id="profileEmail">
+          user@email.com
+        </div>
+
+        <button onclick="logoutUser()">
+          🚪 Logout
+        </button>
+
+      </div>
+
     </div>
 
   </header>
@@ -81,13 +109,11 @@
       <div class="video-grid" id="videoGrid">
 
         <div class="video-card" data-title="Amazing Gaming Video">
-
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-
             <div class="channel-avatar">M</div>
 
             <div>
@@ -95,20 +121,16 @@
               <p>Mini Gamer</p>
               <p>12K views • 2 days ago</p>
             </div>
-
           </div>
-
         </div>
 
 
         <div class="video-card" data-title="Beautiful Islamic Reminder">
-
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-
             <div class="channel-avatar">I</div>
 
             <div>
@@ -116,20 +138,16 @@
               <p>Islamic Channel</p>
               <p>25K views • 1 day ago</p>
             </div>
-
           </div>
-
         </div>
 
 
         <div class="video-card" data-title="Learn Something New">
-
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-
             <div class="channel-avatar">E</div>
 
             <div>
@@ -137,20 +155,16 @@
               <p>Knowledge Hub</p>
               <p>8K views • 5 hours ago</p>
             </div>
-
           </div>
-
         </div>
 
 
         <div class="video-card" data-title="Best Football Moments">
-
           <div class="thumbnail">
             <span>▶</span>
           </div>
 
           <div class="video-info">
-
             <div class="channel-avatar">S</div>
 
             <div>
@@ -158,9 +172,7 @@
               <p>Sports World</p>
               <p>45K views • 3 days ago</p>
             </div>
-
           </div>
-
         </div>
 
       </div>
