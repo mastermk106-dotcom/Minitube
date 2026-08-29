@@ -11,6 +11,7 @@ body {
 }
 
 /* HEADER */
+
 .header {
   height: 70px;
   background: white;
@@ -41,6 +42,7 @@ body {
 }
 
 /* SEARCH */
+
 .search-box {
   display: flex;
   width: 40%;
@@ -65,6 +67,7 @@ body {
 }
 
 /* BUTTONS */
+
 .header-buttons {
   display: flex;
   gap: 10px;
@@ -92,6 +95,7 @@ body {
 }
 
 /* PROFILE */
+
 .profile-area {
   display: none;
   position: relative;
@@ -153,6 +157,7 @@ body {
 }
 
 /* CATEGORIES */
+
 .categories {
   display: flex;
   gap: 10px;
@@ -176,6 +181,7 @@ body {
 }
 
 /* HERO */
+
 .hero {
   margin: 25px 5%;
   padding: 55px;
@@ -197,6 +203,7 @@ body {
 }
 
 /* VIDEOS */
+
 .video-section {
   padding: 10px 5% 50px;
 }
@@ -269,6 +276,7 @@ body {
 }
 
 /* VIDEO PAGE */
+
 .video-page {
   display: none;
   padding: 30px 5% 60px;
@@ -362,7 +370,8 @@ body {
   line-height: 1.6;
 }
 
-/* OLD COMMENTS */
+/* COMMENTS */
+
 .comments-section {
   background: white;
   margin-top: 15px;
@@ -411,61 +420,8 @@ body {
   margin-top: 4px;
 }
 
-/* NEW COMMENTS */
-.comment-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.comment-form input {
-  flex: 1;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 22px;
-  outline: none;
-}
-
-.comment-form button {
-  border: none;
-  background: #ff0000;
-  color: white;
-  padding: 11px 18px;
-  border-radius: 22px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.comment {
-  display: flex;
-  gap: 12px;
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.comment-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.comment-content {
-  flex: 1;
-}
-
-.comment-content strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.comment-content p {
-  color: #444;
-  line-height: 1.5;
-  margin: 0;
-}
-
 /* CHANNEL */
+
 .channel-page {
   display: none;
   padding: 30px 5% 60px;
@@ -558,6 +514,7 @@ body {
 }
 
 /* UPLOAD */
+
 .upload-page {
   display: none;
   padding: 30px 5% 60px;
@@ -624,6 +581,7 @@ body {
 }
 
 /* MODAL */
+
 .modal {
   display: none;
   position: fixed;
@@ -687,6 +645,7 @@ body {
 }
 
 /* MOBILE */
+
 @media (max-width: 900px) {
 
   .video-grid {
@@ -749,8 +708,7 @@ body {
     font-size: 22px;
   }
 
-  .comment-input,
-  .comment-form {
+  .comment-input {
     flex-direction: column;
   }
 }
