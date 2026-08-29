@@ -11,6 +11,7 @@ body {
 }
 
 /* HEADER */
+
 .header {
   height: 70px;
   background: white;
@@ -40,7 +41,9 @@ body {
   border-radius: 8px;
 }
 
+
 /* SEARCH */
+
 .search-box {
   display: flex;
   width: 40%;
@@ -64,7 +67,9 @@ body {
   font-size: 18px;
 }
 
+
 /* HEADER BUTTONS */
+
 .header-buttons {
   display: flex;
   gap: 10px;
@@ -91,7 +96,72 @@ body {
   color: white;
 }
 
+
+/* PROFILE */
+
+.profile-area {
+  display: none;
+  position: relative;
+}
+
+.profile-photo {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #eee;
+}
+
+.profile-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 55px;
+  width: 230px;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.18);
+  border: 1px solid #eee;
+}
+
+.profile-menu.show {
+  display: block;
+}
+
+.profile-name {
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.profile-email {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+.profile-menu button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f1f1;
+  cursor: pointer;
+  text-align: left;
+  font-weight: bold;
+}
+
+.profile-menu button:hover {
+  background: #e5e5e5;
+}
+
+
 /* CATEGORIES */
+
 .categories {
   display: flex;
   gap: 10px;
@@ -114,7 +184,9 @@ body {
   color: white;
 }
 
+
 /* HERO */
+
 .hero {
   margin: 25px 5%;
   padding: 55px;
@@ -135,7 +207,9 @@ body {
   margin-bottom: 25px;
 }
 
+
 /* VIDEOS */
+
 .video-section {
   padding: 10px 5% 50px;
 }
@@ -200,7 +274,103 @@ body {
   font-weight: bold;
 }
 
+
+/* CHANNEL PAGE */
+
+.channel-page {
+  display: none;
+  padding: 30px 5% 60px;
+}
+
+.back-btn {
+  border: none;
+  background: white;
+  padding: 11px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.channel-header {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.channel-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #eee;
+}
+
+.channel-details h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.channel-details p {
+  color: #666;
+  margin-top: 7px;
+}
+
+.channel-stats {
+  font-weight: bold;
+}
+
+.channel-tabs {
+  display: flex;
+  gap: 25px;
+  background: white;
+  margin-top: 18px;
+  padding: 15px 20px;
+  border-radius: 12px;
+}
+
+.channel-tabs button {
+  border: none;
+  background: none;
+  padding: 10px 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.channel-tabs button.active {
+  color: #ff0000;
+  border-bottom: 3px solid #ff0000;
+}
+
+.empty-channel {
+  background: white;
+  text-align: center;
+  padding: 70px 20px;
+  margin-top: 18px;
+  border-radius: 18px;
+}
+
+.empty-icon {
+  font-size: 50px;
+  margin-bottom: 15px;
+}
+
+.empty-channel h2 {
+  margin-bottom: 10px;
+}
+
+.empty-channel p {
+  color: #666;
+}
+
+
 /* MODAL */
+
 .modal {
   display: none;
   position: fixed;
@@ -237,6 +407,10 @@ body {
   margin-top: 5px;
 }
 
+.google-btn {
+  background: #333;
+}
+
 .modal-box p {
   text-align: center;
   margin-top: 18px;
@@ -259,8 +433,11 @@ body {
   cursor: pointer;
 }
 
+
 /* MOBILE */
+
 @media (max-width: 900px) {
+
   .video-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -268,9 +445,12 @@ body {
   .search-box {
     width: 35%;
   }
+
 }
 
+
 @media (max-width: 600px) {
+
   .header {
     height: auto;
     padding: 15px;
@@ -302,4 +482,18 @@ body {
   .video-grid {
     grid-template-columns: 1fr;
   }
+
+  .channel-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .channel-details h1 {
+    font-size: 26px;
+  }
+
+  .profile-menu {
+    right: 0;
+  }
+
 }
