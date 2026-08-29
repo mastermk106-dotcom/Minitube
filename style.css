@@ -1,1 +1,305 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #111;
+}
+
+/* HEADER */
+.header {
+  height: 70px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 25px;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+.logo-icon {
+  background: #ff0000;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* SEARCH */
+.search-box {
+  display: flex;
+  width: 40%;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 18px;
+  border: 1px solid #ccc;
+  border-radius: 25px 0 0 25px;
+  outline: none;
+  font-size: 15px;
+}
+
+.search-box button {
+  width: 55px;
+  border: none;
+  background: #eee;
+  border-radius: 0 25px 25px 0;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* HEADER BUTTONS */
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.header-buttons button,
+.start-btn,
+.modal-btn {
+  border: none;
+  padding: 11px 18px;
+  border-radius: 22px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.login-btn {
+  background: #eee;
+}
+
+.signup-btn,
+.start-btn,
+.modal-btn {
+  background: #ff0000;
+  color: white;
+}
+
+/* CATEGORIES */
+.categories {
+  display: flex;
+  gap: 10px;
+  padding: 18px 5%;
+  overflow-x: auto;
+  background: white;
+}
+
+.categories button {
+  border: none;
+  padding: 9px 17px;
+  border-radius: 20px;
+  background: #eee;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.categories button.active {
+  background: #111;
+  color: white;
+}
+
+/* HERO */
+.hero {
+  margin: 25px 5%;
+  padding: 55px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #111, #444);
+  color: white;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  max-width: 650px;
+  font-size: 17px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+/* VIDEOS */
+.video-section {
+  padding: 10px 5% 50px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.video-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.video-card:hover {
+  transform: translateY(-4px);
+}
+
+.thumbnail {
+  height: 180px;
+  background: linear-gradient(135deg, #222, #666);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 45px;
+}
+
+.video-info {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+}
+
+.video-info h3 {
+  font-size: 16px;
+  margin-bottom: 7px;
+}
+
+.video-info p {
+  color: #666;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.channel-avatar {
+  min-width: 40px;
+  height: 40px;
+  background: #ddd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 420px;
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  position: relative;
+}
+
+.modal-box h2 {
+  margin-bottom: 20px;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.modal-btn {
+  width: 100%;
+  margin-top: 5px;
+}
+
+.modal-box p {
+  text-align: center;
+  margin-top: 18px;
+  color: #666;
+}
+
+.modal-box p span {
+  color: #ff0000;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .search-box {
+    width: 35%;
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    height: auto;
+    padding: 15px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .search-box {
+    width: 100%;
+    order: 3;
+  }
+
+  .header-buttons {
+    margin-left: auto;
+  }
+
+  .logo {
+    font-size: 21px;
+  }
+
+  .hero {
+    padding: 30px 20px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
