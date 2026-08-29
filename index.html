@@ -220,7 +220,29 @@
   </div>
 
 
+  <!-- EXISTING JAVASCRIPT -->
   <script src="script.js"></script>
+
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
+      authDomain: "minitube-9317a.firebaseapp.com",
+      projectId: "minitube-9317a",
+      storageBucket: "minitube-9317a.firebasestorage.app",
+      messagingSenderId: "176876768704",
+      appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
+    };
+
+    const app = initializeApp(firebaseConfig);
+
+    console.log("Firebase connected successfully! 🔥");
+
+  </script>
 
 </body>
 </html>
