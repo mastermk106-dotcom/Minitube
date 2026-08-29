@@ -1,720 +1,1401 @@
-let currentVideoId = null;
-let currentVideoData = null;
+const $ = (id) => document.getElementById(id);
 
-/* ---------- MODALS ---------- */
+let videos = JSON.parse(localStorage.getItem("minitubeVideos") || "[]");
 
-function openLogin() {
-  closeModals();
-  document.getElementById("loginModal").style.display = "flex";
+let currentVideo = null;
+let likedVideos = JSON.parse(localStorage.getItem("minitubeLikes") || "{}");
+
+
+/* =========================
+   DEFAULT VIDEOS
+========================= */
+
+if (videos.length === 0) {
+
+  videos = [
+    {
+      id: "demo1",
+      title: "Amazing Gaming Video 🎮",
+      creator: "Mini Gamer",
+      description: "Amazing gaming video on MiniTube.",
+      url: "",
+      views: 12000,
+      likes: 1
+    },
+    {
+      id: "demo2",
+      title: "Beautiful Islamic Reminder 🕌",
+      creator: "Islamic Channel",
+      description: "A beautiful Islamic reminder.",
+      url: "",
+      views: 25000,
+      likes: 1
+    },
+    {
+      id: "demo3",
+      title: "Learn Something New 📚",
+      creator: "Knowledge Hub",
+      description: "Learn something new today.",
+      url: "",
+      views: 8000,
+      likes: 1
+    },
+    {
+      id: "demo4",
+      title: "Best Football Moments ⚽",
+      creator: "Sports World",
+      description: "Best football moments.",
+      url: "",
+      views: 45000,
+      likes: 1
+    }
+  ];
+
+  saveVideos();
 }
 
-function openSignup() {
-  closeModals();
-  document.getElementById("signupModal").style.display = "flex";
+
+/* =========================
+   SAVE VIDEOS
+========================= */
+
+function saveVideos() {
+  localStorage.setItem(
+    "minitubeVideos",
+    JSON.stringify(videos)
+  );
 }
 
-function openUpload() {
-  closeModals();
 
-  if (!window.currentUser) {
-    openLogin();
-    return;
-  }
+/* =========================
+   SHOW HOME
+========================= */
 
-  document.getElementById("uploadModal").style.display = "flex";
+function showHome() {
+
+  $("homePage").style.display = "block";
+  $("videoPage").style.display = "none";
+  $("channelPage").style.display = "none";
+  $("uploadPage").style.display = "none";
+
 }
 
-function closeModals() {
-  document.querySelectorAll(".modal").forEach(m => {
-    m.style.display = "none";
+
+/* =========================
+   SHOW VIDEO
+========================= */
+
+function openVideo(video) {
+
+  currentVideo = video;
+
+  $("homePage").style.display = "none";
+  $("videoPage").style.display = "block";
+  $("channelPage").style.display = "none";
+  $("uploadPage").style.display = "none";
+
+
+  $("mainVideoTitle").textContent =
+    video.title;
+
+  $("mainVideoCreator").textContent =
+    video.creator || "MiniTube User";
+
+  $("mainVideoViews").textContent =
+    formatViews(video.views || 0) + " views";
+
+  $("mainVideoDescription").textContent =
+    video.description ||
+    "No description available.";
+
+
+  $("mainVideo").src =
+    video.url || "";
+
+
+  $("downloadButton").href =
+    video.url || "#";
+
+
+  $("videoCreatorAvatar").textContent =
+    (video.creator || "M")
+      .charAt(0)
+      .toUpperCase();
+
+
+  $("likeCount").textContent =
+    video.likes || 0;
+
+
+  loadComments(video.id);
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
   });
+
 }
 
-function switchToSignup() {
-  closeModals();
-  openSignup();
-}
 
-function switchToLogin() {
-  closeModals();
-  openLogin();
-}
+/* =========================
+   RENDER VIDEOS
+========================= */
 
-/* ---------- PROFILE ---------- */
+function renderVideos(list = videos) {
 
-function toggleProfileMenu() {
-  document.getElementById("profileMenu").classList.toggle("show");
-}
+  const grid = $("videoGrid");
 
-function openChannel() {
+  grid.innerHTML = "";
 
-  document.getElementById("profileMenu").classList.remove("show");
 
-  const user = window.currentUser;
+  list.forEach(video => {
 
-  if (!user) return;
+    const card =
+      document.createElement("div");
 
-  document.getElementById("channelPage").style.display = "block";
+    card.className = "video-card";
 
-  document.getElementById("channelName").textContent =
-    user.displayName || "MiniTube User";
 
-  document.getElementById("channelEmail").textContent =
-    user.email || "";
+    const thumbnail =
+      document.createElement("div");
 
-  document.getElementById("channelPhoto").src =
-    user.photoURL ||
-    "https://ui-avatars.com/api/?name=" +
-    encodeURIComponent(user.displayName || "M");
+    thumbnail.className = "thumbnail";
 
-  window.scrollTo(0, 0);
-}
 
-function closeChannel() {
-  document.getElementById("channelPage").style.display = "none";
-}
+    if (video.url) {
 
-/* ---------- SIGNUP ---------- */
+      const videoElement =
+        document.createElement("video");
 
-async function signup() {
+      videoElement.src = video.url;
 
-  const name = document.getElementById("signupName").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const password = document.getElementById("signupPassword").value;
+      videoElement.muted = true;
 
-  if (!name || !email || !password) {
-    alert("Please fill all fields.");
-    return;
-  }
+      videoElement.preload = "metadata";
 
-  try {
-
-    const result =
-      await window.firebaseFunctions.createUserWithEmailAndPassword(
-        window.firebaseAuth,
-        email,
-        password
+      thumbnail.appendChild(
+        videoElement
       );
 
-    await window.firebaseFunctions.updateProfile(result.user, {
-      displayName: name
-    });
+    } else {
 
-    alert("Account successfully created! 🎉");
+      thumbnail.innerHTML = "▶";
 
-    closeModals();
+    }
 
-  } catch (error) {
 
-    alert(error.message);
+    const info =
+      document.createElement("div");
 
-  }
+    info.className = "video-info";
+
+
+    const avatar =
+      document.createElement("div");
+
+    avatar.className =
+      "channel-avatar";
+
+    avatar.textContent =
+      (video.creator || "M")
+        .charAt(0)
+        .toUpperCase();
+
+
+    const details =
+      document.createElement("div");
+
+
+    const title =
+      document.createElement("h3");
+
+    title.textContent =
+      video.title;
+
+
+    const creator =
+      document.createElement("p");
+
+    creator.textContent =
+      video.creator ||
+      "MiniTube User";
+
+
+    const views =
+      document.createElement("p");
+
+    views.textContent =
+      formatViews(video.views || 0) +
+      " views";
+
+
+    details.appendChild(title);
+    details.appendChild(creator);
+    details.appendChild(views);
+
+
+    info.appendChild(avatar);
+    info.appendChild(details);
+
+
+    card.appendChild(thumbnail);
+    card.appendChild(info);
+
+
+    card.addEventListener(
+      "click",
+      () => openVideo(video)
+    );
+
+
+    grid.appendChild(card);
+
+  });
+
 }
 
-/* ---------- LOGIN ---------- */
 
-async function login() {
+/* =========================
+   FORMAT VIEWS
+========================= */
 
-  const email =
-    document.getElementById("loginEmail").value.trim();
+function formatViews(number) {
 
-  const password =
-    document.getElementById("loginPassword").value;
+  if (number >= 1000000) {
+    return (
+      (number / 1000000)
+        .toFixed(1)
+        .replace(".0", "") +
+      "M"
+    );
+  }
 
-  if (!email || !password) {
-    alert("Please enter email and password.");
+  if (number >= 1000) {
+    return (
+      (number / 1000)
+        .toFixed(1)
+        .replace(".0", "") +
+      "K"
+    );
+  }
+
+  return String(number);
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchVideos() {
+
+  const search =
+    $("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  if (!search) {
+
+    renderVideos(videos);
+
     return;
   }
 
-  try {
 
-    await window.firebaseFunctions.signInWithEmailAndPassword(
-      window.firebaseAuth,
-      email,
-      password
+  const results =
+    videos.filter(video =>
+
+      video.title
+        .toLowerCase()
+        .includes(search)
+
+      ||
+
+      (video.creator || "")
+        .toLowerCase()
+        .includes(search)
+
     );
 
-    alert("Login successful! ✅");
 
-    closeModals();
+  renderVideos(results);
 
-  } catch (error) {
-
-    alert(error.message);
-
-  }
 }
 
-/* ---------- GOOGLE LOGIN ---------- */
+
+$("searchButton").addEventListener(
+  "click",
+  searchVideos
+);
+
+
+$("searchInput").addEventListener(
+  "keydown",
+  event => {
+
+    if (event.key === "Enter") {
+      searchVideos();
+    }
+
+  }
+);
+
+
+/* =========================
+   LOGIN / SIGNUP MODALS
+========================= */
+
+function openLogin() {
+
+  $("loginModal").style.display =
+    "flex";
+
+}
+
+
+function openSignup() {
+
+  $("signupModal").style.display =
+    "flex";
+
+}
+
+
+function closeModals() {
+
+  $("loginModal").style.display =
+    "none";
+
+  $("signupModal").style.display =
+    "none";
+
+}
+
+
+$("loginButton").addEventListener(
+  "click",
+  openLogin
+);
+
+
+$("signupButton").addEventListener(
+  "click",
+  openSignup
+);
+
+
+$("getStartedButton").addEventListener(
+  "click",
+  openSignup
+);
+
+
+$("closeLoginButton").addEventListener(
+  "click",
+  closeModals
+);
+
+
+$("closeSignupButton").addEventListener(
+  "click",
+  closeModals
+);
+
+
+$("goToSignup").addEventListener(
+  "click",
+  () => {
+
+    closeModals();
+    openSignup();
+
+  }
+);
+
+
+$("goToLogin").addEventListener(
+  "click",
+  () => {
+
+    closeModals();
+    openLogin();
+
+  }
+);
+
+
+/* =========================
+   EMAIL SIGNUP
+========================= */
+
+$("emailSignupButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const name =
+        $("signupName").value.trim();
+
+      const email =
+        $("signupEmail").value.trim();
+
+      const password =
+        $("signupPassword").value;
+
+
+      if (!name || !email || !password) {
+
+        alert(
+          "Please fill all fields."
+        );
+
+        return;
+      }
+
+
+      try {
+
+        const userCredential =
+          await firebaseFunctions
+            .createUserWithEmailAndPassword(
+              firebaseAuth,
+              email,
+              password
+            );
+
+
+        await firebaseFunctions
+          .updateProfile(
+            userCredential.user,
+            {
+              displayName: name
+            }
+          );
+
+
+        alert(
+          "Account successfully created! 🎉"
+        );
+
+
+        closeModals();
+
+
+        $("signupName").value = "";
+        $("signupEmail").value = "";
+        $("signupPassword").value = "";
+
+
+      } catch (error) {
+
+        alert(
+          "Signup failed: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   EMAIL LOGIN
+========================= */
+
+$("emailLoginButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const email =
+        $("loginEmail").value.trim();
+
+      const password =
+        $("loginPassword").value;
+
+
+      if (!email || !password) {
+
+        alert(
+          "Please enter email and password."
+        );
+
+        return;
+      }
+
+
+      try {
+
+        await firebaseFunctions
+          .signInWithEmailAndPassword(
+            firebaseAuth,
+            email,
+            password
+          );
+
+
+        alert(
+          "Login successful! 👋"
+        );
+
+
+        closeModals();
+
+
+        $("loginEmail").value = "";
+        $("loginPassword").value = "";
+
+
+      } catch (error) {
+
+        alert(
+          "Login failed: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   GOOGLE LOGIN / SIGNUP
+========================= */
 
 async function googleLogin() {
 
   try {
 
-    await window.firebaseFunctions.signInWithPopup(
-      window.firebaseAuth,
-      window.googleProvider
-    );
+    await firebaseFunctions
+      .signInWithPopup(
+        firebaseAuth,
+        googleProvider
+      );
 
-    alert("Google login successful! 🎉");
 
     closeModals();
 
-  } catch (error) {
-
-    alert(error.message);
-
-  }
-}
-
-/* ---------- LOGOUT ---------- */
-
-async function logout() {
-
-  try {
-
-    await window.firebaseFunctions.signOut(
-      window.firebaseAuth
-    );
-
-    alert("Logged out successfully.");
-
-    document
-      .getElementById("profileMenu")
-      .classList.remove("show");
 
   } catch (error) {
 
-    alert(error.message);
-
-  }
-}
-
-/* ---------- UPLOAD TO CLOUDINARY ---------- */
-
-async function uploadVideo() {
-
-  const user = window.currentUser;
-
-  if (!user) {
-    alert("Please login first.");
-    return;
-  }
-
-  const file =
-    document.getElementById("videoFile").files[0];
-
-  const title =
-    document.getElementById("videoTitle").value.trim();
-
-  const description =
-    document.getElementById("videoDescription").value.trim();
-
-  const status =
-    document.getElementById("uploadStatus");
-
-  if (!file || !title) {
-    alert("Please select a video and enter a title.");
-    return;
-  }
-
-  status.textContent = "Uploading video... ⏳";
-
-  try {
-
-    const formData = new FormData();
-
-    formData.append("file", file);
-    formData.append("upload_preset", "minituber");
-    formData.append("asset_folder", "MiniTube");
-
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/dvvsxjid/video/upload",
-      {
-        method: "POST",
-        body: formData
-      }
+    alert(
+      "Google login failed: " +
+      error.message
     );
 
-    const data = await response.json();
+  }
 
-    if (!response.ok) {
-      throw new Error(data.error?.message || "Upload failed");
+}
+
+
+$("googleLoginButton")
+  .addEventListener(
+    "click",
+    googleLogin
+  );
+
+
+$("googleSignupButton")
+  .addEventListener(
+    "click",
+    googleLogin
+  );
+
+
+/* =========================
+   PROFILE MENU
+========================= */
+
+$("profilePhoto")
+  .addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+      $("profileMenu")
+        .classList.toggle("show");
+
     }
+  );
 
-    await window.firebaseFunctions.addDoc(
-      window.firebaseFunctions.collection(window.db, "videos"),
-      {
-        title: title,
-        description: description,
-        videoURL: data.secure_url,
-        creator: user.displayName || "MiniTube User",
-        creatorUID: user.uid,
-        views: 0,
-        likes: 0,
-        createdAt:
-          window.firebaseFunctions.serverTimestamp()
-      }
-    );
-
-    status.textContent =
-      "Video successfully uploaded! 🎉";
-
-    document.getElementById("videoFile").value = "";
-    document.getElementById("videoTitle").value = "";
-    document.getElementById("videoDescription").value = "";
-
-    setTimeout(() => {
-      closeModals();
-      loadVideos();
-    }, 1200);
-
-  } catch (error) {
-
-    status.textContent = "Upload failed ❌";
-    alert(error.message);
-
-  }
-}
-
-/* ---------- LOAD VIDEOS ---------- */
-
-async function loadVideos() {
-
-  const grid =
-    document.getElementById("videoGrid");
-
-  if (!grid) return;
-
-  grid.innerHTML = "Loading videos...";
-
-  try {
-
-    const q =
-      window.firebaseFunctions.query(
-        window.firebaseFunctions.collection(
-          window.db,
-          "videos"
-        ),
-        window.firebaseFunctions.orderBy(
-          "createdAt",
-          "desc"
-        )
-      );
-
-    const snapshot =
-      await window.firebaseFunctions.getDocs(q);
-
-    grid.innerHTML = "";
-
-    if (snapshot.empty) {
-
-      grid.innerHTML =
-        "<p>No videos uploaded yet.</p>";
-
-      return;
-    }
-
-    snapshot.forEach(videoDoc => {
-
-      const video = videoDoc.data();
-
-      const card =
-        document.createElement("div");
-
-      card.className = "video-card";
-
-      card.innerHTML = `
-        <div class="thumbnail">
-          <span>▶</span>
-        </div>
-
-        <div class="video-info">
-
-          <div class="channel-avatar">
-            ${(video.creator || "M").charAt(0).toUpperCase()}
-          </div>
-
-          <div>
-            <h3>${escapeHTML(video.title || "Untitled Video")}</h3>
-            <p>${escapeHTML(video.creator || "MiniTube User")}</p>
-            <p>${video.views || 0} views</p>
-          </div>
-
-        </div>
-      `;
-
-      card.onclick = () =>
-        openVideo(videoDoc.id, video);
-
-      grid.appendChild(card);
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    grid.innerHTML =
-      "<p>Could not load videos.</p>";
-
-  }
-}
-
-/* ---------- OPEN VIDEO ---------- */
-
-async function openVideo(id, video) {
-
-  currentVideoId = id;
-  currentVideoData = video;
-
-  document.querySelector(".hero").style.display = "none";
-  document.querySelector(".video-section").style.display = "none";
-
-  document.getElementById("videoPage").style.display = "block";
-
-  const player =
-    document.getElementById("mainVideo");
-
-  player.src = video.videoURL;
-
-  document.getElementById("mainVideoTitle").textContent =
-    video.title || "Untitled Video";
-
-  document.getElementById("mainVideoCreator").textContent =
-    "By " + (video.creator || "MiniTube User");
-
-  document.getElementById("likeCount").textContent =
-    video.likes || 0;
-
-  document.getElementById("downloadBtn").onclick = () => {
-
-    const link = document.createElement("a");
-
-    link.href = video.videoURL;
-    link.download = (video.title || "MiniTube Video") + ".mp4";
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-  };
-
-  try {
-
-    await window.firebaseFunctions.updateDoc(
-      window.firebaseFunctions.doc(
-        window.db,
-        "videos",
-        id
-      ),
-      {
-        views:
-          window.firebaseFunctions.increment(1)
-      }
-    );
-
-  } catch (error) {
-    console.log(error);
-  }
-
-  loadComments();
-
-  window.scrollTo(0, 0);
-}
-
-/* ---------- CLOSE VIDEO ---------- */
-
-function closeVideo() {
-
-  document.getElementById("videoPage").style.display = "none";
-
-  document.querySelector(".hero").style.display = "block";
-  document.querySelector(".video-section").style.display = "block";
-
-  const player =
-    document.getElementById("mainVideo");
-
-  player.pause();
-  player.src = "";
-
-  currentVideoId = null;
-  currentVideoData = null;
-}
-
-/* ---------- LIKE ---------- */
-
-async function likeVideo() {
-
-  if (!currentVideoId) return;
-
-  try {
-
-    await window.firebaseFunctions.updateDoc(
-      window.firebaseFunctions.doc(
-        window.db,
-        "videos",
-        currentVideoId
-      ),
-      {
-        likes:
-          window.firebaseFunctions.increment(1)
-      }
-    );
-
-    const count =
-      Number(
-        document.getElementById("likeCount").textContent
-      );
-
-    document.getElementById("likeCount").textContent =
-      count + 1;
-
-  } catch (error) {
-
-    alert(error.message);
-
-  }
-}
-
-/* ---------- SHARE ---------- */
-
-async function shareVideo() {
-
-  const url = window.location.href;
-
-  try {
-
-    await navigator.clipboard.writeText(url);
-
-    alert("Video link copied! 🔗");
-
-  } catch {
-
-    alert("Share link: " + url);
-
-  }
-}
-
-/* ---------- COMMENTS ---------- */
-
-async function addComment() {
-
-  const user = window.currentUser;
-
-  if (!user) {
-    alert("Please login to comment.");
-    openLogin();
-    return;
-  }
-
-  if (!currentVideoId) return;
-
-  const input =
-    document.getElementById("commentInput");
-
-  const text = input.value.trim();
-
-  if (!text) {
-    alert("Please write a comment.");
-    return;
-  }
-
-  try {
-
-    await window.firebaseFunctions.addDoc(
-
-      window.firebaseFunctions.collection(
-        window.db,
-        "videos",
-        currentVideoId,
-        "comments"
-      ),
-
-      {
-        text: text,
-        userName:
-          user.displayName || "MiniTube User",
-        userUID: user.uid,
-        userPhoto:
-          user.photoURL || "",
-        createdAt:
-          window.firebaseFunctions.serverTimestamp()
-      }
-
-    );
-
-    input.value = "";
-
-    loadComments();
-
-  } catch (error) {
-
-    alert(error.message);
-
-  }
-}
-
-/* ---------- LOAD COMMENTS ---------- */
-
-async function loadComments() {
-
-  const list =
-    document.getElementById("commentsList");
-
-  if (!list || !currentVideoId) return;
-
-  list.innerHTML =
-    "<p>Loading comments...</p>";
-
-  try {
-
-    const q =
-      window.firebaseFunctions.query(
-
-        window.firebaseFunctions.collection(
-          window.db,
-          "videos",
-          currentVideoId,
-          "comments"
-        ),
-
-        window.firebaseFunctions.orderBy(
-          "createdAt",
-          "desc"
-        )
-
-      );
-
-    const snapshot =
-      await window.firebaseFunctions.getDocs(q);
-
-    list.innerHTML = "";
-
-    if (snapshot.empty) {
-
-      list.innerHTML =
-        "<p>No comments yet. Be the first! 💬</p>";
-
-      return;
-    }
-
-    snapshot.forEach(commentDoc => {
-
-      const comment =
-        commentDoc.data();
-
-      const div =
-        document.createElement("div");
-
-      div.className = "comment";
-
-      const avatar =
-        comment.userPhoto ||
-        "https://ui-avatars.com/api/?name=" +
-        encodeURIComponent(
-          comment.userName || "U"
-        );
-
-      div.innerHTML = `
-
-        <img
-          class="comment-avatar"
-          src="${avatar}"
-        >
-
-        <div class="comment-content">
-
-          <strong>
-            ${escapeHTML(
-              comment.userName || "MiniTube User"
-            )}
-          </strong>
-
-          <p>
-            ${escapeHTML(comment.text || "")}
-          </p>
-
-        </div>
-
-      `;
-
-      list.appendChild(div);
-
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    list.innerHTML =
-      "<p>Comments could not be loaded.</p>";
-
-  }
-}
-
-/* ---------- SEARCH ---------- */
-
-function searchVideos() {
-
-  const search =
-    document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
-
-  document
-    .querySelectorAll(".video-card")
-    .forEach(card => {
-
-      const text =
-        card.textContent.toLowerCase();
-
-      card.style.display =
-        !search || text.includes(search)
-          ? ""
-          : "none";
-
-    });
-}
-
-/* ---------- SECURITY ---------- */
-
-function escapeHTML(text) {
-
-  const div = document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-/* ---------- START ---------- */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+  "click",
+  event => {
 
-    loadVideos();
+    if (
+      !event.target.closest(
+        "#profileArea"
+      )
+    ) {
 
-    const input =
-      document.getElementById("searchInput");
-
-    if (input) {
-
-      input.addEventListener(
-        "keypress",
-        event => {
-
-          if (event.key === "Enter") {
-            searchVideos();
-          }
-
-        }
-      );
+      $("profileMenu")
+        .classList.remove("show");
 
     }
 
   }
 );
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+$("logoutButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      try {
+
+        await firebaseFunctions
+          .signOut(firebaseAuth);
+
+        $("profileMenu")
+          .classList.remove("show");
+
+        showHome();
+
+        alert(
+          "You have been logged out."
+        );
+
+      } catch (error) {
+
+        alert(
+          "Logout failed: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   CHANNEL
+========================= */
+
+$("myChannelButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!window.currentUser) {
+
+        openLogin();
+
+        return;
+      }
+
+
+      $("homePage").style.display =
+        "none";
+
+      $("videoPage").style.display =
+        "none";
+
+      $("uploadPage").style.display =
+        "none";
+
+      $("channelPage").style.display =
+        "block";
+
+
+      const user =
+        window.currentUser;
+
+
+      $("channelName").textContent =
+        user.displayName ||
+        "MiniTube User";
+
+
+      $("channelEmail").textContent =
+        user.email || "";
+
+
+      $("channelPhoto").src =
+        user.photoURL ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          user.displayName ||
+          "MiniTube User"
+        );
+
+
+      $("profileMenu")
+        .classList.remove("show");
+
+    }
+  );
+
+
+$("backFromChannelButton")
+  .addEventListener(
+    "click",
+    showHome
+  );
+
+
+/* =========================
+   UPLOAD PAGE
+========================= */
+
+$("uploadButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!window.currentUser) {
+
+        openLogin();
+
+        return;
+      }
+
+
+      $("homePage").style.display =
+        "none";
+
+      $("videoPage").style.display =
+        "none";
+
+      $("channelPage").style.display =
+        "none";
+
+      $("uploadPage").style.display =
+        "block";
+
+
+      $("profileMenu")
+        .classList.remove("show");
+
+    }
+  );
+
+
+$("backFromUploadButton")
+  .addEventListener(
+    "click",
+    showHome
+  );
+
+
+/* =========================
+   VIDEO PREVIEW
+========================= */
+
+$("videoFile")
+  .addEventListener(
+    "change",
+    () => {
+
+      const file =
+        $("videoFile").files[0];
+
+
+      if (!file) {
+
+        $("videoPreview")
+          .style.display = "none";
+
+        return;
+      }
+
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      $("videoPreview").src = url;
+
+      $("videoPreview")
+        .style.display = "block";
+
+    }
+  );
+
+
+/* =========================
+   UPLOAD VIDEO
+========================= */
+
+$("uploadVideoButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      const file =
+        $("videoFile").files[0];
+
+      const title =
+        $("videoTitle").value.trim();
+
+      const description =
+        $("videoDescription")
+          .value
+          .trim();
+
+
+      if (!file) {
+
+        alert(
+          "Please select a video."
+        );
+
+        return;
+      }
+
+
+      if (!title) {
+
+        alert(
+          "Please enter a video title."
+        );
+
+        return;
+      }
+
+
+      $("uploadStatus")
+        .textContent =
+          "Uploading video... ⏳";
+
+
+      try {
+
+        /*
+          CLOUDINARY SETTINGS
+
+          Cloud name:
+          dvvsxjid
+
+          Upload preset:
+          minituber
+        */
+
+
+        const formData =
+          new FormData();
+
+
+        formData.append(
+          "file",
+          file
+        );
+
+
+        formData.append(
+          "upload_preset",
+          "minituber"
+        );
+
+
+        const response =
+          await fetch(
+            "https://api.cloudinary.com/v1_1/dvvsxjid/video/upload",
+            {
+              method: "POST",
+              body: formData
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error?.message ||
+            "Upload failed."
+          );
+
+        }
+
+
+        const newVideo = {
+
+          id:
+            Date.now().toString(),
+
+          title:
+            title,
+
+          creator:
+            window.currentUser?.displayName ||
+            "MiniTube User",
+
+          description:
+            description,
+
+          url:
+            data.secure_url,
+
+          views:
+            0,
+
+          likes:
+            0
+
+        };
+
+
+        videos.unshift(
+          newVideo
+        );
+
+
+        saveVideos();
+
+
+        $("uploadStatus")
+          .textContent =
+            "Video successfully uploaded! 🎉";
+
+
+        alert(
+          "Video successfully uploaded! 🎉"
+        );
+
+
+        $("videoTitle").value = "";
+
+        $("videoDescription").value = "";
+
+        $("videoFile").value = "";
+
+        $("videoPreview").src = "";
+
+        $("videoPreview")
+          .style.display = "none";
+
+
+        renderVideos();
+
+
+        setTimeout(
+          showHome,
+          500
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        $("uploadStatus")
+          .textContent =
+            "Upload failed: " +
+            error.message;
+
+
+        alert(
+          "Upload failed: " +
+          error.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   BACK FROM VIDEO
+========================= */
+
+$("backFromVideoButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("mainVideo").pause();
+
+      $("mainVideo").src = "";
+
+      showHome();
+
+    }
+  );
+
+
+/* =========================
+   LIKE
+========================= */
+
+$("likeButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      if (!currentVideo) return;
+
+
+      const id =
+        currentVideo.id;
+
+
+      if (
+        likedVideos[id]
+      ) {
+
+        alert(
+          "You already liked this video."
+        );
+
+        return;
+      }
+
+
+      currentVideo.likes =
+        (currentVideo.likes || 0) + 1;
+
+
+      likedVideos[id] = true;
+
+
+      localStorage.setItem(
+        "minitubeLikes",
+        JSON.stringify(
+          likedVideos
+        )
+      );
+
+
+      saveVideos();
+
+
+      $("likeCount").textContent =
+        currentVideo.likes;
+
+    }
+  );
+
+
+/* =========================
+   SHARE
+========================= */
+
+$("shareButton")
+  .addEventListener(
+    "click",
+    async () => {
+
+      if (!currentVideo) return;
+
+
+      const shareData = {
+
+        title:
+          currentVideo.title,
+
+        text:
+          "Watch this video on MiniTube 🎬",
+
+        url:
+          window.location.href
+
+      };
+
+
+      try {
+
+        if (
+          navigator.share
+        ) {
+
+          await navigator.share(
+            shareData
+          );
+
+        } else {
+
+          await navigator.clipboard
+            .writeText(
+              window.location.href
+            );
+
+          alert(
+            "Video link copied! 🔗"
+          );
+
+        }
+
+      } catch (error) {
+
+        console.log(
+          "Share cancelled."
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+function getComments() {
+
+  return JSON.parse(
+    localStorage.getItem(
+      "minitubeComments"
+    ) || "{}"
+  );
+
+}
+
+
+function saveComments(comments) {
+
+  localStorage.setItem(
+    "minitubeComments",
+    JSON.stringify(
+      comments
+    )
+  );
+
+}
+
+
+function loadComments(videoId) {
+
+  const allComments =
+    getComments();
+
+
+  const comments =
+    allComments[videoId] || [];
+
+
+  const list =
+    $("commentsList");
+
+
+  list.innerHTML = "";
+
+
+  if (comments.length === 0) {
+
+    list.innerHTML =
+      "<p class='no-comments'>No comments yet. Be the first! 💬</p>";
+
+    return;
+  }
+
+
+  comments.forEach(comment => {
+
+    const item =
+      document.createElement("div");
+
+    item.className = "comment";
+
+
+    const avatar =
+      document.createElement("img");
+
+    avatar.className =
+      "comment-avatar";
+
+    avatar.src =
+      comment.photo ||
+      "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(
+        comment.name || "User"
+      );
+
+
+    const content =
+      document.createElement("div");
+
+    content.className =
+      "comment-content";
+
+
+    const author =
+      document.createElement("strong");
+
+    author.textContent =
+      comment.name ||
+      "MiniTube User";
+
+
+    const text =
+      document.createElement("p");
+
+    text.textContent =
+      comment.text;
+
+
+    content.appendChild(author);
+
+    content.appendChild(text);
+
+
+    item.appendChild(avatar);
+
+    item.appendChild(content);
+
+
+    list.appendChild(item);
+
+  });
+
+}
+
+
+$("commentButton")
+  .addEventListener(
+    "click",
+    addComment
+  );
+
+
+$("commentInput")
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (event.key === "Enter") {
+        addComment();
+      }
+
+    }
+  );
+
+
+function addComment() {
+
+  if (!currentVideo) return;
+
+
+  if (!window.currentUser) {
+
+    alert(
+      "Please login to comment."
+    );
+
+    openLogin();
+
+    return;
+  }
+
+
+  const input =
+    $("commentInput");
+
+
+  const text =
+    input.value.trim();
+
+
+  if (!text) {
+
+    alert(
+      "Please write a comment."
+    );
+
+    return;
+  }
+
+
+  const allComments =
+    getComments();
+
+
+  if (!allComments[currentVideo.id]) {
+
+    allComments[currentVideo.id] =
+      [];
+
+  }
+
+
+  allComments[currentVideo.id]
+    .push({
+
+      name:
+        window.currentUser.displayName ||
+        "MiniTube User",
+
+      text:
+        text,
+
+      photo:
+        window.currentUser.photoURL ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          window.currentUser.displayName ||
+          "User"
+        )
+
+    });
+
+
+  saveComments(
+    allComments
+  );
+
+
+  input.value = "";
+
+
+  loadComments(
+    currentVideo.id
+  );
+
+}
+
+
+/* =========================
+   CLOSE MODALS ON OUTSIDE CLICK
+========================= */
+
+window.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      $("loginModal")
+    ) {
+
+      closeModals();
+
+    }
+
+
+    if (
+      event.target ===
+      $("signupModal")
+    ) {
+
+      closeModals();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START WEBSITE
+========================= */
+
+renderVideos();
+
+showHome();
