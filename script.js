@@ -13,7 +13,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   updateProfile,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
@@ -38,7 +39,7 @@ const firebaseConfig = {
 
 
 // ==========================================
-// INITIALIZE FIREBASE
+// INITIALIZE
 // ==========================================
 
 const app = initializeApp(firebaseConfig);
@@ -52,7 +53,7 @@ console.log("Firebase connected successfully! 🔥");
 
 
 // ==========================================
-// LOGIN / SIGNUP POPUPS
+// MODALS
 // ==========================================
 
 window.openLogin = function () {
@@ -113,15 +114,8 @@ window.searchVideos = function () {
     const title =
       video.dataset.title.toLowerCase();
 
-    if (title.includes(search)) {
-
-      video.style.display = "";
-
-    } else {
-
-      video.style.display = "none";
-
-    }
+    video.style.display =
+      title.includes(search) ? "" : "none";
 
   });
 
@@ -129,7 +123,7 @@ window.searchVideos = function () {
 
 
 // ==========================================
-// EMAIL SIGN UP
+// SIGN UP
 // ==========================================
 
 document
@@ -137,23 +131,16 @@ document
   .addEventListener("click", async () => {
 
     const name =
-      document.getElementById("signupName")
-        .value
-        .trim();
+      document.getElementById("signupName").value.trim();
 
     const username =
-      document.getElementById("signupUsername")
-        .value
-        .trim();
+      document.getElementById("signupUsername").value.trim();
 
     const email =
-      document.getElementById("signupEmail")
-        .value
-        .trim();
+      document.getElementById("signupEmail").value.trim();
 
     const password =
-      document.getElementById("signupPassword")
-        .value;
+      document.getElementById("signupPassword").value;
 
 
     if (!name || !username || !email || !password) {
@@ -176,7 +163,7 @@ document
 
     try {
 
-      const userCredential =
+      const result =
         await createUserWithEmailAndPassword(
           auth,
           email,
@@ -184,8 +171,7 @@ document
         );
 
 
-      const user =
-        userCredential.user;
+      const user = result.user;
 
 
       await updateProfile(user, {
@@ -223,7 +209,7 @@ document
 
 
 // ==========================================
-// EMAIL LOGIN
+// LOGIN
 // ==========================================
 
 document
@@ -231,13 +217,10 @@ document
   .addEventListener("click", async () => {
 
     const email =
-      document.getElementById("loginEmail")
-        .value
-        .trim();
+      document.getElementById("loginEmail").value.trim();
 
     const password =
-      document.getElementById("loginPassword")
-        .value;
+      document.getElementById("loginPassword").value;
 
 
     if (!email || !password) {
@@ -289,8 +272,7 @@ async function googleLogin() {
       );
 
 
-    const user =
-      result.user;
+    const user = result.user;
 
 
     await setDoc(
@@ -336,6 +318,113 @@ document
 
 
 // ==========================================
+// SHOW PROFILE
+// ==========================================
+
+function showProfile(user) {
+
+  const headerButtons =
+    document.getElementById("headerButtons");
+
+  const profileArea =
+    document.getElementById("profileArea");
+
+  const profilePhoto =
+    document.getElementById("profilePhoto");
+
+  const profileName =
+    document.getElementById("profileName");
+
+  const profileEmail =
+    document.getElementById("profileEmail");
+
+
+  headerButtons.style.display = "none";
+
+  profileArea.style.display = "block";
+
+
+  profileName.textContent =
+    user.displayName || "MiniTube User";
+
+  profileEmail.textContent =
+    user.email || "";
+
+
+  if (user.photoURL) {
+
+    profilePhoto.src = user.photoURL;
+
+  } else {
+
+    profilePhoto.src =
+      "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(
+        user.displayName || "User"
+      );
+
+  }
+
+}
+
+
+// ==========================================
+// HIDE PROFILE
+// ==========================================
+
+function hideProfile() {
+
+  document.getElementById("headerButtons").style.display = "flex";
+
+  document.getElementById("profileArea").style.display = "none";
+
+}
+
+
+// ==========================================
+// PROFILE CLICK
+// ==========================================
+
+document
+  .getElementById("profilePhoto")
+  .addEventListener("click", () => {
+
+    const menu =
+      document.getElementById("profileMenu");
+
+    menu.classList.toggle("show");
+
+  });
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+window.logoutUser = async function () {
+
+  try {
+
+    await signOut(auth);
+
+    alert("Logged out successfully! 👋");
+
+    document
+      .getElementById("profileMenu")
+      .classList.remove("show");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(error.message);
+
+  }
+
+};
+
+
+// ==========================================
 // AUTH STATE
 // ==========================================
 
@@ -343,14 +432,15 @@ onAuthStateChanged(auth, (user) => {
 
   if (user) {
 
-    console.log(
-      "Logged in:",
-      user.email
-    );
+    console.log("Logged in:", user.email);
+
+    showProfile(user);
 
   } else {
 
     console.log("No user logged in.");
+
+    hideProfile();
 
   }
 
