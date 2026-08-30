@@ -19,23 +19,44 @@
       <span>MiniTube</span>
     </div>
 
+    <!-- SEARCH -->
     <div class="search-box">
       <input
         type="text"
         id="searchInput"
         placeholder="Search MiniTube..."
       >
-      <button id="searchButton">🔍</button>
+
+      <button id="searchButton">
+        🔍
+      </button>
     </div>
 
-    <!-- LOGIN / SIGNUP -->
+    <!-- AUTH BUTTONS -->
     <div class="header-buttons" id="authButtons">
-      <button class="login-btn" id="loginButton">Login</button>
-      <button class="signup-btn" id="signupButton">Sign Up</button>
+
+      <button
+        class="login-btn"
+        id="loginButton"
+      >
+        Login
+      </button>
+
+      <button
+        class="signup-btn"
+        id="signupButton"
+      >
+        Sign Up
+      </button>
+
     </div>
+
 
     <!-- PROFILE -->
-    <div class="profile-area" id="profileArea">
+    <div
+      class="profile-area"
+      id="profileArea"
+    >
 
       <img
         id="profilePhoto"
@@ -44,14 +65,22 @@
         alt="Profile"
       >
 
-      <div class="profile-menu" id="profileMenu">
+      <div
+        class="profile-menu"
+        id="profileMenu"
+      >
 
-        <div class="profile-name" id="profileName">
+        <div
+          class="profile-name"
+          id="profileName"
+        >
           MiniTube User
         </div>
 
-        <div class="profile-email" id="profileEmail">
-        </div>
+        <div
+          class="profile-email"
+          id="profileEmail"
+        ></div>
 
         <button id="myChannelButton">
           📺 My Channel
@@ -89,31 +118,37 @@
 
   <main>
 
-    <!-- HOME -->
+    <!-- ================= HOME ================= -->
+
     <div id="homePage">
 
-      <!-- HERO -->
       <section class="hero">
 
-        <h1>Welcome to MiniTube 🎬</h1>
+        <h1>
+          Welcome to MiniTube 🎬
+        </h1>
 
         <p>
           Watch, upload and share your favorite videos.
           Create your own channel and become a MiniTube creator.
         </p>
 
-        <button class="start-btn" id="getStartedButton">
+        <button
+          class="start-btn"
+          id="getStartedButton"
+        >
           Get Started
         </button>
 
       </section>
 
 
-      <!-- VIDEOS -->
       <section class="video-section">
 
         <div class="section-title">
-          <h2>🔥 Recommended Videos</h2>
+          <h2>
+            🔥 Recommended Videos
+          </h2>
         </div>
 
         <div
@@ -126,7 +161,8 @@
     </div>
 
 
-    <!-- VIDEO PAGE -->
+    <!-- ================= VIDEO PAGE ================= -->
+
     <section
       class="video-page"
       id="videoPage"
@@ -157,6 +193,9 @@
           Video Title
         </h1>
 
+
+        <!-- ACTIONS -->
+
         <div class="video-actions">
 
           <button id="likeButton">
@@ -170,8 +209,7 @@
           <a
             id="downloadButton"
             href="#"
-            target="_blank"
-            rel="noopener"
+            download
           >
             ⬇️ Download
           </a>
@@ -180,6 +218,7 @@
 
 
         <!-- CREATOR -->
+
         <div class="creator-box">
 
           <div
@@ -205,9 +244,12 @@
 
 
         <!-- DESCRIPTION -->
+
         <div class="description-box">
 
-          <h3>Description</h3>
+          <h3>
+            Description
+          </h3>
 
           <p id="mainVideoDescription">
             No description available.
@@ -216,12 +258,16 @@
         </div>
 
 
-        <!-- COMMENTS -->
+        <!-- ================= COMMENTS ================= -->
+
         <div class="comments-section">
 
-          <h2>💬 Comments</h2>
+          <h2>
+            💬 Comments
+          </h2>
 
-          <div class="comment-form">
+
+          <div class="comment-input">
 
             <input
               type="text"
@@ -235,6 +281,7 @@
 
           </div>
 
+
           <div id="commentsList"></div>
 
         </div>
@@ -244,7 +291,8 @@
     </section>
 
 
-    <!-- CHANNEL PAGE -->
+    <!-- ================= CHANNEL PAGE ================= -->
+
     <section
       class="channel-page"
       id="channelPage"
@@ -256,6 +304,7 @@
       >
         ← Back
       </button>
+
 
       <div class="channel-header">
 
@@ -282,10 +331,41 @@
 
       </div>
 
+
+      <div class="channel-tabs">
+
+        <button class="active">
+          Videos
+        </button>
+
+        <button>
+          About
+        </button>
+
+      </div>
+
+
+      <div class="empty-channel">
+
+        <div class="empty-icon">
+          🎬
+        </div>
+
+        <h2>
+          Your MiniTube Channel
+        </h2>
+
+        <p>
+          Your uploaded videos will appear here.
+        </p>
+
+      </div>
+
     </section>
 
 
-    <!-- UPLOAD PAGE -->
+    <!-- ================= UPLOAD PAGE ================= -->
+
     <section
       class="upload-page"
       id="uploadPage"
@@ -298,13 +378,17 @@
         ← Back
       </button>
 
+
       <div class="upload-box">
 
-        <h1>Upload Video 🎬</h1>
+        <h1>
+          Upload Video 🎬
+        </h1>
 
         <p class="upload-note">
           Upload your video to MiniTube.
         </p>
+
 
         <label class="upload-label">
           Video Title
@@ -317,6 +401,7 @@
           placeholder="Enter video title"
         >
 
+
         <label class="upload-label">
           Description
         </label>
@@ -326,6 +411,7 @@
           class="upload-input description-input"
           placeholder="Enter video description"
         ></textarea>
+
 
         <label class="upload-label">
           Select Video
@@ -337,12 +423,15 @@
           accept="video/*"
         >
 
+
         <video
           id="videoPreview"
           class="video-preview"
           controls
+          playsinline
           style="display:none"
         ></video>
+
 
         <button
           class="upload-btn"
@@ -350,6 +439,7 @@
         >
           ⬆️ Upload Video
         </button>
+
 
         <p id="uploadStatus"></p>
 
@@ -360,7 +450,8 @@
   </main>
 
 
-  <!-- LOGIN MODAL -->
+  <!-- ================= LOGIN MODAL ================= -->
+
   <div
     class="modal"
     id="loginModal"
@@ -375,7 +466,11 @@
         ×
       </button>
 
-      <h2>Login to MiniTube</h2>
+
+      <h2>
+        Login to MiniTube
+      </h2>
+
 
       <input
         id="loginEmail"
@@ -383,11 +478,13 @@
         placeholder="Email"
       >
 
+
       <input
         id="loginPassword"
         type="password"
         placeholder="Password"
       >
+
 
       <button
         class="modal-btn"
@@ -396,6 +493,7 @@
         Login
       </button>
 
+
       <button
         class="modal-btn google-btn"
         id="googleLoginButton"
@@ -403,8 +501,10 @@
         🔵 Continue with Google
       </button>
 
+
       <p>
         Don't have an account?
+
         <span id="goToSignup">
           Sign Up
         </span>
@@ -415,7 +515,8 @@
   </div>
 
 
-  <!-- SIGNUP MODAL -->
+  <!-- ================= SIGNUP MODAL ================= -->
+
   <div
     class="modal"
     id="signupModal"
@@ -430,7 +531,11 @@
         ×
       </button>
 
-      <h2>Create MiniTube Account</h2>
+
+      <h2>
+        Create MiniTube Account
+      </h2>
+
 
       <input
         id="signupName"
@@ -438,17 +543,20 @@
         placeholder="Your Name"
       >
 
+
       <input
         id="signupEmail"
         type="email"
         placeholder="Email"
       >
 
+
       <input
         id="signupPassword"
         type="password"
         placeholder="Create Password"
       >
+
 
       <button
         class="modal-btn"
@@ -457,6 +565,7 @@
         Create Account
       </button>
 
+
       <button
         class="modal-btn google-btn"
         id="googleSignupButton"
@@ -464,8 +573,10 @@
         🔵 Continue with Google
       </button>
 
+
       <p>
         Already have an account?
+
         <span id="goToLogin">
           Login
         </span>
@@ -476,12 +587,15 @@
   </div>
 
 
-  <!-- FIREBASE -->
+  <!-- ================= FIREBASE ================= -->
+
   <script type="module">
 
     import {
       initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
 
     import {
       getAuth,
@@ -492,7 +606,9 @@
       onAuthStateChanged,
       signOut,
       updateProfile
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
 
     import {
       getFirestore,
@@ -505,8 +621,11 @@
       query,
       orderBy,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+    }
+    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+
+    /* FIREBASE CONFIG */
 
     const firebaseConfig = {
 
@@ -531,39 +650,70 @@
     };
 
 
+    /* INITIALIZE FIREBASE */
+
     const app =
-      initializeApp(firebaseConfig);
+      initializeApp(
+        firebaseConfig
+      );
 
 
-    window.firebaseAuth =
+    const auth =
       getAuth(app);
 
 
-    window.googleProvider =
+    const googleProvider =
       new GoogleAuthProvider();
 
 
-    window.db =
+    const db =
       getFirestore(app);
+
+
+    /* MAKE AVAILABLE TO SCRIPT.JS */
+
+    window.firebaseAuth =
+      auth;
+
+
+    window.googleProvider =
+      googleProvider;
+
+
+    window.db =
+      db;
 
 
     window.firebaseFunctions = {
 
       signInWithPopup,
+
       createUserWithEmailAndPassword,
+
       signInWithEmailAndPassword,
+
       onAuthStateChanged,
+
       signOut,
+
       updateProfile,
 
       collection,
+
       addDoc,
+
       getDocs,
+
       doc,
+
       updateDoc,
+
       increment,
+
       query,
+
       orderBy,
+
       serverTimestamp
 
     };
@@ -574,59 +724,97 @@
     );
 
 
+    /* AUTH STATE */
+
     onAuthStateChanged(
-      window.firebaseAuth,
+      auth,
       user => {
 
-        window.currentUser = user;
+        window.currentUser =
+          user;
+
+
+        const authButtons =
+          document.getElementById(
+            "authButtons"
+          );
+
+
+        const profileArea =
+          document.getElementById(
+            "profileArea"
+          );
+
 
         if (user) {
 
-          document
-            .getElementById("authButtons")
-            .style.display = "none";
-
-          document
-            .getElementById("profileArea")
-            .style.display = "block";
+          authButtons.style.display =
+            "none";
 
 
-          document
-            .getElementById("profileName")
-            .textContent =
-              user.displayName ||
-              "MiniTube User";
+          profileArea.style.display =
+            "block";
 
 
-          document
-            .getElementById("profileEmail")
-            .textContent =
-              user.email || "";
+          document.getElementById(
+            "profileName"
+          ).textContent =
+            user.displayName ||
+            "MiniTube User";
+
+
+          document.getElementById(
+            "profileEmail"
+          ).textContent =
+            user.email || "";
 
 
           const photo =
             user.photoURL ||
+
             "https://ui-avatars.com/api/?name=" +
+
             encodeURIComponent(
               user.displayName ||
               "M"
             );
 
 
-          document
-            .getElementById("profilePhoto")
-            .src = photo;
+          document.getElementById(
+            "profilePhoto"
+          ).src =
+            photo;
+
+
+          /* CHANNEL */
+
+          document.getElementById(
+            "channelPhoto"
+          ).src =
+            photo;
+
+
+          document.getElementById(
+            "channelName"
+          ).textContent =
+            user.displayName ||
+            "MiniTube User";
+
+
+          document.getElementById(
+            "channelEmail"
+          ).textContent =
+            user.email || "";
 
 
         } else {
 
-          document
-            .getElementById("authButtons")
-            .style.display = "flex";
+          authButtons.style.display =
+            "flex";
 
-          document
-            .getElementById("profileArea")
-            .style.display = "none";
+
+          profileArea.style.display =
+            "none";
 
         }
 
@@ -637,6 +825,7 @@
 
 
   <!-- MAIN JAVASCRIPT -->
+
   <script src="script.js"></script>
 
 </body>
