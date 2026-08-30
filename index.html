@@ -19,7 +19,6 @@
       <span>MiniTube</span>
     </div>
 
-    <!-- SEARCH -->
     <div class="search-box">
       <input
         type="text"
@@ -32,7 +31,7 @@
       </button>
     </div>
 
-    <!-- AUTH BUTTONS -->
+    <!-- LOGIN / SIGNUP -->
     <div class="header-buttons" id="authButtons">
 
       <button
@@ -82,6 +81,7 @@
           id="profileEmail"
         ></div>
 
+
         <button id="myChannelButton">
           📺 My Channel
         </button>
@@ -104,24 +104,47 @@
   <!-- CATEGORIES -->
   <div class="categories">
 
-    <button class="active">All</button>
-    <button>Gaming</button>
-    <button>Islamic</button>
-    <button>Education</button>
-    <button>Entertainment</button>
-    <button>Sports</button>
-    <button>News</button>
-    <button>Music</button>
+    <button class="active">
+      All
+    </button>
+
+    <button>
+      Gaming
+    </button>
+
+    <button>
+      Islamic
+    </button>
+
+    <button>
+      Education
+    </button>
+
+    <button>
+      Entertainment
+    </button>
+
+    <button>
+      Sports
+    </button>
+
+    <button>
+      News
+    </button>
+
+    <button>
+      Music
+    </button>
 
   </div>
 
 
   <main>
 
-    <!-- ================= HOME ================= -->
-
+    <!-- HOME -->
     <div id="homePage">
 
+      <!-- HERO -->
       <section class="hero">
 
         <h1>
@@ -143,6 +166,7 @@
       </section>
 
 
+      <!-- VIDEOS -->
       <section class="video-section">
 
         <div class="section-title">
@@ -161,8 +185,7 @@
     </div>
 
 
-    <!-- ================= VIDEO PAGE ================= -->
-
+    <!-- VIDEO PAGE -->
     <section
       class="video-page"
       id="videoPage"
@@ -194,8 +217,6 @@
         </h1>
 
 
-        <!-- ACTIONS -->
-
         <div class="video-actions">
 
           <button id="likeButton">
@@ -209,6 +230,8 @@
           <a
             id="downloadButton"
             href="#"
+            target="_blank"
+            rel="noopener"
             download
           >
             ⬇️ Download
@@ -218,7 +241,6 @@
 
 
         <!-- CREATOR -->
-
         <div class="creator-box">
 
           <div
@@ -244,7 +266,6 @@
 
 
         <!-- DESCRIPTION -->
-
         <div class="description-box">
 
           <h3>
@@ -258,8 +279,7 @@
         </div>
 
 
-        <!-- ================= COMMENTS ================= -->
-
+        <!-- COMMENTS -->
         <div class="comments-section">
 
           <h2>
@@ -267,7 +287,7 @@
           </h2>
 
 
-          <div class="comment-input">
+          <div class="comment-form">
 
             <input
               type="text"
@@ -291,8 +311,7 @@
     </section>
 
 
-    <!-- ================= CHANNEL PAGE ================= -->
-
+    <!-- CHANNEL PAGE -->
     <section
       class="channel-page"
       id="channelPage"
@@ -315,6 +334,7 @@
           alt="Channel"
         >
 
+
         <div class="channel-details">
 
           <h1 id="channelName">
@@ -331,41 +351,10 @@
 
       </div>
 
-
-      <div class="channel-tabs">
-
-        <button class="active">
-          Videos
-        </button>
-
-        <button>
-          About
-        </button>
-
-      </div>
-
-
-      <div class="empty-channel">
-
-        <div class="empty-icon">
-          🎬
-        </div>
-
-        <h2>
-          Your MiniTube Channel
-        </h2>
-
-        <p>
-          Your uploaded videos will appear here.
-        </p>
-
-      </div>
-
     </section>
 
 
-    <!-- ================= UPLOAD PAGE ================= -->
-
+    <!-- UPLOAD PAGE -->
     <section
       class="upload-page"
       id="uploadPage"
@@ -428,7 +417,6 @@
           id="videoPreview"
           class="video-preview"
           controls
-          playsinline
           style="display:none"
         ></video>
 
@@ -450,8 +438,7 @@
   </main>
 
 
-  <!-- ================= LOGIN MODAL ================= -->
-
+  <!-- LOGIN MODAL -->
   <div
     class="modal"
     id="loginModal"
@@ -508,6 +495,7 @@
         <span id="goToSignup">
           Sign Up
         </span>
+
       </p>
 
     </div>
@@ -515,8 +503,7 @@
   </div>
 
 
-  <!-- ================= SIGNUP MODAL ================= -->
-
+  <!-- SIGNUP MODAL -->
   <div
     class="modal"
     id="signupModal"
@@ -580,6 +567,7 @@
         <span id="goToLogin">
           Login
         </span>
+
       </p>
 
     </div>
@@ -587,14 +575,12 @@
   </div>
 
 
-  <!-- ================= FIREBASE ================= -->
-
+  <!-- FIREBASE -->
   <script type="module">
 
     import {
       initializeApp
-    }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
     import {
@@ -606,8 +592,7 @@
       onAuthStateChanged,
       signOut,
       updateProfile
-    }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
     import {
@@ -621,11 +606,12 @@
       query,
       orderBy,
       serverTimestamp
-    }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-    /* FIREBASE CONFIG */
+    /* =========================
+       FIREBASE CONFIG
+    ========================= */
 
     const firebaseConfig = {
 
@@ -650,12 +636,12 @@
     };
 
 
-    /* INITIALIZE FIREBASE */
+    /* =========================
+       INITIALIZE FIREBASE
+    ========================= */
 
     const app =
-      initializeApp(
-        firebaseConfig
-      );
+      initializeApp(firebaseConfig);
 
 
     const auth =
@@ -670,7 +656,9 @@
       getFirestore(app);
 
 
-    /* MAKE AVAILABLE TO SCRIPT.JS */
+    /* =========================
+       GLOBAL FIREBASE OBJECT
+    ========================= */
 
     window.firebaseAuth =
       auth;
@@ -714,7 +702,9 @@
 
       orderBy,
 
-      serverTimestamp
+      serverTimestamp,
+
+      db
 
     };
 
@@ -724,7 +714,9 @@
     );
 
 
-    /* AUTH STATE */
+    /* =========================
+       AUTH STATE
+    ========================= */
 
     onAuthStateChanged(
       auth,
@@ -734,87 +726,58 @@
           user;
 
 
-        const authButtons =
-          document.getElementById(
-            "authButtons"
-          );
-
-
-        const profileArea =
-          document.getElementById(
-            "profileArea"
-          );
-
-
         if (user) {
 
-          authButtons.style.display =
-            "none";
+          document
+            .getElementById("authButtons")
+            .style.display = "none";
 
 
-          profileArea.style.display =
-            "block";
+          document
+            .getElementById("profileArea")
+            .style.display = "block";
 
 
-          document.getElementById(
-            "profileName"
-          ).textContent =
-            user.displayName ||
-            "MiniTube User";
+          document
+            .getElementById("profileName")
+            .textContent =
+              user.displayName ||
+              "MiniTube User";
 
 
-          document.getElementById(
-            "profileEmail"
-          ).textContent =
-            user.email || "";
+          document
+            .getElementById("profileEmail")
+            .textContent =
+              user.email || "";
 
 
           const photo =
             user.photoURL ||
-
             "https://ui-avatars.com/api/?name=" +
-
             encodeURIComponent(
               user.displayName ||
               "M"
             );
 
 
-          document.getElementById(
-            "profilePhoto"
-          ).src =
-            photo;
-
-
-          /* CHANNEL */
-
-          document.getElementById(
-            "channelPhoto"
-          ).src =
-            photo;
-
-
-          document.getElementById(
-            "channelName"
-          ).textContent =
-            user.displayName ||
-            "MiniTube User";
-
-
-          document.getElementById(
-            "channelEmail"
-          ).textContent =
-            user.email || "";
+          document
+            .getElementById("profilePhoto")
+            .src =
+              photo;
 
 
         } else {
 
-          authButtons.style.display =
-            "flex";
+          document
+            .getElementById("authButtons")
+            .style.display =
+              "flex";
 
 
-          profileArea.style.display =
-            "none";
+          document
+            .getElementById("profileArea")
+            .style.display =
+              "none";
 
         }
 
@@ -825,7 +788,6 @@
 
 
   <!-- MAIN JAVASCRIPT -->
-
   <script src="script.js"></script>
 
 </body>
