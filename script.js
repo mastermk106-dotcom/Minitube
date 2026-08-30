@@ -1,9 +1,6 @@
 const $ = (id) => document.getElementById(id);
 
-let videos = JSON.parse(
-  localStorage.getItem("minitubeVideos") || "[]"
-);
-
+let videos = [];
 let currentVideo = null;
 
 let likedVideos = JSON.parse(
@@ -12,63 +9,69 @@ let likedVideos = JSON.parse(
 
 
 /* =========================
-   SAVE LOCAL VIDEOS
+   FIREBASE VIDEO LOADING
 ========================= */
 
-function saveVideos() {
-  localStorage.setItem(
-    "minitubeVideos",
-    JSON.stringify(videos)
-  );
+async function loadVideos() {
+
+  try {
+
+    const snapshot = await firebaseFunctions.getDocs(
+      firebaseFunctions.collection(
+        window.db,
+        "videos"
+      )
+    );
+
+    videos = [];
+
+    snapshot.forEach((docSnap) => {
+
+      videos.push({
+        id: docSnap.id,
+        ...docSnap.data()
+      });
+
+    });
+
+    console.log(
+      "Videos loaded from Firebase:",
+      videos.length
+    );
+
+    renderVideos();
+
+  } catch (error) {
+
+    console.error(
+      "Firebase video loading error:",
+      error
+    );
+
+    const localVideos = JSON.parse(
+      localStorage.getItem("minitubeVideos") || "[]"
+    );
+
+    videos = localVideos;
+
+    renderVideos();
+
+  }
+
 }
 
 
 /* =========================
-   DEFAULT VIDEOS
+   SAVE LOCAL COPY
 ========================= */
 
-const defaultVideos = [
-  {
-    id: "demo1",
-    title: "Amazing Gaming Video 🎮",
-    creator: "Mini Gamer",
-    description: "Amazing gaming video on MiniTube.",
-    url: "",
-    views: 12000,
-    likes: 1
-  },
-  {
-    id: "demo2",
-    title: "Beautiful Islamic Reminder 🕌",
-    creator: "Islamic Channel",
-    description: "A beautiful Islamic reminder.",
-    url: "",
-    views: 25000,
-    likes: 1
-  },
-  {
-    id: "demo3",
-    title: "Learn Something New 📚",
-    creator: "Knowledge Hub",
-    description: "Learn something new today.",
-    url: "",
-    views: 8000,
-    likes: 1
-  },
-  {
-    id: "demo4",
-    title: "Best Football Moments ⚽",
-    creator: "Sports World",
-    description: "Best football moments.",
-    url: "",
-    views: 45000,
-    likes: 1
-  }
-];
+function saveVideos() {
 
-if (!videos.some(v => v.id === "demo1")) {
-  videos = [...defaultVideos, ...videos];
-  saveVideos();
+  localStorage.setItem(
+    "minitubeVideos",
+    JSON.stringify(videos)
+  );
+
 }
 
 
@@ -83,7 +86,6 @@ function showHome() {
   $("channelPage").style.display = "none";
   $("uploadPage").style.display = "none";
 
-  renderVideos(videos);
 }
 
 
@@ -100,49 +102,69 @@ function openVideo(video) {
   $("channelPage").style.display = "none";
   $("uploadPage").style.display = "none";
 
+
   $("mainVideoTitle").textContent =
     video.title || "Untitled Video";
+
 
   $("mainVideoCreator").textContent =
     video.creator || "MiniTube User";
 
+
   $("mainVideoViews").textContent =
     formatViews(video.views || 0) + " views";
 
+
   $("mainVideoDescription").textContent =
-    video.description || "No description available.";
+    video.description ||
+    "No description available.";
 
-  const mainVideo = $("mainVideo");
 
-  mainVideo.pause();
+  const player = $("mainVideo");
 
-  mainVideo.removeAttribute("src");
+  player.pause();
+
+  player.removeAttribute("src");
+
+  player.load();
+
 
   if (video.url) {
-    mainVideo.src = video.url;
-    mainVideo.load();
+
+    player.src = video.url;
+
+    player.load();
+
+    console.log(
+      "Playing video:",
+      video.url
+    );
+
   }
+
 
   $("downloadButton").href =
     video.url || "#";
 
-  $("downloadButton").download =
-    video.title || "MiniTube Video";
 
   $("videoCreatorAvatar").textContent =
     (video.creator || "M")
       .charAt(0)
       .toUpperCase();
 
+
   $("likeCount").textContent =
     video.likes || 0;
 
+
   loadComments(video.id);
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 
@@ -154,16 +176,35 @@ function renderVideos(list = videos) {
 
   const grid = $("videoGrid");
 
-  if (!grid) return;
-
   grid.innerHTML = "";
 
-  list.forEach(video => {
+
+  if (!list || list.length === 0) {
+
+    grid.innerHTML = `
+      <div style="
+        grid-column:1/-1;
+        background:white;
+        padding:40px;
+        text-align:center;
+        border-radius:15px;
+      ">
+        <h2>No videos yet 🎬</h2>
+        <p>Upload your first video to MiniTube.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+
+  list.forEach((video) => {
 
     const card =
       document.createElement("div");
 
-    card.className = "video-card";
+    card.className =
+      "video-card";
 
 
     /* THUMBNAIL */
@@ -171,64 +212,57 @@ function renderVideos(list = videos) {
     const thumbnail =
       document.createElement("div");
 
-    thumbnail.className = "thumbnail";
+    thumbnail.className =
+      "thumbnail";
 
 
     if (video.url) {
 
-      const videoElement =
+      const preview =
         document.createElement("video");
 
-      videoElement.src = video.url;
+      preview.src =
+        video.url;
 
-      videoElement.muted = true;
+      preview.muted = true;
 
-      videoElement.preload = "metadata";
+      preview.playsInline = true;
 
-      videoElement.playsInline = true;
+      preview.preload = "metadata";
 
-      videoElement.controls = false;
+      preview.controls = false;
 
-      videoElement.addEventListener(
-        "loadedmetadata",
+      preview.addEventListener(
+        "loadeddata",
         () => {
 
           try {
-            videoElement.currentTime = 0.1;
+            preview.currentTime = 0.1;
           } catch (e) {}
 
         }
       );
 
-      videoElement.addEventListener(
-        "mouseenter",
+
+      preview.addEventListener(
+        "error",
         () => {
 
-          videoElement.play().catch(() => {});
+          thumbnail.innerHTML =
+            "▶";
 
         }
       );
 
-      videoElement.addEventListener(
-        "mouseleave",
-        () => {
-
-          videoElement.pause();
-
-          try {
-            videoElement.currentTime = 0.1;
-          } catch (e) {}
-
-        }
-      );
 
       thumbnail.appendChild(
-        videoElement
+        preview
       );
 
     } else {
 
-      thumbnail.innerHTML = "▶";
+      thumbnail.innerHTML =
+        "▶";
 
     }
 
@@ -238,7 +272,8 @@ function renderVideos(list = videos) {
     const info =
       document.createElement("div");
 
-    info.className = "video-info";
+    info.className =
+      "video-info";
 
 
     const avatar =
@@ -246,6 +281,7 @@ function renderVideos(list = videos) {
 
     avatar.className =
       "channel-avatar";
+
 
     avatar.textContent =
       (video.creator || "M")
@@ -261,21 +297,25 @@ function renderVideos(list = videos) {
       document.createElement("h3");
 
     title.textContent =
-      video.title || "Untitled Video";
+      video.title ||
+      "Untitled Video";
 
 
     const creator =
       document.createElement("p");
 
     creator.textContent =
-      video.creator || "MiniTube User";
+      video.creator ||
+      "MiniTube User";
 
 
     const views =
       document.createElement("p");
 
     views.textContent =
-      formatViews(video.views || 0) +
+      formatViews(
+        video.views || 0
+      ) +
       " views";
 
 
@@ -283,8 +323,10 @@ function renderVideos(list = videos) {
     details.appendChild(creator);
     details.appendChild(views);
 
+
     info.appendChild(avatar);
     info.appendChild(details);
+
 
     card.appendChild(thumbnail);
     card.appendChild(info);
@@ -299,6 +341,7 @@ function renderVideos(list = videos) {
     grid.appendChild(card);
 
   });
+
 }
 
 
@@ -319,6 +362,7 @@ function formatViews(number) {
 
   }
 
+
   if (number >= 1000) {
 
     return (
@@ -330,7 +374,9 @@ function formatViews(number) {
 
   }
 
+
   return String(number);
+
 }
 
 
@@ -346,29 +392,35 @@ function searchVideos() {
       .toLowerCase()
       .trim();
 
+
   if (!search) {
 
     renderVideos(videos);
 
     return;
+
   }
 
+
   const results =
-    videos.filter(video =>
+    videos.filter(
+      (video) =>
 
-      (video.title || "")
-        .toLowerCase()
-        .includes(search)
+        (video.title || "")
+          .toLowerCase()
+          .includes(search)
 
-      ||
+        ||
 
-      (video.creator || "")
-        .toLowerCase()
-        .includes(search)
+        (video.creator || "")
+          .toLowerCase()
+          .includes(search)
 
     );
 
+
   renderVideos(results);
+
 }
 
 
@@ -380,10 +432,12 @@ $("searchButton").addEventListener(
 
 $("searchInput").addEventListener(
   "keydown",
-  event => {
+  (event) => {
 
     if (event.key === "Enter") {
+
       searchVideos();
+
     }
 
   }
@@ -395,19 +449,28 @@ $("searchInput").addEventListener(
 ========================= */
 
 function openLogin() {
-  $("loginModal").style.display = "flex";
+
+  $("loginModal").style.display =
+    "flex";
+
 }
 
 
 function openSignup() {
-  $("signupModal").style.display = "flex";
+
+  $("signupModal").style.display =
+    "flex";
+
 }
 
 
 function closeModals() {
 
-  $("loginModal").style.display = "none";
-  $("signupModal").style.display = "none";
+  $("loginModal").style.display =
+    "none";
+
+  $("signupModal").style.display =
+    "none";
 
 }
 
@@ -468,128 +531,138 @@ $("goToLogin").addEventListener(
    EMAIL SIGNUP
 ========================= */
 
-$("emailSignupButton").addEventListener(
-  "click",
-  async () => {
+$("emailSignupButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    const name =
-      $("signupName").value.trim();
+      const name =
+        $("signupName").value.trim();
 
-    const email =
-      $("signupEmail").value.trim();
+      const email =
+        $("signupEmail").value.trim();
 
-    const password =
-      $("signupPassword").value;
-
-
-    if (!name || !email || !password) {
-
-      alert("Please fill all fields.");
-
-      return;
-    }
+      const password =
+        $("signupPassword").value;
 
 
-    try {
+      if (!name || !email || !password) {
 
-      const userCredential =
+        alert(
+          "Please fill all fields."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const userCredential =
+          await firebaseFunctions
+            .createUserWithEmailAndPassword(
+              firebaseAuth,
+              email,
+              password
+            );
+
+
         await firebaseFunctions
-          .createUserWithEmailAndPassword(
-            firebaseAuth,
-            email,
-            password
+          .updateProfile(
+            userCredential.user,
+            {
+              displayName: name
+            }
           );
 
 
-      await firebaseFunctions
-        .updateProfile(
-          userCredential.user,
-          {
-            displayName: name
-          }
+        alert(
+          "Account successfully created! 🎉"
         );
 
 
-      alert(
-        "Account successfully created! 🎉"
-      );
-
-      closeModals();
-
-      $("signupName").value = "";
-      $("signupEmail").value = "";
-      $("signupPassword").value = "";
+        closeModals();
 
 
-    } catch (error) {
+        $("signupName").value = "";
+        $("signupEmail").value = "";
+        $("signupPassword").value = "";
 
-      alert(
-        "Signup failed: " +
-        error.message
-      );
+
+      } catch (error) {
+
+        alert(
+          "Signup failed: " +
+          error.message
+        );
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /* =========================
    EMAIL LOGIN
 ========================= */
 
-$("emailLoginButton").addEventListener(
-  "click",
-  async () => {
+$("emailLoginButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    const email =
-      $("loginEmail").value.trim();
+      const email =
+        $("loginEmail").value.trim();
 
-    const password =
-      $("loginPassword").value;
-
-
-    if (!email || !password) {
-
-      alert(
-        "Please enter email and password."
-      );
-
-      return;
-    }
+      const password =
+        $("loginPassword").value;
 
 
-    try {
+      if (!email || !password) {
 
-      await firebaseFunctions
-        .signInWithEmailAndPassword(
-          firebaseAuth,
-          email,
-          password
+        alert(
+          "Please enter email and password."
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        await firebaseFunctions
+          .signInWithEmailAndPassword(
+            firebaseAuth,
+            email,
+            password
+          );
+
+
+        alert(
+          "Login successful! 👋"
         );
 
 
-      alert(
-        "Login successful! 👋"
-      );
-
-      closeModals();
-
-      $("loginEmail").value = "";
-      $("loginPassword").value = "";
+        closeModals();
 
 
-    } catch (error) {
+        $("loginEmail").value = "";
+        $("loginPassword").value = "";
 
-      alert(
-        "Login failed: " +
-        error.message
-      );
+
+      } catch (error) {
+
+        alert(
+          "Login failed: " +
+          error.message
+        );
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /* =========================
@@ -620,41 +693,46 @@ async function googleLogin() {
 }
 
 
-$("googleLoginButton").addEventListener(
-  "click",
-  googleLogin
-);
+$("googleLoginButton")
+  .addEventListener(
+    "click",
+    googleLogin
+  );
 
 
-$("googleSignupButton").addEventListener(
-  "click",
-  googleLogin
-);
+$("googleSignupButton")
+  .addEventListener(
+    "click",
+    googleLogin
+  );
 
 
 /* =========================
    PROFILE MENU
 ========================= */
 
-$("profilePhoto").addEventListener(
-  "click",
-  event => {
+$("profilePhoto")
+  .addEventListener(
+    "click",
+    (event) => {
 
-    event.stopPropagation();
+      event.stopPropagation();
 
-    $("profileMenu")
-      .classList.toggle("show");
+      $("profileMenu")
+        .classList.toggle("show");
 
-  }
-);
+    }
+  );
 
 
 document.addEventListener(
   "click",
-  event => {
+  (event) => {
 
     if (
-      !event.target.closest("#profileArea")
+      !event.target.closest(
+        "#profileArea"
+      )
     ) {
 
       $("profileMenu")
@@ -670,451 +748,545 @@ document.addEventListener(
    LOGOUT
 ========================= */
 
-$("logoutButton").addEventListener(
-  "click",
-  async () => {
+$("logoutButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    try {
+      try {
 
-      await firebaseFunctions
-        .signOut(firebaseAuth);
+        await firebaseFunctions
+          .signOut(firebaseAuth);
 
-      $("profileMenu")
-        .classList.remove("show");
+        $("profileMenu")
+          .classList.remove("show");
 
-      showHome();
+        showHome();
 
-      alert(
-        "You have been logged out."
-      );
+        alert(
+          "You have been logged out."
+        );
 
-    } catch (error) {
+      } catch (error) {
 
-      alert(
-        "Logout failed: " +
-        error.message
-      );
+        alert(
+          "Logout failed: " +
+          error.message
+        );
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /* =========================
    CHANNEL
 ========================= */
 
-$("myChannelButton").addEventListener(
-  "click",
-  () => {
+$("myChannelButton")
+  .addEventListener(
+    "click",
+    () => {
 
-    if (!window.currentUser) {
+      if (!window.currentUser) {
 
-      openLogin();
+        openLogin();
 
-      return;
-    }
+        return;
 
-
-    $("homePage").style.display = "none";
-    $("videoPage").style.display = "none";
-    $("uploadPage").style.display = "none";
-    $("channelPage").style.display = "block";
+      }
 
 
-    const user =
-      window.currentUser;
+      $("homePage").style.display =
+        "none";
+
+      $("videoPage").style.display =
+        "none";
+
+      $("uploadPage").style.display =
+        "none";
+
+      $("channelPage").style.display =
+        "block";
 
 
-    $("channelName").textContent =
-      user.displayName ||
-      "MiniTube User";
+      const user =
+        window.currentUser;
 
 
-    $("channelEmail").textContent =
-      user.email || "";
-
-
-    $("channelPhoto").src =
-      user.photoURL ||
-      "https://ui-avatars.com/api/?name=" +
-      encodeURIComponent(
+      $("channelName").textContent =
         user.displayName ||
-        "MiniTube User"
-      );
+        "MiniTube User";
 
 
-    $("profileMenu")
-      .classList.remove("show");
-
-  }
-);
+      $("channelEmail").textContent =
+        user.email || "";
 
 
-$("backFromChannelButton").addEventListener(
-  "click",
-  showHome
-);
+      $("channelPhoto").src =
+        user.photoURL ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          user.displayName ||
+          "MiniTube User"
+        );
+
+
+      $("profileMenu")
+        .classList.remove("show");
+
+    }
+  );
+
+
+$("backFromChannelButton")
+  .addEventListener(
+    "click",
+    showHome
+  );
 
 
 /* =========================
    UPLOAD PAGE
 ========================= */
 
-$("uploadButton").addEventListener(
-  "click",
-  () => {
+$("uploadButton")
+  .addEventListener(
+    "click",
+    () => {
 
-    if (!window.currentUser) {
+      if (!window.currentUser) {
 
-      openLogin();
+        openLogin();
 
-      return;
+        return;
+
+      }
+
+
+      $("homePage").style.display =
+        "none";
+
+      $("videoPage").style.display =
+        "none";
+
+      $("channelPage").style.display =
+        "none";
+
+      $("uploadPage").style.display =
+        "block";
+
+
+      $("profileMenu")
+        .classList.remove("show");
+
     }
+  );
 
 
-    $("homePage").style.display = "none";
-    $("videoPage").style.display = "none";
-    $("channelPage").style.display = "none";
-    $("uploadPage").style.display = "block";
-
-
-    $("profileMenu")
-      .classList.remove("show");
-
-  }
-);
-
-
-$("backFromUploadButton").addEventListener(
-  "click",
-  showHome
-);
+$("backFromUploadButton")
+  .addEventListener(
+    "click",
+    showHome
+  );
 
 
 /* =========================
    VIDEO PREVIEW
 ========================= */
 
-$("videoFile").addEventListener(
-  "change",
-  () => {
+$("videoFile")
+  .addEventListener(
+    "change",
+    () => {
 
-    const file =
-      $("videoFile").files[0];
+      const file =
+        $("videoFile").files[0];
 
 
-    if (!file) {
+      if (!file) {
 
-      $("videoPreview").style.display =
-        "none";
+        $("videoPreview")
+          .style.display =
+          "none";
 
-      return;
+        return;
+
+      }
+
+
+      const url =
+        URL.createObjectURL(file);
+
+
+      $("videoPreview").src =
+        url;
+
+
+      $("videoPreview")
+        .style.display =
+        "block";
+
     }
-
-
-    const url =
-      URL.createObjectURL(file);
-
-
-    $("videoPreview").src = url;
-
-    $("videoPreview").style.display =
-      "block";
-
-  }
-);
+  );
 
 
 /* =========================
    UPLOAD VIDEO
 ========================= */
 
-$("uploadVideoButton").addEventListener(
-  "click",
-  async () => {
+$("uploadVideoButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    const file =
-      $("videoFile").files[0];
+      const file =
+        $("videoFile").files[0];
 
-    const title =
-      $("videoTitle").value.trim();
+      const title =
+        $("videoTitle")
+          .value
+          .trim();
 
-    const description =
-      $("videoDescription")
-        .value
-        .trim();
-
-
-    if (!file) {
-
-      alert(
-        "Please select a video."
-      );
-
-      return;
-    }
+      const description =
+        $("videoDescription")
+          .value
+          .trim();
 
 
-    if (!title) {
+      if (!file) {
 
-      alert(
-        "Please enter a video title."
-      );
-
-      return;
-    }
-
-
-    $("uploadStatus").textContent =
-      "Uploading video... ⏳";
-
-
-    try {
-
-      const formData =
-        new FormData();
-
-
-      formData.append(
-        "file",
-        file
-      );
-
-
-      formData.append(
-        "upload_preset",
-        "minituber"
-      );
-
-
-      const response =
-        await fetch(
-          "https://api.cloudinary.com/v1_1/dvvsxjid/video/upload",
-          {
-            method: "POST",
-            body: formData
-          }
+        alert(
+          "Please select a video."
         );
 
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          data.error?.message ||
-          "Upload failed."
-        );
+        return;
 
       }
 
 
-      const newVideo = {
+      if (!title) {
 
-        id:
-          Date.now().toString(),
+        alert(
+          "Please enter a video title."
+        );
 
-        title:
-          title,
+        return;
 
-        creator:
-          window.currentUser?.displayName ||
-          "MiniTube User",
-
-        description:
-          description,
-
-        url:
-          data.secure_url,
-
-        views:
-          0,
-
-        likes:
-          0
-
-      };
+      }
 
 
-      videos.unshift(newVideo);
-
-      saveVideos();
-
-
-      $("uploadStatus").textContent =
-        "Video successfully uploaded! 🎉";
+      $("uploadStatus")
+        .textContent =
+        "Uploading video... ⏳";
 
 
-      alert(
-        "Video successfully uploaded! 🎉"
-      );
+      try {
+
+        const formData =
+          new FormData();
 
 
-      $("videoTitle").value = "";
-      $("videoDescription").value = "";
-      $("videoFile").value = "";
-
-      $("videoPreview").src = "";
-
-      $("videoPreview").style.display =
-        "none";
+        formData.append(
+          "file",
+          file
+        );
 
 
-      renderVideos(videos);
+        formData.append(
+          "upload_preset",
+          "minituber"
+        );
 
 
-      setTimeout(
-        showHome,
-        500
-      );
+        const response =
+          await fetch(
+            "https://api.cloudinary.com/v1_1/dvvsxjid/video/upload",
+            {
+              method: "POST",
+              body: formData
+            }
+          );
 
 
-    } catch (error) {
-
-      console.error(error);
-
-      $("uploadStatus").textContent =
-        "Upload failed: " +
-        error.message;
+        const data =
+          await response.json();
 
 
-      alert(
-        "Upload failed: " +
-        error.message
-      );
+        if (!response.ok) {
+
+          throw new Error(
+            data.error?.message ||
+            "Upload failed."
+          );
+
+        }
+
+
+        const newVideo = {
+
+          title: title,
+
+          creator:
+            window.currentUser?.displayName ||
+            "MiniTube User",
+
+          description: description,
+
+          url: data.secure_url,
+
+          views: 0,
+
+          likes: 0,
+
+          userId:
+            window.currentUser?.uid ||
+            "",
+
+          createdAt:
+            firebaseFunctions.serverTimestamp()
+
+        };
+
+
+        /* SAVE TO FIRESTORE */
+
+        const docRef =
+          await firebaseFunctions.addDoc(
+            firebaseFunctions.collection(
+              window.db,
+              "videos"
+            ),
+            newVideo
+          );
+
+
+        newVideo.id =
+          docRef.id;
+
+
+        videos.unshift(
+          newVideo
+        );
+
+
+        saveVideos();
+
+
+        $("uploadStatus")
+          .textContent =
+          "Video successfully uploaded! 🎉";
+
+
+        alert(
+          "Video successfully uploaded! 🎉"
+        );
+
+
+        $("videoTitle").value = "";
+
+        $("videoDescription").value = "";
+
+        $("videoFile").value = "";
+
+        $("videoPreview").src = "";
+
+        $("videoPreview")
+          .style.display =
+          "none";
+
+
+        renderVideos();
+
+
+        setTimeout(
+          showHome,
+          500
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        $("uploadStatus")
+          .textContent =
+          "Upload failed: " +
+          error.message;
+
+
+        alert(
+          "Upload failed: " +
+          error.message
+        );
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /* =========================
    BACK FROM VIDEO
 ========================= */
 
-$("backFromVideoButton").addEventListener(
-  "click",
-  () => {
+$("backFromVideoButton")
+  .addEventListener(
+    "click",
+    () => {
 
-    $("mainVideo").pause();
+      $("mainVideo").pause();
 
-    $("mainVideo").removeAttribute("src");
+      $("mainVideo").removeAttribute(
+        "src"
+      );
 
-    showHome();
+      $("mainVideo").load();
 
-  }
-);
+      showHome();
+
+    }
+  );
 
 
 /* =========================
    LIKE
 ========================= */
 
-$("likeButton").addEventListener(
-  "click",
-  () => {
+$("likeButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    if (!currentVideo) return;
-
-
-    const id =
-      currentVideo.id;
+      if (!currentVideo) return;
 
 
-    if (likedVideos[id]) {
+      const id =
+        currentVideo.id;
 
-      alert(
-        "You already liked this video."
+
+      if (likedVideos[id]) {
+
+        alert(
+          "You already liked this video."
+        );
+
+        return;
+
+      }
+
+
+      currentVideo.likes =
+        (currentVideo.likes || 0) + 1;
+
+
+      likedVideos[id] =
+        true;
+
+
+      localStorage.setItem(
+        "minitubeLikes",
+        JSON.stringify(
+          likedVideos
+        )
       );
 
-      return;
+
+      $("likeCount").textContent =
+        currentVideo.likes;
+
+
+      try {
+
+        if (id) {
+
+          await firebaseFunctions
+            .updateDoc(
+              firebaseFunctions.doc(
+                window.db,
+                "videos",
+                id
+              ),
+              {
+                likes:
+                  firebaseFunctions.increment(1)
+              }
+            );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Like update failed:",
+          error
+        );
+
+      }
+
     }
-
-
-    currentVideo.likes =
-      (currentVideo.likes || 0) + 1;
-
-
-    likedVideos[id] = true;
-
-
-    localStorage.setItem(
-      "minitubeLikes",
-      JSON.stringify(likedVideos)
-    );
-
-
-    saveVideos();
-
-
-    $("likeCount").textContent =
-      currentVideo.likes;
-
-  }
-);
+  );
 
 
 /* =========================
    SHARE
 ========================= */
 
-$("shareButton").addEventListener(
-  "click",
-  async () => {
+$("shareButton")
+  .addEventListener(
+    "click",
+    async () => {
 
-    if (!currentVideo) return;
-
-
-    const shareData = {
-
-      title:
-        currentVideo.title,
-
-      text:
-        "Watch this video on MiniTube 🎬",
-
-      url:
-        window.location.href
-
-    };
+      if (!currentVideo) return;
 
 
-    try {
+      const shareData = {
 
-      if (navigator.share) {
+        title:
+          currentVideo.title,
 
-        await navigator.share(
-          shareData
-        );
+        text:
+          "Watch this video on MiniTube 🎬",
 
-      } else {
+        url:
+          window.location.href
 
-        await navigator.clipboard
-          .writeText(
-            window.location.href
+      };
+
+
+      try {
+
+        if (navigator.share) {
+
+          await navigator.share(
+            shareData
           );
 
-        alert(
-          "Video link copied! 🔗"
+        } else {
+
+          await navigator.clipboard
+            .writeText(
+              window.location.href
+            );
+
+          alert(
+            "Video link copied! 🔗"
+          );
+
+        }
+
+      } catch (error) {
+
+        console.log(
+          "Share cancelled."
         );
 
       }
 
-    } catch (error) {
-
-      console.log(
-        "Share cancelled."
-      );
-
     }
-
-  }
-);
+  );
 
 
 /* =========================
@@ -1136,7 +1308,9 @@ function saveComments(comments) {
 
   localStorage.setItem(
     "minitubeComments",
-    JSON.stringify(comments)
+    JSON.stringify(
+      comments
+    )
   );
 
 }
@@ -1147,8 +1321,10 @@ function loadComments(videoId) {
   const allComments =
     getComments();
 
+
   const comments =
     allComments[videoId] || [];
+
 
   const list =
     $("commentsList");
@@ -1163,86 +1339,116 @@ function loadComments(videoId) {
       "<p class='no-comments'>No comments yet. Be the first! 💬</p>";
 
     return;
+
   }
 
 
-  comments.forEach(comment => {
+  comments.forEach(
+    (comment) => {
 
-    const item =
-      document.createElement("div");
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.className =
-      "comment-item";
+      item.className =
+        "comment";
 
 
-    const avatar =
-      document.createElement("img");
+      const avatar =
+        document.createElement(
+          "img"
+        );
 
-    avatar.className =
-      "comment-avatar";
+      avatar.className =
+        "comment-avatar";
 
-    avatar.src =
-      comment.photo ||
-      "https://ui-avatars.com/api/?name=" +
-      encodeURIComponent(
-        comment.name || "User"
+
+      avatar.src =
+        comment.photo ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          comment.name ||
+          "User"
+        );
+
+
+      const content =
+        document.createElement(
+          "div"
+        );
+
+      content.className =
+        "comment-content";
+
+
+      const author =
+        document.createElement(
+          "strong"
+        );
+
+      author.textContent =
+        comment.name ||
+        "MiniTube User";
+
+
+      const text =
+        document.createElement(
+          "p"
+        );
+
+      text.textContent =
+        comment.text;
+
+
+      content.appendChild(
+        author
+      );
+
+      content.appendChild(
+        text
       );
 
 
-    const content =
-      document.createElement("div");
+      item.appendChild(
+        avatar
+      );
 
-    content.className =
-      "comment-content";
-
-
-    const author =
-      document.createElement("strong");
-
-    author.textContent =
-      comment.name ||
-      "MiniTube User";
+      item.appendChild(
+        content
+      );
 
 
-    const text =
-      document.createElement("p");
+      list.appendChild(
+        item
+      );
 
-    text.className =
-      "comment-text";
-
-    text.textContent =
-      comment.text;
-
-
-    content.appendChild(author);
-    content.appendChild(text);
-
-    item.appendChild(avatar);
-    item.appendChild(content);
-
-    list.appendChild(item);
-
-  });
+    }
+  );
 
 }
 
 
-$("commentButton").addEventListener(
-  "click",
-  addComment
-);
+$("commentButton")
+  .addEventListener(
+    "click",
+    addComment
+  );
 
 
-$("commentInput").addEventListener(
-  "keydown",
-  event => {
+$("commentInput")
+  .addEventListener(
+    "keydown",
+    (event) => {
 
-    if (event.key === "Enter") {
-      addComment();
+      if (event.key === "Enter") {
+
+        addComment();
+
+      }
+
     }
-
-  }
-);
+  );
 
 
 function addComment() {
@@ -1259,6 +1465,7 @@ function addComment() {
     openLogin();
 
     return;
+
   }
 
 
@@ -1277,6 +1484,7 @@ function addComment() {
     );
 
     return;
+
   }
 
 
@@ -1292,46 +1500,62 @@ function addComment() {
   }
 
 
-  allComments[currentVideo.id].push({
+  allComments[currentVideo.id]
+    .push({
 
-    name:
-      window.currentUser.displayName ||
-      "MiniTube User",
-
-    text:
-      text,
-
-    photo:
-      window.currentUser.photoURL ||
-      "https://ui-avatars.com/api/?name=" +
-      encodeURIComponent(
+      name:
         window.currentUser.displayName ||
-        "User"
-      )
+        "MiniTube User",
 
-  });
+      text: text,
+
+      photo:
+        window.currentUser.photoURL ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
+          window.currentUser.displayName ||
+          "User"
+        )
+
+    });
 
 
-  saveComments(allComments);
+  saveComments(
+    allComments
+  );
+
 
   input.value = "";
 
-  loadComments(currentVideo.id);
+
+  loadComments(
+    currentVideo.id
+  );
 
 }
 
 
 /* =========================
-   OUTSIDE CLICK MODALS
+   OUTSIDE CLICK
 ========================= */
 
 window.addEventListener(
   "click",
-  event => {
+  (event) => {
 
     if (
-      event.target === $("loginModal") ||
-      event.target === $("signupModal")
+      event.target ===
+      $("loginModal")
+    ) {
+
+      closeModals();
+
+    }
+
+
+    if (
+      event.target ===
+      $("signupModal")
     ) {
 
       closeModals();
@@ -1346,6 +1570,6 @@ window.addEventListener(
    START
 ========================= */
 
-renderVideos(videos);
-
 showHome();
+
+loadVideos();
