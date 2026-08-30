@@ -1,18 +1,15 @@
 const $ = (id) => document.getElementById(id);
 
-let videos = [];
+let videos = JSON.parse(localStorage.getItem("minitubeVideos") || "[]");
 let currentVideo = null;
-
-let likedVideos = JSON.parse(
-  localStorage.getItem("minitubeLikes") || "{}"
-);
+let likedVideos = JSON.parse(localStorage.getItem("minitubeLikes") || "{}");
 
 
 /* =========================
-   DEMO VIDEOS
+   DEFAULT VIDEOS
 ========================= */
 
-const demoVideos = [
+const defaultVideos = [
   {
     id: "demo1",
     title: "Amazing Gaming Video 🎮",
@@ -53,84 +50,49 @@ const demoVideos = [
 
 
 /* =========================
-   LOAD VIDEOS
+   SAVE VIDEOS
 ========================= */
 
-async function loadVideosFromFirebase() {
-
-  try {
-
-    const snapshot =
-      await firebaseFunctions.getDocs(
-        firebaseFunctions.collection(
-          firebaseFunctions.db,
-          "videos"
-        )
-      );
-
-    const firebaseVideos = [];
-
-    snapshot.forEach((docSnap) => {
-
-      firebaseVideos.push({
-        id: docSnap.id,
-        ...docSnap.data()
-      });
-
-    });
-
-
-    /*
-      Demo videos are always shown.
-      Uploaded Firebase videos are added after them.
-    */
-
-    videos = [
-      ...demoVideos,
-      ...firebaseVideos
-    ];
-
-
-    renderVideos(videos);
-
-  } catch (error) {
-
-    console.error(
-      "Firebase video loading error:",
-      error
-    );
-
-
-    /*
-      If Firebase has an error,
-      demo videos still appear.
-    */
-
-    videos = [...demoVideos];
-
-    renderVideos(videos);
-
-    alert(
-      "Firebase video loading failed: " +
-      error.message
-    );
-  }
+function saveVideos() {
+  localStorage.setItem(
+    "minitubeVideos",
+    JSON.stringify(videos)
+  );
 }
 
 
 /* =========================
-   HOME
+   RESTORE DEFAULT VIDEOS
+========================= */
+
+function restoreDefaultVideos() {
+
+  const existingIds = videos.map(video => video.id);
+
+  defaultVideos.forEach(video => {
+
+    if (!existingIds.includes(video.id)) {
+      videos.push(video);
+    }
+
+  });
+
+  saveVideos();
+}
+
+
+/* =========================
+   SHOW HOME
 ========================= */
 
 function showHome() {
 
   $("homePage").style.display = "block";
-
   $("videoPage").style.display = "none";
-
   $("channelPage").style.display = "none";
-
   $("uploadPage").style.display = "none";
+
+  renderVideos();
 
 }
 
@@ -141,15 +103,20 @@ function showHome() {
 
 function openVideo(video) {
 
+  if (!video || !video.url) {
+
+    alert(
+      "This demo video has no video file yet."
+    );
+
+    return;
+  }
+
   currentVideo = video;
 
-
   $("homePage").style.display = "none";
-
   $("videoPage").style.display = "block";
-
   $("channelPage").style.display = "none";
-
   $("uploadPage").style.display = "none";
 
 
@@ -158,14 +125,11 @@ function openVideo(video) {
 
 
   $("mainVideoCreator").textContent =
-    video.creator ||
-    "MiniTube User";
+    video.creator || "MiniTube User";
 
 
   $("mainVideoViews").textContent =
-    formatViews(
-      video.views || 0
-    ) + " views";
+    formatViews(video.views || 0) + " views";
 
 
   $("mainVideoDescription").textContent =
@@ -173,53 +137,37 @@ function openVideo(video) {
     "No description available.";
 
 
-  const player =
+  const mainVideo =
     $("mainVideo");
 
 
-  player.pause();
+  mainVideo.pause();
 
-  player.removeAttribute("src");
+  mainVideo.src = "";
 
-  player.load();
+  mainVideo.load();
 
 
-  /*
-    Only real uploaded videos
-    have a Cloudinary URL.
-  */
+  setTimeout(() => {
 
-  if (video.url) {
+    mainVideo.src = video.url;
 
-    player.src = video.url;
+    mainVideo.load();
 
-    player.load();
-
-  }
+  }, 50);
 
 
   $("downloadButton").href =
-    video.url || "#";
+    video.url;
 
-
-  if (video.url) {
-
-    $("downloadButton").style.display =
-      "inline-block";
-
-  } else {
-
-    $("downloadButton").style.display =
-      "none";
-
-  }
+  $("downloadButton").setAttribute(
+    "download",
+    ""
+  );
 
 
   $("videoCreatorAvatar").textContent =
-    (
-      video.creator ||
-      "M"
-    )
+    (video.creator || "M")
       .charAt(0)
       .toUpperCase();
 
@@ -240,14 +188,14 @@ function openVideo(video) {
 
 
 /* =========================
-   VIDEO RENDER
+   RENDER VIDEOS
 ========================= */
 
 function renderVideos(list = videos) {
 
-  const grid =
-    $("videoGrid");
+  const grid = $("videoGrid");
 
+  if (!grid) return;
 
   grid.innerHTML = "";
 
@@ -257,42 +205,41 @@ function renderVideos(list = videos) {
     const card =
       document.createElement("div");
 
-    card.className =
-      "video-card";
+    card.className = "video-card";
 
 
     const thumbnail =
       document.createElement("div");
 
-    thumbnail.className =
-      "thumbnail";
+    thumbnail.className = "thumbnail";
 
-
-    /*
-      Uploaded videos show
-      Cloudinary preview.
-    */
 
     if (video.url) {
 
       const videoElement =
         document.createElement("video");
 
+      videoElement.src = video.url;
 
-      videoElement.src =
-        video.url;
+      videoElement.muted = true;
 
+      videoElement.playsInline = true;
 
-      videoElement.muted =
-        true;
+      videoElement.preload = "metadata";
 
-
-      videoElement.preload =
-        "metadata";
+      videoElement.controls = false;
 
 
-      videoElement.playsInline =
-        true;
+      videoElement.addEventListener(
+        "loadedmetadata",
+        () => {
+
+          try {
+            videoElement.currentTime = 0.1;
+          } catch (e) {}
+
+        }
+      );
 
 
       thumbnail.appendChild(
@@ -310,8 +257,7 @@ function renderVideos(list = videos) {
     const info =
       document.createElement("div");
 
-    info.className =
-      "video-info";
+    info.className = "video-info";
 
 
     const avatar =
@@ -320,12 +266,8 @@ function renderVideos(list = videos) {
     avatar.className =
       "channel-avatar";
 
-
     avatar.textContent =
-      (
-        video.creator ||
-        "M"
-      )
+      (video.creator || "M")
         .charAt(0)
         .toUpperCase();
 
@@ -353,25 +295,20 @@ function renderVideos(list = videos) {
       document.createElement("p");
 
     views.textContent =
-      formatViews(
-        video.views || 0
-      ) + " views";
+      formatViews(video.views || 0) +
+      " views";
 
 
     details.appendChild(title);
-
     details.appendChild(creator);
-
     details.appendChild(views);
 
 
     info.appendChild(avatar);
-
     info.appendChild(details);
 
 
     card.appendChild(thumbnail);
-
     card.appendChild(info);
 
 
@@ -397,22 +334,24 @@ function formatViews(number) {
   if (number >= 1000000) {
 
     return (
-      number / 1000000
-    )
-      .toFixed(1)
-      .replace(".0", "") +
-      "M";
+      (number / 1000000)
+        .toFixed(1)
+        .replace(".0", "") +
+      "M"
+    );
+
   }
 
 
   if (number >= 1000) {
 
     return (
-      number / 1000
-    )
-      .toFixed(1)
-      .replace(".0", "") +
-      "K";
+      (number / 1000)
+        .toFixed(1)
+        .replace(".0", "") +
+      "K"
+    );
+
   }
 
 
@@ -450,10 +389,7 @@ function searchVideos() {
 
       ||
 
-      (
-        video.creator ||
-        ""
-      )
+      (video.creator || "")
         .toLowerCase()
         .includes(search)
 
@@ -465,26 +401,22 @@ function searchVideos() {
 }
 
 
-$("searchButton")
-  .addEventListener(
-    "click",
-    searchVideos
-  );
+$("searchButton").addEventListener(
+  "click",
+  searchVideos
+);
 
 
-$("searchInput")
-  .addEventListener(
-    "keydown",
-    event => {
+$("searchInput").addEventListener(
+  "keydown",
+  event => {
 
-      if (event.key === "Enter") {
-
-        searchVideos();
-
-      }
-
+    if (event.key === "Enter") {
+      searchVideos();
     }
-  );
+
+  }
+);
 
 
 /* =========================
@@ -492,91 +424,73 @@ $("searchInput")
 ========================= */
 
 function openLogin() {
-
-  $("loginModal").style.display =
-    "flex";
-
+  $("loginModal").style.display = "flex";
 }
 
 
 function openSignup() {
-
-  $("signupModal").style.display =
-    "flex";
-
+  $("signupModal").style.display = "flex";
 }
 
 
 function closeModals() {
 
-  $("loginModal").style.display =
-    "none";
-
-  $("signupModal").style.display =
-    "none";
+  $("loginModal").style.display = "none";
+  $("signupModal").style.display = "none";
 
 }
 
 
-$("loginButton")
-  .addEventListener(
-    "click",
-    openLogin
-  );
+$("loginButton").addEventListener(
+  "click",
+  openLogin
+);
 
 
-$("signupButton")
-  .addEventListener(
-    "click",
-    openSignup
-  );
+$("signupButton").addEventListener(
+  "click",
+  openSignup
+);
 
 
-$("getStartedButton")
-  .addEventListener(
-    "click",
-    openSignup
-  );
+$("getStartedButton").addEventListener(
+  "click",
+  openSignup
+);
 
 
-$("closeLoginButton")
-  .addEventListener(
-    "click",
-    closeModals
-  );
+$("closeLoginButton").addEventListener(
+  "click",
+  closeModals
+);
 
 
-$("closeSignupButton")
-  .addEventListener(
-    "click",
-    closeModals
-  );
+$("closeSignupButton").addEventListener(
+  "click",
+  closeModals
+);
 
 
-$("goToSignup")
-  .addEventListener(
-    "click",
-    () => {
+$("goToSignup").addEventListener(
+  "click",
+  () => {
 
-      closeModals();
+    closeModals();
+    openSignup();
 
-      openSignup();
-
-    }
-  );
+  }
+);
 
 
-$("goToLogin")
-  .addEventListener(
-    "click",
-    () => {
+$("goToLogin").addEventListener(
+  "click",
+  () => {
 
-      closeModals();
+    closeModals();
+    openLogin();
 
-      openLogin();
-
-    }
-  );
+  }
+);
 
 
 /* =========================
@@ -589,27 +503,16 @@ $("emailSignupButton")
     async () => {
 
       const name =
-        $("signupName")
-          .value
-          .trim();
-
+        $("signupName").value.trim();
 
       const email =
-        $("signupEmail")
-          .value
-          .trim();
-
+        $("signupEmail").value.trim();
 
       const password =
-        $("signupPassword")
-          .value;
+        $("signupPassword").value;
 
 
-      if (
-        !name ||
-        !email ||
-        !password
-      ) {
+      if (!name || !email || !password) {
 
         alert(
           "Please fill all fields."
@@ -646,15 +549,9 @@ $("emailSignupButton")
 
         closeModals();
 
-
-        $("signupName").value =
-          "";
-
-        $("signupEmail").value =
-          "";
-
-        $("signupPassword").value =
-          "";
+        $("signupName").value = "";
+        $("signupEmail").value = "";
+        $("signupPassword").value = "";
 
 
       } catch (error) {
@@ -680,20 +577,13 @@ $("emailLoginButton")
     async () => {
 
       const email =
-        $("loginEmail")
-          .value
-          .trim();
-
+        $("loginEmail").value.trim();
 
       const password =
-        $("loginPassword")
-          .value;
+        $("loginPassword").value;
 
 
-      if (
-        !email ||
-        !password
-      ) {
+      if (!email || !password) {
 
         alert(
           "Please enter email and password."
@@ -720,12 +610,8 @@ $("emailLoginButton")
 
         closeModals();
 
-
-        $("loginEmail").value =
-          "";
-
-        $("loginPassword").value =
-          "";
+        $("loginEmail").value = "";
+        $("loginPassword").value = "";
 
 
       } catch (error) {
@@ -755,9 +641,7 @@ async function googleLogin() {
         googleProvider
       );
 
-
     closeModals();
-
 
   } catch (error) {
 
@@ -797,8 +681,7 @@ $("profilePhoto")
       event.stopPropagation();
 
       $("profileMenu")
-        .classList
-        .toggle("show");
+        .classList.toggle("show");
 
     }
   );
@@ -815,8 +698,7 @@ document.addEventListener(
     ) {
 
       $("profileMenu")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
     }
 
@@ -838,19 +720,14 @@ $("logoutButton")
         await firebaseFunctions
           .signOut(firebaseAuth);
 
-
         $("profileMenu")
-          .classList
-          .remove("show");
-
+          .classList.remove("show");
 
         showHome();
-
 
         alert(
           "You have been logged out."
         );
-
 
       } catch (error) {
 
@@ -882,47 +759,36 @@ $("myChannelButton")
       }
 
 
-      $("homePage").style.display =
-        "none";
-
-      $("videoPage").style.display =
-        "none";
-
-      $("uploadPage").style.display =
-        "none";
-
-      $("channelPage").style.display =
-        "block";
+      $("homePage").style.display = "none";
+      $("videoPage").style.display = "none";
+      $("uploadPage").style.display = "none";
+      $("channelPage").style.display = "block";
 
 
       const user =
         window.currentUser;
 
 
-      $("channelName")
-        .textContent =
+      $("channelName").textContent =
+        user.displayName ||
+        "MiniTube User";
+
+
+      $("channelEmail").textContent =
+        user.email || "";
+
+
+      $("channelPhoto").src =
+        user.photoURL ||
+        "https://ui-avatars.com/api/?name=" +
+        encodeURIComponent(
           user.displayName ||
-          "MiniTube User";
-
-
-      $("channelEmail")
-        .textContent =
-          user.email || "";
-
-
-      $("channelPhoto")
-        .src =
-          user.photoURL ||
-          "https://ui-avatars.com/api/?name=" +
-          encodeURIComponent(
-            user.displayName ||
-            "MiniTube User"
-          );
+          "MiniTube User"
+        );
 
 
       $("profileMenu")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
     }
   );
@@ -952,22 +818,14 @@ $("uploadButton")
       }
 
 
-      $("homePage").style.display =
-        "none";
-
-      $("videoPage").style.display =
-        "none";
-
-      $("channelPage").style.display =
-        "none";
-
-      $("uploadPage").style.display =
-        "block";
+      $("homePage").style.display = "none";
+      $("videoPage").style.display = "none";
+      $("channelPage").style.display = "none";
+      $("uploadPage").style.display = "block";
 
 
       $("profileMenu")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
     }
   );
@@ -990,36 +848,26 @@ $("videoFile")
     () => {
 
       const file =
-        $("videoFile")
-          .files[0];
+        $("videoFile").files[0];
 
 
       if (!file) {
 
         $("videoPreview")
-          .style
-          .display =
-            "none";
+          .style.display = "none";
 
         return;
       }
 
 
       const url =
-        URL.createObjectURL(
-          file
-        );
+        URL.createObjectURL(file);
 
 
-      $("videoPreview")
-        .src =
-          url;
-
+      $("videoPreview").src = url;
 
       $("videoPreview")
-        .style
-        .display =
-          "block";
+        .style.display = "block";
 
     }
   );
@@ -1035,15 +883,10 @@ $("uploadVideoButton")
     async () => {
 
       const file =
-        $("videoFile")
-          .files[0];
-
+        $("videoFile").files[0];
 
       const title =
-        $("videoTitle")
-          .value
-          .trim();
-
+        $("videoTitle").value.trim();
 
       const description =
         $("videoDescription")
@@ -1118,50 +961,39 @@ $("uploadVideoButton")
         }
 
 
-        /*
-          Save uploaded video
-          to Firestore.
-        */
+        const newVideo = {
 
-        await firebaseFunctions
-          .addDoc(
-            firebaseFunctions
-              .collection(
-                firebaseFunctions.db,
-                "videos"
-              ),
-            {
+          id:
+            Date.now().toString(),
 
-              title: title,
+          title:
+            title,
 
-              creator:
-                window.currentUser
-                  ?.displayName ||
-                "MiniTube User",
+          creator:
+            window.currentUser?.displayName ||
+            "MiniTube User",
 
-              creatorId:
-                window.currentUser
-                  ?.uid ||
-                "",
+          description:
+            description,
 
-              description:
-                description,
+          url:
+            data.secure_url,
 
-              url:
-                data.secure_url,
+          views:
+            0,
 
-              views:
-                0,
+          likes:
+            0
 
-              likes:
-                0,
+        };
 
-              createdAt:
-                firebaseFunctions
-                  .serverTimestamp()
 
-            }
-          );
+        videos.unshift(
+          newVideo
+        );
+
+
+        saveVideos();
 
 
         $("uploadStatus")
@@ -1174,25 +1006,17 @@ $("uploadVideoButton")
         );
 
 
-        $("videoTitle").value =
-          "";
+        $("videoTitle").value = "";
+        $("videoDescription").value = "";
+        $("videoFile").value = "";
 
-        $("videoDescription").value =
-          "";
-
-        $("videoFile").value =
-          "";
-
-        $("videoPreview").src =
-          "";
+        $("videoPreview").src = "";
 
         $("videoPreview")
-          .style
-          .display =
-            "none";
+          .style.display = "none";
 
 
-        await loadVideosFromFirebase();
+        renderVideos();
 
 
         setTimeout(
@@ -1234,8 +1058,7 @@ $("backFromVideoButton")
 
       $("mainVideo").pause();
 
-      $("mainVideo")
-        .removeAttribute("src");
+      $("mainVideo").removeAttribute("src");
 
       $("mainVideo").load();
 
@@ -1252,16 +1075,16 @@ $("backFromVideoButton")
 $("likeButton")
   .addEventListener(
     "click",
-    async () => {
+    () => {
 
       if (!currentVideo) return;
 
 
-      if (
-        likedVideos[
-          currentVideo.id
-        ]
-      ) {
+      const id =
+        currentVideo.id;
+
+
+      if (likedVideos[id]) {
 
         alert(
           "You already liked this video."
@@ -1275,9 +1098,7 @@ $("likeButton")
         (currentVideo.likes || 0) + 1;
 
 
-      likedVideos[
-        currentVideo.id
-      ] = true;
+      likedVideos[id] = true;
 
 
       localStorage.setItem(
@@ -1288,47 +1109,11 @@ $("likeButton")
       );
 
 
-      /*
-        Update Firebase only
-        for real uploaded videos.
-      */
-
-      if (
-        !currentVideo.id
-          .startsWith("demo")
-      ) {
-
-        try {
-
-          await firebaseFunctions
-            .updateDoc(
-              firebaseFunctions.doc(
-                firebaseFunctions.db,
-                "videos",
-                currentVideo.id
-              ),
-              {
-                likes:
-                  firebaseFunctions
-                    .increment(1)
-              }
-            );
-
-        } catch (error) {
-
-          console.error(
-            "Like update failed:",
-            error
-          );
-
-        }
-
-      }
+      saveVideos();
 
 
-      $("likeCount")
-        .textContent =
-          currentVideo.likes;
+      $("likeCount").textContent =
+        currentVideo.likes;
 
     }
   );
@@ -1348,9 +1133,7 @@ $("shareButton")
 
       try {
 
-        if (
-          navigator.share
-        ) {
+        if (navigator.share) {
 
           await navigator.share({
 
@@ -1372,7 +1155,6 @@ $("shareButton")
               window.location.href
             );
 
-
           alert(
             "Video link copied! 🔗"
           );
@@ -1392,30 +1174,50 @@ $("shareButton")
 
 
 /* =========================
-   FIRESTORE COMMENTS
+   COMMENTS
 ========================= */
 
-async function loadComments(
-  videoId
-) {
+function getComments() {
+
+  return JSON.parse(
+    localStorage.getItem(
+      "minitubeComments"
+    ) || "{}"
+  );
+
+}
+
+
+function saveComments(comments) {
+
+  localStorage.setItem(
+    "minitubeComments",
+    JSON.stringify(
+      comments
+    )
+  );
+
+}
+
+
+function loadComments(videoId) {
+
+  const allComments =
+    getComments();
+
+
+  const comments =
+    allComments[videoId] || [];
+
 
   const list =
     $("commentsList");
 
 
-  list.innerHTML =
-    "<p>Loading comments... ⏳";
+  list.innerHTML = "";
 
 
-  /*
-    Demo videos do not have
-    Firestore comment collections.
-  */
-
-  if (
-    String(videoId)
-      .startsWith("demo")
-  ) {
+  if (comments.length === 0) {
 
     list.innerHTML =
       "<p class='no-comments'>No comments yet. Be the first! 💬</p>";
@@ -1424,161 +1226,63 @@ async function loadComments(
   }
 
 
-  try {
+  comments.forEach(comment => {
 
-    const commentsQuery =
-      firebaseFunctions
-        .query(
-          firebaseFunctions
-            .collection(
-              firebaseFunctions.db,
-              "videos",
-              videoId,
-              "comments"
-            ),
-          firebaseFunctions
-            .orderBy(
-              "createdAt",
-              "asc"
-            )
-        );
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "comment";
 
 
-    const snapshot =
-      await firebaseFunctions
-        .getDocs(
-          commentsQuery
-        );
+    const avatar =
+      document.createElement("img");
+
+    avatar.className =
+      "comment-avatar";
+
+    avatar.src =
+      comment.photo ||
+      "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(
+        comment.name || "User"
+      );
 
 
-    list.innerHTML = "";
+    const content =
+      document.createElement("div");
+
+    content.className =
+      "comment-content";
 
 
-    if (
-      snapshot.empty
-    ) {
+    const author =
+      document.createElement("strong");
 
-      list.innerHTML =
-        "<p class='no-comments'>No comments yet. Be the first! 💬</p>";
-
-      return;
-    }
+    author.textContent =
+      comment.name ||
+      "MiniTube User";
 
 
-    snapshot.forEach(
-      docSnap => {
+    const text =
+      document.createElement("p");
 
-        const comment =
-          docSnap.data();
-
-
-        const item =
-          document.createElement(
-            "div"
-          );
+    text.textContent =
+      comment.text;
 
 
-        item.className =
-          "comment";
+    content.appendChild(author);
+    content.appendChild(text);
 
+    item.appendChild(avatar);
+    item.appendChild(content);
 
-        const avatar =
-          document.createElement(
-            "img"
-          );
+    list.appendChild(item);
 
-
-        avatar.className =
-          "comment-avatar";
-
-
-        avatar.src =
-          comment.photo ||
-          "https://ui-avatars.com/api/?name=" +
-          encodeURIComponent(
-            comment.name ||
-            "User"
-          );
-
-
-        const content =
-          document.createElement(
-            "div"
-          );
-
-
-        content.className =
-          "comment-content";
-
-
-        const author =
-          document.createElement(
-            "strong"
-          );
-
-
-        author.textContent =
-          comment.name ||
-          "MiniTube User";
-
-
-        const text =
-          document.createElement(
-            "p"
-          );
-
-
-        text.textContent =
-          comment.text;
-
-
-        content.appendChild(
-          author
-        );
-
-
-        content.appendChild(
-          text
-        );
-
-
-        item.appendChild(
-          avatar
-        );
-
-
-        item.appendChild(
-          content
-        );
-
-
-        list.appendChild(
-          item
-        );
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "Comments error:",
-      error
-    );
-
-
-    list.innerHTML =
-      "<p>Comments could not be loaded.</p>";
-
-  }
+  });
 
 }
 
-
-/* =========================
-   ADD COMMENT
-========================= */
 
 $("commentButton")
   .addEventListener(
@@ -1592,19 +1296,15 @@ $("commentInput")
     "keydown",
     event => {
 
-      if (
-        event.key === "Enter"
-      ) {
-
+      if (event.key === "Enter") {
         addComment();
-
       }
 
     }
   );
 
 
-async function addComment() {
+function addComment() {
 
   if (!currentVideo) return;
 
@@ -1616,24 +1316,6 @@ async function addComment() {
     );
 
     openLogin();
-
-    return;
-  }
-
-
-  /*
-    Demo videos are not stored
-    in Firestore.
-  */
-
-  if (
-    String(currentVideo.id)
-      .startsWith("demo")
-  ) {
-
-    alert(
-      "Comments are available on uploaded videos."
-    );
 
     return;
   }
@@ -1657,75 +1339,52 @@ async function addComment() {
   }
 
 
-  try {
-
-    await firebaseFunctions
-      .addDoc(
-        firebaseFunctions
-          .collection(
-            firebaseFunctions.db,
-            "videos",
-            currentVideo.id,
-            "comments"
-          ),
-        {
-
-          name:
-            window.currentUser
-              .displayName ||
-            "MiniTube User",
-
-          uid:
-            window.currentUser.uid,
-
-          photo:
-            window.currentUser
-              .photoURL ||
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(
-              window.currentUser
-                .displayName ||
-              "User"
-            ),
-
-          text:
-            text,
-
-          createdAt:
-            firebaseFunctions
-              .serverTimestamp()
-
-        }
-      );
+  const allComments =
+    getComments();
 
 
-    input.value = "";
+  if (!allComments[currentVideo.id]) {
 
-
-    await loadComments(
-      currentVideo.id
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    alert(
-      "Comment failed: " +
-      error.message
-    );
+    allComments[currentVideo.id] = [];
 
   }
+
+
+  allComments[currentVideo.id].push({
+
+    name:
+      window.currentUser.displayName ||
+      "MiniTube User",
+
+    text:
+      text,
+
+    photo:
+      window.currentUser.photoURL ||
+      "https://ui-avatars.com/api/?name=" +
+      encodeURIComponent(
+        window.currentUser.displayName ||
+        "User"
+      )
+
+  });
+
+
+  saveComments(allComments);
+
+
+  input.value = "";
+
+
+  loadComments(
+    currentVideo.id
+  );
 
 }
 
 
 /* =========================
-   OUTSIDE CLICK
+   CLOSE MODALS
 ========================= */
 
 window.addEventListener(
@@ -1759,13 +1418,8 @@ window.addEventListener(
    START WEBSITE
 ========================= */
 
-window.addEventListener(
-  "load",
-  async () => {
+restoreDefaultVideos();
 
-    showHome();
+renderVideos();
 
-    await loadVideosFromFirebase();
-
-  }
-);
+showHome();
