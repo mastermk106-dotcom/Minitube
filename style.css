@@ -10,8 +10,6 @@ body {
   color: #111;
 }
 
-/* HEADER */
-
 .header {
   height: 70px;
   background: white;
@@ -41,8 +39,6 @@ body {
   border-radius: 8px;
 }
 
-/* SEARCH */
-
 .search-box {
   display: flex;
   width: 40%;
@@ -65,8 +61,6 @@ body {
   cursor: pointer;
   font-size: 18px;
 }
-
-/* HEADER BUTTONS */
 
 .header-buttons {
   display: flex;
@@ -94,8 +88,6 @@ body {
   color: white;
 }
 
-/* PROFILE */
-
 .profile-area {
   display: none;
   position: relative;
@@ -115,7 +107,7 @@ body {
   position: absolute;
   right: 0;
   top: 55px;
-  width: 230px;
+  width: 250px;
   background: white;
   border-radius: 12px;
   padding: 15px;
@@ -129,6 +121,13 @@ body {
 
 .profile-name {
   font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.profile-username {
+  color: #ff0000;
+  font-size: 13px;
   font-weight: bold;
   margin-bottom: 4px;
 }
@@ -156,8 +155,6 @@ body {
   background: #e5e5e5;
 }
 
-/* CATEGORIES */
-
 .categories {
   display: flex;
   gap: 10px;
@@ -180,8 +177,6 @@ body {
   color: white;
 }
 
-/* HERO */
-
 .hero {
   margin: 25px 5%;
   padding: 55px;
@@ -201,8 +196,6 @@ body {
   line-height: 1.6;
   margin-bottom: 25px;
 }
-
-/* VIDEOS */
 
 .video-section {
   padding: 10px 5% 50px;
@@ -275,8 +268,6 @@ body {
   font-weight: bold;
 }
 
-/* VIDEO PAGE */
-
 .video-page {
   display: none;
   padding: 30px 5% 60px;
@@ -307,8 +298,6 @@ body {
   margin-bottom: 15px;
 }
 
-/* VIDEO ACTIONS */
-
 .video-actions {
   display: flex;
   gap: 10px;
@@ -327,13 +316,6 @@ body {
   cursor: pointer;
   font-weight: bold;
 }
-
-.video-actions a:hover,
-.video-actions button:hover {
-  background: #ddd;
-}
-
-/* CREATOR */
 
 .creator-box {
   background: white;
@@ -358,8 +340,6 @@ body {
   font-size: 14px;
 }
 
-/* DESCRIPTION */
-
 .description-box {
   background: white;
   margin-top: 15px;
@@ -375,8 +355,6 @@ body {
   color: #555;
   line-height: 1.6;
 }
-
-/* COMMENTS */
 
 .comments-section {
   background: white;
@@ -448,8 +426,6 @@ body {
   padding: 15px 0;
 }
 
-/* CHANNEL PAGE */
-
 .channel-page {
   display: none;
   padding: 30px 5% 60px;
@@ -468,16 +444,16 @@ body {
 .channel-header {
   background: white;
   border-radius: 18px;
-  padding: 30px;
+  padding: 35px;
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 30px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 
 .channel-photo {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #eee;
@@ -490,14 +466,31 @@ body {
 
 .channel-details p {
   color: #666;
-  margin-top: 7px;
+  margin-top: 8px;
+}
+
+#channelUsername {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+#channelBio {
+  max-width: 600px;
+  line-height: 1.6;
+  color: #444;
+}
+
+#channelLink {
+  display: inline-block;
+  margin-top: 12px;
+  color: #ff0000;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 .channel-stats {
   font-weight: bold;
 }
-
-/* UPLOAD PAGE */
 
 .upload-page {
   display: none;
@@ -564,8 +557,6 @@ body {
   font-size: 15px;
 }
 
-/* MODALS */
-
 .modal {
   display: none;
   position: fixed;
@@ -574,6 +565,8 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 999;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .modal-box {
@@ -583,6 +576,12 @@ body {
   padding: 30px;
   border-radius: 18px;
   position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.profile-modal-box {
+  max-width: 480px;
 }
 
 .modal-box h2 {
@@ -597,9 +596,19 @@ body {
   border-radius: 8px;
 }
 
+.modal-box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}
+
 .modal-btn {
   width: 100%;
-  margin-top: 5px;
+  margin-top: 8px;
 }
 
 .google-btn {
@@ -628,7 +637,41 @@ body {
   cursor: pointer;
 }
 
-/* MOBILE */
+.profile-edit-preview {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.profile-edit-preview img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #eee;
+}
+
+.profile-label {
+  display: block;
+  font-weight: bold;
+  margin: 15px 0 8px;
+}
+
+.input-help {
+  display: block;
+  color: #777;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+#profileFile {
+  border: none;
+  padding: 0;
+}
+
+#profileStatus {
+  font-weight: bold;
+  margin-top: 12px;
+}
 
 @media (max-width: 900px) {
 
@@ -639,6 +682,7 @@ body {
   .search-box {
     width: 35%;
   }
+
 }
 
 @media (max-width: 600px) {
@@ -699,4 +743,9 @@ body {
   .comment-form button {
     width: 100%;
   }
+
+  .modal-box {
+    padding: 24px;
+  }
+
 }
