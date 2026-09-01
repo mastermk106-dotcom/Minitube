@@ -5,7 +5,6 @@ let videos = JSON.parse(
 );
 
 let currentVideo = null;
-
 let currentCategory = "All";
 
 let likedVideos = JSON.parse(
@@ -30,9 +29,7 @@ function saveVideos() {
 function getComments() {
 
   return JSON.parse(
-    localStorage.getItem(
-      "minitubeComments"
-    ) || "{}"
+    localStorage.getItem("minitubeComments") || "{}"
   );
 
 }
@@ -55,11 +52,8 @@ function saveComments(comments) {
 function prepareVideos() {
 
   const saved = JSON.parse(
-    localStorage.getItem(
-      "minitubeVideos"
-    ) || "[]"
+    localStorage.getItem("minitubeVideos") || "[]"
   );
-
 
   videos = saved.filter(video => {
 
@@ -67,12 +61,9 @@ function prepareVideos() {
       return false;
     }
 
-    return !String(
-      video.id
-    ).startsWith("demo");
+    return !String(video.id).startsWith("demo");
 
   });
-
 
   saveVideos();
 
@@ -85,9 +76,7 @@ function prepareVideos() {
 
 function formatViews(number) {
 
-  number =
-    Number(number) || 0;
-
+  number = Number(number) || 0;
 
   if (number >= 1000000) {
 
@@ -100,7 +89,6 @@ function formatViews(number) {
 
   }
 
-
   if (number >= 1000) {
 
     return (
@@ -111,7 +99,6 @@ function formatViews(number) {
     );
 
   }
-
 
   return String(number);
 
@@ -128,69 +115,47 @@ function formatDuration(seconds) {
     return "";
   }
 
+  seconds = Math.floor(seconds);
 
-  seconds =
-    Math.floor(seconds);
+  const hours = Math.floor(seconds / 3600);
 
+  const minutes = Math.floor(
+    (seconds % 3600) / 60
+  );
 
-  const hours =
-    Math.floor(
-      seconds / 3600
-    );
-
-
-  const minutes =
-    Math.floor(
-      (seconds % 3600) / 60
-    );
-
-
-  const secs =
-    seconds % 60;
-
+  const secs = seconds % 60;
 
   if (hours > 0) {
 
     return (
       hours +
       ":" +
-      String(minutes)
-        .padStart(2, "0") +
+      String(minutes).padStart(2, "0") +
       ":" +
-      String(secs)
-        .padStart(2, "0")
+      String(secs).padStart(2, "0")
     );
 
   }
 
-
   return (
     minutes +
     ":" +
-    String(secs)
-      .padStart(2, "0")
+    String(secs).padStart(2, "0")
   );
 
 }
 
 
 /* =========================
-   HOME
+   PAGE CONTROL
 ========================= */
 
 function showHome() {
 
-  $("homePage").style.display =
-    "block";
-
-  $("videoPage").style.display =
-    "none";
-
-  $("channelPage").style.display =
-    "none";
-
-  $("uploadPage").style.display =
-    "none";
+  $("homePage").style.display = "block";
+  $("videoPage").style.display = "none";
+  $("channelPage").style.display = "none";
+  $("uploadPage").style.display = "none";
 
 }
 
@@ -203,105 +168,54 @@ function openVideo(video) {
 
   if (!video || !video.url) {
 
-    alert(
-      "This video has no playable file."
-    );
+    alert("This video has no playable file.");
 
     return;
 
   }
 
+  currentVideo = video;
 
-  currentVideo =
-    video;
-
-
-  $("homePage").style.display =
-    "none";
-
-  $("videoPage").style.display =
-    "block";
-
-  $("channelPage").style.display =
-    "none";
-
-  $("uploadPage").style.display =
-    "none";
-
+  $("homePage").style.display = "none";
+  $("videoPage").style.display = "block";
+  $("channelPage").style.display = "none";
+  $("uploadPage").style.display = "none";
 
   $("mainVideoTitle").textContent =
-    video.title ||
-    "Video";
-
+    video.title || "Video";
 
   $("mainVideoCreator").textContent =
-    video.creator ||
-    "MiniTube User";
-
+    video.creator || "MiniTube User";
 
   $("mainVideoViews").textContent =
-    formatViews(
-      video.views || 0
-    ) +
-    " views";
-
+    formatViews(video.views || 0) + " views";
 
   $("mainVideoDescription").textContent =
-    video.description ||
-    "No description available.";
-
+    video.description || "No description available.";
 
   $("likeCount").textContent =
     video.likes || 0;
 
-
   $("videoCreatorAvatar").textContent =
-    (
-      video.creator ||
-      "M"
-    )
+    (video.creator || "M")
       .charAt(0)
       .toUpperCase();
 
-
-  const player =
-    $("mainVideo");
-
+  const player = $("mainVideo");
 
   player.pause();
 
-  player.removeAttribute(
-    "src"
-  );
+  player.removeAttribute("src");
 
   player.load();
 
-
-  player.src =
-    video.url;
-
+  player.src = video.url;
 
   player.load();
 
+  $("downloadButton").href = video.url;
 
-  player.onerror = () => {
-
-    console.error(
-      "Video playback error:",
-      player.error
-    );
-
-  };
-
-
-  $("downloadButton").href =
-    video.url;
-
-
-  loadComments(
-    video.id
-  );
-
+  loadComments(video.id);
 
   window.scrollTo({
     top: 0,
@@ -315,93 +229,61 @@ function openVideo(video) {
    THUMBNAIL
 ========================= */
 
-function createThumbnail(
-  video,
-  thumbnail
-) {
+function createThumbnail(video, thumbnail) {
 
   thumbnail.innerHTML = "";
 
-
   if (!video.url) {
 
-    thumbnail.innerHTML =
-      "▶";
+    thumbnail.innerHTML = "▶";
 
     return;
 
   }
 
-
   const videoElement =
-    document.createElement(
-      "video"
-    );
+    document.createElement("video");
 
-
-  videoElement.src =
-    video.url;
-
-  videoElement.muted =
-    true;
-
-  videoElement.preload =
-    "metadata";
-
-  videoElement.playsInline =
-    true;
-
+  videoElement.src = video.url;
+  videoElement.muted = true;
+  videoElement.preload = "metadata";
+  videoElement.playsInline = true;
 
   videoElement.addEventListener(
     "loadedmetadata",
     () => {
 
       const duration =
-        formatDuration(
-          videoElement.duration
-        );
-
+        formatDuration(videoElement.duration);
 
       if (duration) {
-
-        thumbnail.dataset.duration =
-          duration;
-
+        thumbnail.dataset.duration = duration;
       }
 
     }
   );
 
-
   videoElement.addEventListener(
     "loadeddata",
     () => {
 
-      thumbnail.innerHTML =
-        "";
+      thumbnail.innerHTML = "";
 
-      thumbnail.appendChild(
-        videoElement
-      );
+      thumbnail.appendChild(videoElement);
 
     }
   );
-
 
   videoElement.addEventListener(
     "error",
     () => {
 
-      thumbnail.innerHTML =
-        "▶";
+      thumbnail.innerHTML = "▶";
 
     }
   );
 
-
-  thumbnail.appendChild(
-    videoElement
-  );
+  thumbnail.appendChild(videoElement);
 
 }
 
@@ -410,22 +292,15 @@ function createThumbnail(
    RENDER VIDEOS
 ========================= */
 
-function renderVideos(
-  list = videos
-) {
+function renderVideos(list = videos) {
 
-  const grid =
-    $("videoGrid");
-
+  const grid = $("videoGrid");
 
   if (!grid) {
     return;
   }
 
-
-  grid.innerHTML =
-    "";
-
+  grid.innerHTML = "";
 
   if (!list.length) {
 
@@ -444,160 +319,79 @@ function renderVideos(
 
   }
 
-
   list.forEach(video => {
 
     const card =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    card.className =
-      "video-card";
-
+    card.className = "video-card";
 
     const thumbnail =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
+    thumbnail.className = "thumbnail";
 
-    thumbnail.className =
-      "thumbnail";
-
-
-    createThumbnail(
-      video,
-      thumbnail
-    );
-
+    createThumbnail(video, thumbnail);
 
     const info =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    info.className =
-      "video-info";
-
+    info.className = "video-info";
 
     const avatar =
-      document.createElement(
-        "div"
-      );
+      document.createElement("div");
 
-
-    avatar.className =
-      "channel-avatar";
-
+    avatar.className = "channel-avatar";
 
     avatar.textContent =
-      (
-        video.creator ||
-        "M"
-      )
+      (video.creator || "M")
         .charAt(0)
         .toUpperCase();
 
-
     const details =
-      document.createElement(
-        "div"
-      );
-
+      document.createElement("div");
 
     const title =
-      document.createElement(
-        "h3"
-      );
-
+      document.createElement("h3");
 
     title.textContent =
-      video.title ||
-      "Untitled Video";
-
+      video.title || "Untitled Video";
 
     const creator =
-      document.createElement(
-        "p"
-      );
-
+      document.createElement("p");
 
     creator.textContent =
-      video.creator ||
-      "MiniTube User";
-
+      video.creator || "MiniTube User";
 
     const views =
-      document.createElement(
-        "p"
-      );
-
+      document.createElement("p");
 
     views.textContent =
-      formatViews(
-        video.views || 0
-      ) +
-      " views";
-
+      formatViews(video.views || 0) + " views";
 
     const category =
-      document.createElement(
-        "p"
-      );
-
+      document.createElement("p");
 
     category.textContent =
-      video.category ||
-      "Uncategorized";
+      video.category || "Uncategorized";
 
+    details.appendChild(title);
+    details.appendChild(creator);
+    details.appendChild(views);
+    details.appendChild(category);
 
-    details.appendChild(
-      title
-    );
+    info.appendChild(avatar);
+    info.appendChild(details);
 
-    details.appendChild(
-      creator
-    );
-
-    details.appendChild(
-      views
-    );
-
-    details.appendChild(
-      category
-    );
-
-
-    info.appendChild(
-      avatar
-    );
-
-    info.appendChild(
-      details
-    );
-
-
-    card.appendChild(
-      thumbnail
-    );
-
-    card.appendChild(
-      info
-    );
-
+    card.appendChild(thumbnail);
+    card.appendChild(info);
 
     card.addEventListener(
       "click",
       () => openVideo(video)
     );
 
-
-    grid.appendChild(
-      card
-    );
+    grid.appendChild(card);
 
   });
 
@@ -608,36 +402,44 @@ function renderVideos(
    CATEGORY FILTER
 ========================= */
 
-function filterCategory(
-  category
-) {
+function filterCategory(category) {
 
-  currentCategory =
-    category;
-
+  currentCategory = category;
 
   document
-    .querySelectorAll(
-      ".categories button"
-    )
+    .querySelectorAll(".categories button")
     .forEach(button => {
 
       button.classList.toggle(
         "active",
-        button.dataset.category ===
-        category
+        button.dataset.category === category
       );
 
     });
-
 
   applyFilters();
 
 }
 
 
+document
+  .querySelectorAll(".categories button")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+        filterCategory(
+          button.dataset.category
+        );
+      }
+    );
+
+  });
+
+
 /* =========================
-   SEARCH + CATEGORY
+   SEARCH
 ========================= */
 
 function applyFilters() {
@@ -648,50 +450,31 @@ function applyFilters() {
       .toLowerCase()
       .trim();
 
+  let filtered = [...videos];
 
-  let filtered =
-    [...videos];
-
-
-  if (
-    currentCategory !==
-    "All"
-  ) {
+  if (currentCategory !== "All") {
 
     filtered =
       filtered.filter(video =>
-
-        (
-          video.category ||
-          ""
-        )
+        (video.category || "")
           .toLowerCase() ===
-        currentCategory
-          .toLowerCase()
-
+        currentCategory.toLowerCase()
       );
 
   }
-
 
   if (search) {
 
     filtered =
       filtered.filter(video =>
 
-        (
-          video.title ||
-          ""
-        )
+        (video.title || "")
           .toLowerCase()
           .includes(search)
 
         ||
 
-        (
-          video.creator ||
-          ""
-        )
+        (video.creator || "")
           .toLowerCase()
           .includes(search)
 
@@ -699,41 +482,10 @@ function applyFilters() {
 
   }
 
-
-  renderVideos(
-    filtered
-  );
+  renderVideos(filtered);
 
 }
 
-
-/* =========================
-   CATEGORY BUTTONS
-========================= */
-
-document
-  .querySelectorAll(
-    ".categories button"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        filterCategory(
-          button.dataset.category
-        );
-
-      }
-    );
-
-  });
-
-
-/* =========================
-   SEARCH
-========================= */
 
 $("searchButton")
   .addEventListener(
@@ -747,13 +499,8 @@ $("searchInput")
     "keydown",
     event => {
 
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
+      if (event.key === "Enter") {
         applyFilters();
-
       }
 
     }
@@ -766,64 +513,45 @@ $("searchInput")
 
 function openLogin() {
 
-  $("loginModal").style.display =
-    "flex";
+  $("loginModal").style.display = "flex";
 
 }
 
 
 function openSignup() {
 
-  $("signupModal").style.display =
-    "flex";
+  $("signupModal").style.display = "flex";
 
 }
 
 
 function closeModals() {
 
-  $("loginModal").style.display =
-    "none";
-
-  $("signupModal").style.display =
-    "none";
+  $("loginModal").style.display = "none";
+  $("signupModal").style.display = "none";
+  $("profileModal").style.display = "none";
 
 }
 
 
 $("loginButton")
-  .addEventListener(
-    "click",
-    openLogin
-  );
+  .addEventListener("click", openLogin);
 
 
 $("signupButton")
-  .addEventListener(
-    "click",
-    openSignup
-  );
+  .addEventListener("click", openSignup);
 
 
 $("getStartedButton")
-  .addEventListener(
-    "click",
-    openSignup
-  );
+  .addEventListener("click", openSignup);
 
 
 $("closeLoginButton")
-  .addEventListener(
-    "click",
-    closeModals
-  );
+  .addEventListener("click", closeModals);
 
 
 $("closeSignupButton")
-  .addEventListener(
-    "click",
-    closeModals
-  );
+  .addEventListener("click", closeModals);
 
 
 $("goToSignup")
@@ -832,7 +560,6 @@ $("goToSignup")
     () => {
 
       closeModals();
-
       openSignup();
 
     }
@@ -845,7 +572,6 @@ $("goToLogin")
     () => {
 
       closeModals();
-
       openLogin();
 
     }
@@ -866,32 +592,22 @@ $("emailSignupButton")
           .value
           .trim();
 
-
       const email =
         $("signupEmail")
           .value
           .trim();
 
-
       const password =
         $("signupPassword")
           .value;
 
+      if (!name || !email || !password) {
 
-      if (
-        !name ||
-        !email ||
-        !password
-      ) {
-
-        alert(
-          "Please fill all fields."
-        );
+        alert("Please fill all fields.");
 
         return;
 
       }
-
 
       try {
 
@@ -903,34 +619,28 @@ $("emailSignupButton")
               password
             );
 
-
         await firebaseFunctions
           .updateProfile(
             userCredential.user,
             {
-              displayName:
-                name
+              displayName: name
             }
           );
 
+        await createInitialProfile(
+          userCredential.user,
+          name
+        );
 
         alert(
           "Account successfully created! 🎉"
         );
 
-
         closeModals();
 
-
-        $("signupName").value =
-          "";
-
-        $("signupEmail").value =
-          "";
-
-        $("signupPassword").value =
-          "";
-
+        $("signupName").value = "";
+        $("signupEmail").value = "";
+        $("signupPassword").value = "";
 
       } catch (error) {
 
@@ -943,6 +653,70 @@ $("emailSignupButton")
 
     }
   );
+
+
+/* =========================
+   CREATE INITIAL PROFILE
+========================= */
+
+async function createInitialProfile(user, name) {
+
+  const username =
+    makeUsername(name);
+
+  const profile = {
+
+    uid: user.uid,
+
+    username: username,
+
+    channelName:
+      name || "MiniTube User",
+
+    bio: "",
+
+    link: "",
+
+    photoURL:
+      user.photoURL || "",
+
+    email:
+      user.email || "",
+
+    createdAt:
+      firebaseFunctions.serverTimestamp()
+
+  };
+
+  await firebaseFunctions.setDoc(
+    firebaseFunctions.doc(
+      firebaseFunctions.db,
+      "profiles",
+      user.uid
+    ),
+    profile
+  );
+
+  window.currentProfile = profile;
+
+}
+
+
+function makeUsername(name) {
+
+  let username =
+    String(name || "user")
+      .toLowerCase()
+      .replace(/[^a-z0-9_]/g, "")
+      .slice(0, 20);
+
+  if (!username) {
+    username = "user";
+  }
+
+  return username;
+
+}
 
 
 /* =========================
@@ -959,16 +733,11 @@ $("emailLoginButton")
           .value
           .trim();
 
-
       const password =
         $("loginPassword")
           .value;
 
-
-      if (
-        !email ||
-        !password
-      ) {
+      if (!email || !password) {
 
         alert(
           "Please enter email and password."
@@ -977,7 +746,6 @@ $("emailLoginButton")
         return;
 
       }
-
 
       try {
 
@@ -988,21 +756,14 @@ $("emailLoginButton")
             password
           );
 
-
         alert(
           "Login successful! 👋"
         );
 
-
         closeModals();
 
-
-        $("loginEmail").value =
-          "";
-
-        $("loginPassword").value =
-          "";
-
+        $("loginEmail").value = "";
+        $("loginPassword").value = "";
 
       } catch (error) {
 
@@ -1025,21 +786,81 @@ async function googleLogin() {
 
   try {
 
-    await firebaseFunctions
-      .signInWithPopup(
-        firebaseAuth,
-        googleProvider
-      );
+    const result =
+      await firebaseFunctions
+        .signInWithPopup(
+          firebaseAuth,
+          googleProvider
+        );
 
+    const user =
+      result.user;
+
+    await ensureGoogleProfile(user);
 
     closeModals();
-
 
   } catch (error) {
 
     alert(
       "Google login failed: " +
       error.message
+    );
+
+  }
+
+}
+
+
+async function ensureGoogleProfile(user) {
+
+  const profileRef =
+    firebaseFunctions.doc(
+      firebaseFunctions.db,
+      "profiles",
+      user.uid
+    );
+
+  const profileSnap =
+    await firebaseFunctions.getDoc(
+      profileRef
+    );
+
+  if (!profileSnap.exists()) {
+
+    const profile = {
+
+      uid: user.uid,
+
+      username:
+        makeUsername(
+          user.displayName ||
+          user.email?.split("@")[0] ||
+          "user"
+        ),
+
+      channelName:
+        user.displayName ||
+        "MiniTube User",
+
+      bio: "",
+
+      link: "",
+
+      photoURL:
+        user.photoURL || "",
+
+      email:
+        user.email || "",
+
+      createdAt:
+        firebaseFunctions.serverTimestamp()
+
+    };
+
+    await firebaseFunctions.setDoc(
+      profileRef,
+      profile
     );
 
   }
@@ -1072,11 +893,8 @@ $("profilePhoto")
 
       event.stopPropagation();
 
-
       $("profileMenu")
-        .classList.toggle(
-          "show"
-        );
+        .classList.toggle("show");
 
     }
   );
@@ -1087,20 +905,480 @@ document.addEventListener(
   event => {
 
     if (
-      !event.target.closest(
-        "#profileArea"
-      )
+      !event.target.closest("#profileArea")
     ) {
 
       $("profileMenu")
-        .classList.remove(
-          "show"
-        );
+        .classList.remove("show");
 
     }
 
   }
 );
+
+
+/* =========================
+   EDIT PROFILE
+========================= */
+
+$("editProfileButton")
+  .addEventListener(
+    "click",
+    openEditProfile
+  );
+
+
+async function openEditProfile() {
+
+  if (!window.currentUser) {
+
+    openLogin();
+
+    return;
+
+  }
+
+  $("profileMenu")
+    .classList.remove("show");
+
+  const user =
+    window.currentUser;
+
+  let profile =
+    window.currentProfile;
+
+  if (!profile) {
+
+    try {
+
+      const snap =
+        await firebaseFunctions.getDoc(
+          firebaseFunctions.doc(
+            firebaseFunctions.db,
+            "profiles",
+            user.uid
+          )
+        );
+
+      if (snap.exists()) {
+        profile = snap.data();
+        window.currentProfile = profile;
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+  profile =
+    profile || {};
+
+  $("editProfilePhoto").src =
+    profile.photoURL ||
+    user.photoURL ||
+    getAvatar(
+      profile.channelName ||
+      user.displayName ||
+      "M"
+    );
+
+  $("profileUsernameInput").value =
+    profile.username ||
+    makeUsername(
+      user.displayName ||
+      "user"
+    );
+
+  $("channelNameInput").value =
+    profile.channelName ||
+    user.displayName ||
+    "";
+
+  $("bioInput").value =
+    profile.bio ||
+    "";
+
+  $("profileLinkInput").value =
+    profile.link ||
+    "";
+
+  $("profileFile").value = "";
+
+  $("profileStatus").textContent = "";
+
+  $("profileModal").style.display = "flex";
+
+}
+
+
+$("closeProfileButton")
+  .addEventListener(
+    "click",
+    () => {
+
+      $("profileModal").style.display =
+        "none";
+
+    }
+  );
+
+
+/* =========================
+   PROFILE IMAGE PREVIEW
+========================= */
+
+$("profileFile")
+  .addEventListener(
+    "change",
+    () => {
+
+      const file =
+        $("profileFile").files[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!file.type.startsWith("image/")) {
+
+        alert("Please select an image.");
+
+        $("profileFile").value = "";
+
+        return;
+
+      }
+
+      const previewURL =
+        URL.createObjectURL(file);
+
+      $("editProfilePhoto").src =
+        previewURL;
+
+    }
+  );
+
+
+/* =========================
+   SAVE PROFILE
+========================= */
+
+$("saveProfileButton")
+  .addEventListener(
+    "click",
+    saveProfile
+  );
+
+
+async function saveProfile() {
+
+  if (!window.currentUser) {
+
+    alert("Please login first.");
+
+    return;
+
+  }
+
+  const user =
+    window.currentUser;
+
+  let username =
+    $("profileUsernameInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const channelName =
+    $("channelNameInput")
+      .value
+      .trim();
+
+  const bio =
+    $("bioInput")
+      .value
+      .trim();
+
+  let link =
+    $("profileLinkInput")
+      .value
+      .trim();
+
+  if (!username) {
+
+    alert("Please enter a username.");
+
+    return;
+
+  }
+
+  if (!/^[a-z0-9_]{3,30}$/.test(username)) {
+
+    alert(
+      "Username must be 3-30 characters and use only letters, numbers or _. "
+    );
+
+    return;
+
+  }
+
+  if (!channelName) {
+
+    alert("Please enter a channel name.");
+
+    return;
+
+  }
+
+  if (link && !/^https?:\/\//i.test(link)) {
+
+    link = "https://" + link;
+
+  }
+
+  const status =
+    $("profileStatus");
+
+  status.textContent =
+    "Saving profile... ⏳";
+
+  try {
+
+    /* USERNAME CHECK */
+
+    const usernameQuery =
+      firebaseFunctions.query(
+        firebaseFunctions.collection(
+          firebaseFunctions.db,
+          "profiles"
+        ),
+        firebaseFunctions.where(
+          "username",
+          "==",
+          username
+        ),
+        firebaseFunctions.limit(1)
+      );
+
+    const usernameResults =
+      await firebaseFunctions.getDocs(
+        usernameQuery
+      );
+
+    let usernameTaken = false;
+
+    usernameResults.forEach(
+      profileDoc => {
+
+        if (profileDoc.id !== user.uid) {
+          usernameTaken = true;
+        }
+
+      }
+    );
+
+    if (usernameTaken) {
+
+      status.textContent =
+        "❌ Username already taken.";
+
+      return;
+
+    }
+
+
+    /* IMAGE UPLOAD */
+
+    let photoURL =
+      window.currentProfile?.photoURL ||
+      user.photoURL ||
+      "";
+
+    const imageFile =
+      $("profileFile").files[0];
+
+    if (imageFile) {
+
+      status.textContent =
+        "Uploading profile picture... ⏳";
+
+      const formData =
+        new FormData();
+
+      formData.append(
+        "file",
+        imageFile
+      );
+
+      formData.append(
+        "upload_preset",
+        "minituber"
+      );
+
+      const response =
+        await fetch(
+          "https://api.cloudinary.com/v1_1/dvvsxjid/auto/upload",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error?.message ||
+          "Profile picture upload failed."
+        );
+
+      }
+
+      photoURL =
+        data.secure_url;
+
+    }
+
+
+    /* SAVE FIRESTORE */
+
+    status.textContent =
+      "Saving profile... ⏳";
+
+    const profileData = {
+
+      uid:
+        user.uid,
+
+      username:
+        username,
+
+      channelName:
+        channelName,
+
+      bio:
+        bio,
+
+      link:
+        link,
+
+      photoURL:
+        photoURL,
+
+      email:
+        user.email || "",
+
+      updatedAt:
+        firebaseFunctions.serverTimestamp()
+
+    };
+
+
+    await firebaseFunctions.setDoc(
+      firebaseFunctions.doc(
+        firebaseFunctions.db,
+        "profiles",
+        user.uid
+      ),
+      profileData,
+      {
+        merge: true
+      }
+    );
+
+
+    /* UPDATE FIREBASE AUTH PHOTO */
+
+    try {
+
+      await firebaseFunctions
+        .updateProfile(
+          user,
+          {
+            displayName:
+              channelName,
+
+            photoURL:
+              photoURL || null
+
+          }
+        );
+
+    } catch (authError) {
+
+      console.log(
+        "Auth profile update skipped:",
+        authError
+      );
+
+    }
+
+
+    window.currentProfile =
+      profileData;
+
+
+    updateProfileHeader(
+      profileData
+    );
+
+
+    status.textContent =
+      "Profile saved successfully! 🎉";
+
+
+    setTimeout(
+      () => {
+
+        $("profileModal")
+          .style.display =
+          "none";
+
+      },
+      700
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "❌ " +
+      error.message;
+
+  }
+
+}
+
+
+function updateProfileHeader(profile) {
+
+  $("profileName").textContent =
+    profile.channelName ||
+    "MiniTube User";
+
+  $("profileUsername").textContent =
+    profile.username
+      ? "@" + profile.username
+      : "@username";
+
+  $("profileEmail").textContent =
+    window.currentUser?.email || "";
+
+  $("profilePhoto").src =
+    profile.photoURL ||
+    getAvatar(
+      profile.channelName ||
+      "M"
+    );
+
+}
 
 
 /* =========================
@@ -1119,20 +1397,14 @@ $("logoutButton")
             firebaseAuth
           );
 
-
         $("profileMenu")
-          .classList.remove(
-            "show"
-          );
-
+          .classList.remove("show");
 
         showHome();
-
 
         alert(
           "You have been logged out."
         );
-
 
       } catch (error) {
 
@@ -1148,66 +1420,122 @@ $("logoutButton")
 
 
 /* =========================
-   CHANNEL
+   MY CHANNEL
 ========================= */
 
 $("myChannelButton")
   .addEventListener(
     "click",
-    () => {
+    openMyChannel
+  );
 
-      if (!window.currentUser) {
 
-        openLogin();
+async function openMyChannel() {
 
-        return;
+  if (!window.currentUser) {
+
+    openLogin();
+
+    return;
+
+  }
+
+  $("profileMenu")
+    .classList.remove("show");
+
+  $("homePage").style.display = "none";
+  $("videoPage").style.display = "none";
+  $("uploadPage").style.display = "none";
+  $("channelPage").style.display = "block";
+
+  const user =
+    window.currentUser;
+
+  let profile =
+    window.currentProfile;
+
+  if (!profile) {
+
+    try {
+
+      const snap =
+        await firebaseFunctions.getDoc(
+          firebaseFunctions.doc(
+            firebaseFunctions.db,
+            "profiles",
+            user.uid
+          )
+        );
+
+      if (snap.exists()) {
+
+        profile =
+          snap.data();
+
+        window.currentProfile =
+          profile;
 
       }
 
+    } catch (error) {
 
-      $("homePage").style.display =
-        "none";
-
-      $("videoPage").style.display =
-        "none";
-
-      $("uploadPage").style.display =
-        "none";
-
-      $("channelPage").style.display =
-        "block";
-
-
-      const user =
-        window.currentUser;
-
-
-      $("channelName").textContent =
-        user.displayName ||
-        "MiniTube User";
-
-
-      $("channelEmail").textContent =
-        user.email ||
-        "";
-
-
-      $("channelPhoto").src =
-        user.photoURL ||
-        "https://ui-avatars.com/api/?name=" +
-        encodeURIComponent(
-          user.displayName ||
-          "MiniTube User"
-        );
-
-
-      $("profileMenu")
-        .classList.remove(
-          "show"
-        );
+      console.error(error);
 
     }
-  );
+
+  }
+
+  profile =
+    profile || {};
+
+  $("channelName").textContent =
+    profile.channelName ||
+    user.displayName ||
+    "MiniTube User";
+
+  $("channelUsername").textContent =
+    profile.username
+      ? "@" + profile.username
+      : "@username";
+
+  $("channelEmail").textContent =
+    user.email || "";
+
+  $("channelBio").textContent =
+    profile.bio ||
+    "No bio yet.";
+
+  const channelLink =
+    $("channelLink");
+
+  if (profile.link) {
+
+    channelLink.href =
+      profile.link;
+
+    channelLink.textContent =
+      "🔗 " + profile.link;
+
+    channelLink.style.display =
+      "inline-block";
+
+  } else {
+
+    channelLink.style.display =
+      "none";
+
+  }
+
+  $("channelPhoto").src =
+    profile.photoURL ||
+    user.photoURL ||
+    getAvatar(
+      profile.channelName ||
+      user.displayName ||
+      "M"
+    );
+
+}
 
 
 $("backFromChannelButton")
@@ -1234,24 +1562,13 @@ $("uploadButton")
 
       }
 
-
-      $("homePage").style.display =
-        "none";
-
-      $("videoPage").style.display =
-        "none";
-
-      $("channelPage").style.display =
-        "none";
-
-      $("uploadPage").style.display =
-        "block";
-
+      $("homePage").style.display = "none";
+      $("videoPage").style.display = "none";
+      $("channelPage").style.display = "none";
+      $("uploadPage").style.display = "block";
 
       $("profileMenu")
-        .classList.remove(
-          "show"
-        );
+        .classList.remove("show");
 
     }
   );
@@ -1274,33 +1591,23 @@ $("videoFile")
     () => {
 
       const file =
-        $("videoFile")
-          .files[0];
-
+        $("videoFile").files[0];
 
       if (!file) {
 
-        $("videoPreview")
-          .style.display =
+        $("videoPreview").style.display =
           "none";
 
         return;
 
       }
 
-
       const url =
-        URL.createObjectURL(
-          file
-        );
+        URL.createObjectURL(file);
 
+      $("videoPreview").src = url;
 
-      $("videoPreview").src =
-        url;
-
-
-      $("videoPreview")
-        .style.display =
+      $("videoPreview").style.display =
         "block";
 
     }
@@ -1317,48 +1624,32 @@ $("uploadVideoButton")
     async () => {
 
       const file =
-        $("videoFile")
-          .files[0];
-
+        $("videoFile").files[0];
 
       const title =
-        $("videoTitle")
-          .value
-          .trim();
-
+        $("videoTitle").value.trim();
 
       const description =
-        $("videoDescription")
-          .value
-          .trim();
-
+        $("videoDescription").value.trim();
 
       const category =
-        $("videoCategory")
-          .value;
-
+        $("videoCategory").value;
 
       if (!file) {
 
-        alert(
-          "Please select a video."
-        );
+        alert("Please select a video.");
 
         return;
 
       }
-
 
       if (!title) {
 
-        alert(
-          "Please enter a video title."
-        );
+        alert("Please enter a video title.");
 
         return;
 
       }
-
 
       if (!window.currentUser) {
 
@@ -1372,29 +1663,23 @@ $("uploadVideoButton")
 
       }
 
-
-      $("uploadStatus")
-        .textContent =
+      $("uploadStatus").textContent =
         "Uploading video... ⏳";
-
 
       try {
 
         const formData =
           new FormData();
 
-
         formData.append(
           "file",
           file
         );
 
-
         formData.append(
           "upload_preset",
           "minituber"
         );
-
 
         const response =
           await fetch(
@@ -1405,10 +1690,8 @@ $("uploadVideoButton")
             }
           );
 
-
         const data =
           await response.json();
-
 
         if (!response.ok) {
 
@@ -1419,6 +1702,8 @@ $("uploadVideoButton")
 
         }
 
+        const profile =
+          window.currentProfile || {};
 
         const newVideo = {
 
@@ -1429,8 +1714,8 @@ $("uploadVideoButton")
             title,
 
           creator:
-            window.currentUser
-              .displayName ||
+            profile.channelName ||
+            window.currentUser.displayName ||
             "MiniTube User",
 
           description:
@@ -1450,49 +1735,29 @@ $("uploadVideoButton")
 
         };
 
-
         videos = [
           newVideo,
           ...videos
         ];
 
-
         saveVideos();
 
-
-        $("uploadStatus")
-          .textContent =
+        $("uploadStatus").textContent =
           "Video successfully uploaded! 🎉";
-
 
         alert(
           "Video successfully uploaded! 🎉"
         );
 
+        $("videoTitle").value = "";
+        $("videoDescription").value = "";
+        $("videoCategory").value = "Gaming";
+        $("videoFile").value = "";
 
-        $("videoTitle").value =
-          "";
+        $("videoPreview").src = "";
+        $("videoPreview").style.display = "none";
 
-        $("videoDescription").value =
-          "";
-
-        $("videoCategory").value =
-          "Gaming";
-
-        $("videoFile").value =
-          "";
-
-        $("videoPreview").src =
-          "";
-
-        $("videoPreview")
-          .style.display =
-          "none";
-
-
-        currentCategory =
-          "All";
-
+        currentCategory = "All";
 
         document
           .querySelectorAll(
@@ -1502,32 +1767,25 @@ $("uploadVideoButton")
 
             button.classList.toggle(
               "active",
-              button.dataset.category ===
-              "All"
+              button.dataset.category === "All"
             );
 
           });
 
-
         renderVideos();
-
 
         setTimeout(
           showHome,
           500
         );
 
-
       } catch (error) {
 
         console.error(error);
 
-
-        $("uploadStatus")
-          .textContent =
+        $("uploadStatus").textContent =
           "Upload failed: " +
           error.message;
-
 
         alert(
           "Upload failed: " +
@@ -1552,9 +1810,7 @@ $("backFromVideoButton")
       $("mainVideo").pause();
 
       $("mainVideo")
-        .removeAttribute(
-          "src"
-        );
+        .removeAttribute("src");
 
       $("mainVideo").load();
 
@@ -1577,10 +1833,8 @@ $("likeButton")
         return;
       }
 
-
       const id =
         currentVideo.id;
-
 
       if (likedVideos[id]) {
 
@@ -1592,26 +1846,17 @@ $("likeButton")
 
       }
 
-
       currentVideo.likes =
-        (currentVideo.likes || 0) +
-        1;
+        (currentVideo.likes || 0) + 1;
 
-
-      likedVideos[id] =
-        true;
-
+      likedVideos[id] = true;
 
       localStorage.setItem(
         "minitubeLikes",
-        JSON.stringify(
-          likedVideos
-        )
+        JSON.stringify(likedVideos)
       );
 
-
       saveVideos();
-
 
       $("likeCount").textContent =
         currentVideo.likes;
@@ -1633,7 +1878,6 @@ $("shareButton")
         return;
       }
 
-
       const shareData = {
 
         title:
@@ -1646,7 +1890,6 @@ $("shareButton")
           window.location.href
 
       };
-
 
       try {
 
@@ -1662,7 +1905,6 @@ $("shareButton")
             .writeText(
               window.location.href
             );
-
 
           alert(
             "Video link copied! 🔗"
@@ -1691,19 +1933,13 @@ function loadComments(videoId) {
   const allComments =
     getComments();
 
-
   const comments =
-    allComments[videoId] ||
-    [];
-
+    allComments[videoId] || [];
 
   const list =
     $("commentsList");
 
-
-  list.innerHTML =
-    "";
-
+  list.innerHTML = "";
 
   if (!comments.length) {
 
@@ -1714,94 +1950,54 @@ function loadComments(videoId) {
 
   }
 
+  comments.forEach(comment => {
 
-  comments.forEach(
-    comment => {
+    const item =
+      document.createElement("div");
 
-      const item =
-        document.createElement(
-          "div"
-        );
+    item.className =
+      "comment-item";
 
+    const avatar =
+      document.createElement("img");
 
-      item.className =
-        "comment-item";
+    avatar.className =
+      "comment-avatar";
 
-
-      const avatar =
-        document.createElement(
-          "img"
-        );
-
-
-      avatar.className =
-        "comment-avatar";
-
-
-      avatar.src =
-        comment.photo ||
-        "https://ui-avatars.com/api/?name=" +
-        encodeURIComponent(
-          comment.name ||
-          "User"
-        );
-
-
-      const content =
-        document.createElement(
-          "div"
-        );
-
-
-      content.className =
-        "comment-content";
-
-
-      const author =
-        document.createElement(
-          "strong"
-        );
-
-
-      author.textContent =
-        comment.name ||
-        "MiniTube User";
-
-
-      const text =
-        document.createElement(
-          "p"
-        );
-
-
-      text.textContent =
-        comment.text;
-
-
-      content.appendChild(
-        author
+    avatar.src =
+      comment.photo ||
+      getAvatar(
+        comment.name || "User"
       );
 
-      content.appendChild(
-        text
-      );
+    const content =
+      document.createElement("div");
 
+    content.className =
+      "comment-content";
 
-      item.appendChild(
-        avatar
-      );
+    const author =
+      document.createElement("strong");
 
-      item.appendChild(
-        content
-      );
+    author.textContent =
+      comment.name ||
+      "MiniTube User";
 
+    const text =
+      document.createElement("p");
 
-      list.appendChild(
-        item
-      );
+    text.textContent =
+      comment.text;
 
-    }
-  );
+    content.appendChild(author);
+    content.appendChild(text);
+
+    item.appendChild(avatar);
+    item.appendChild(content);
+
+    list.appendChild(item);
+
+  });
 
 }
 
@@ -1818,13 +2014,8 @@ $("commentInput")
     "keydown",
     event => {
 
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
+      if (event.key === "Enter") {
         addComment();
-
       }
 
     }
@@ -1836,7 +2027,6 @@ function addComment() {
   if (!currentVideo) {
     return;
   }
-
 
   if (!window.currentUser) {
 
@@ -1850,14 +2040,11 @@ function addComment() {
 
   }
 
-
   const input =
     $("commentInput");
 
-
   const text =
     input.value.trim();
-
 
   if (!text) {
 
@@ -1869,67 +2056,49 @@ function addComment() {
 
   }
 
-
   const allComments =
     getComments();
 
+  if (!allComments[currentVideo.id]) {
 
-  if (
-    !allComments[
-      currentVideo.id
-    ]
-  ) {
-
-    allComments[
-      currentVideo.id
-    ] = [];
+    allComments[currentVideo.id] = [];
 
   }
 
+  const profile =
+    window.currentProfile || {};
 
-  allComments[
-    currentVideo.id
-  ].push({
+  allComments[currentVideo.id].push({
 
     name:
-      window.currentUser
-        .displayName ||
+      profile.channelName ||
+      window.currentUser.displayName ||
       "MiniTube User",
 
     text:
       text,
 
     photo:
-      window.currentUser
-        .photoURL ||
-      "https://ui-avatars.com/api/?name=" +
-      encodeURIComponent(
-        window.currentUser
-          .displayName ||
+      profile.photoURL ||
+      window.currentUser.photoURL ||
+      getAvatar(
+        profile.channelName ||
         "User"
       )
 
   });
 
+  saveComments(allComments);
 
-  saveComments(
-    allComments
-  );
+  input.value = "";
 
-
-  input.value =
-    "";
-
-
-  loadComments(
-    currentVideo.id
-  );
+  loadComments(currentVideo.id);
 
 }
 
 
 /* =========================
-   CLOSE MODALS
+   CLOSE MODALS BY BACKDROP
 ========================= */
 
 window.addEventListener(
@@ -1937,18 +2106,9 @@ window.addEventListener(
   event => {
 
     if (
-      event.target ===
-      $("loginModal")
-    ) {
-
-      closeModals();
-
-    }
-
-
-    if (
-      event.target ===
-      $("signupModal")
+      event.target === $("loginModal") ||
+      event.target === $("signupModal") ||
+      event.target === $("profileModal")
     ) {
 
       closeModals();
