@@ -1,10 +1,8 @@
 const $ = (id) => document.getElementById(id);
 
-let videos = JSON.parse(
-  localStorage.getItem("minitubeVideos") || "[]"
-);
-
+let videos = JSON.parse(localStorage.getItem("minitubeVideos") || "[]");
 let currentVideo = null;
+let currentCategory = "All";
 
 let likedVideos = JSON.parse(
   localStorage.getItem("minitubeLikes") || "{}"
@@ -37,12 +35,23 @@ function saveComments(comments) {
 
 
 /* =========================
-   REMOVE OLD DEMO VIDEOS
+   CLEAN OLD DEMO VIDEOS
 ========================= */
 
-function removeDemoVideos() {
-  videos = videos.filter(video => {
-    return !String(video.id || "").startsWith("demo");
+function prepareVideos() {
+
+  const saved = JSON.parse(
+    localStorage.getItem("minitubeVideos") || "[]"
+  );
+
+  videos = saved.filter(video => {
+
+    if (!video || !video.id) {
+      return false;
+    }
+
+    return !String(video.id).startsWith("demo");
+
   });
 
   saveVideos();
@@ -54,22 +63,29 @@ function removeDemoVideos() {
 ========================= */
 
 function formatViews(number) {
+
   number = Number(number) || 0;
 
   if (number >= 1000000) {
+
     return (
       (number / 1000000)
         .toFixed(1)
-        .replace(".0", "") + "M"
+        .replace(".0", "") +
+      "M"
     );
+
   }
 
   if (number >= 1000) {
+
     return (
       (number / 1000)
         .toFixed(1)
-        .replace(".0", "") + "K"
+        .replace(".0", "") +
+      "K"
     );
+
   }
 
   return String(number);
@@ -81,14 +97,32 @@ function formatViews(number) {
 ========================= */
 
 function formatDuration(seconds) {
+
   if (!Number.isFinite(seconds)) {
     return "";
   }
 
   seconds = Math.floor(seconds);
 
-  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(seconds / 3600);
+
+  const minutes = Math.floor(
+    (seconds % 3600) / 60
+  );
+
   const secs = seconds % 60;
+
+  if (hours > 0) {
+
+    return (
+      hours +
+      ":" +
+      String(minutes).padStart(2, "0") +
+      ":" +
+      String(secs).padStart(2, "0")
+    );
+
+  }
 
   return (
     minutes +
@@ -103,10 +137,15 @@ function formatDuration(seconds) {
 ========================= */
 
 function showHome() {
+
   $("homePage").style.display = "block";
+
   $("videoPage").style.display = "none";
+
   $("channelPage").style.display = "none";
+
   $("uploadPage").style.display = "none";
+
 }
 
 
@@ -115,33 +154,52 @@ function showHome() {
 ========================= */
 
 function openVideo(video) {
+
+  if (!video || !video.url) {
+
+    alert("This video has no playable file.");
+
+    return;
+  }
+
   currentVideo = video;
 
   $("homePage").style.display = "none";
+
   $("videoPage").style.display = "block";
+
   $("channelPage").style.display = "none";
+
   $("uploadPage").style.display = "none";
+
 
   $("mainVideoTitle").textContent =
     video.title || "Video";
 
+
   $("mainVideoCreator").textContent =
     video.creator || "MiniTube User";
 
+
   $("mainVideoViews").textContent =
-    formatViews(video.views || 0) + " views";
+    formatViews(video.views || 0) +
+    " views";
+
 
   $("mainVideoDescription").textContent =
     video.description ||
     "No description available.";
 
+
   $("likeCount").textContent =
     video.likes || 0;
+
 
   $("videoCreatorAvatar").textContent =
     (video.creator || "M")
       .charAt(0)
       .toUpperCase();
+
 
   const player = $("mainVideo");
 
@@ -151,28 +209,34 @@ function openVideo(video) {
 
   player.load();
 
-  if (video.url) {
-    player.src = video.url;
 
-    player.load();
+  player.src = video.url;
 
-    player.onerror = () => {
-      console.error(
-        "Video could not be loaded:",
-        player.error
-      );
-    };
-  }
+  player.load();
+
+
+  player.onerror = () => {
+
+    console.error(
+      "Video playback error:",
+      player.error
+    );
+
+  };
+
 
   $("downloadButton").href =
-    video.url || "#";
+    video.url;
+
 
   loadComments(video.id);
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
 
 
@@ -181,57 +245,93 @@ function openVideo(video) {
 ========================= */
 
 function createThumbnail(video, thumbnail) {
+
   thumbnail.innerHTML = "";
 
   if (!video.url) {
+
     thumbnail.innerHTML = "▶";
+
     return;
   }
+
 
   const videoElement =
     document.createElement("video");
 
-  videoElement.src = video.url;
 
-  videoElement.muted = true;
+  videoElement.src =
+    video.url;
 
-  videoElement.preload = "metadata";
+  videoElement.muted =
+    true;
 
-  videoElement.playsInline = true;
+  videoElement.preload =
+    "metadata";
+
+  videoElement.playsInline =
+    true;
+
+
+  videoElement.setAttribute(
+    "playsinline",
+    ""
+  );
+
 
   videoElement.addEventListener(
     "loadedmetadata",
     () => {
-      if (videoElement.duration) {
+
+      const duration =
+        formatDuration(
+          videoElement.duration
+        );
+
+
+      if (duration) {
+
         videoElement.dataset.duration =
-          formatDuration(
-            videoElement.duration
-          );
+          duration;
+
+        thumbnail.dataset.duration =
+          duration;
+
       }
+
     }
   );
+
 
   videoElement.addEventListener(
     "loadeddata",
     () => {
+
       thumbnail.innerHTML = "";
 
       thumbnail.appendChild(
         videoElement
       );
+
     }
   );
+
 
   videoElement.addEventListener(
     "error",
     () => {
-      thumbnail.innerHTML = "▶";
+
+      thumbnail.innerHTML =
+        "▶";
+
     }
   );
+
 
   thumbnail.appendChild(
     videoElement
   );
+
 }
 
 
@@ -240,18 +340,34 @@ function createThumbnail(video, thumbnail) {
 ========================= */
 
 function renderVideos(list = videos) {
-  const grid = $("videoGrid");
 
-  if (!grid) return;
+  const grid =
+    $("videoGrid");
+
+  if (!grid) {
+    return;
+  }
+
 
   grid.innerHTML = "";
 
+
   if (!list.length) {
-    grid.innerHTML =
-      "<p style='padding:20px;color:#777;'>No videos available yet. Upload your first video! 🎬</p>";
+
+    grid.innerHTML = `
+      <p style="
+        grid-column:1/-1;
+        text-align:center;
+        padding:40px;
+        color:#777;
+      ">
+        No videos found.
+      </p>
+    `;
 
     return;
   }
+
 
   list.forEach(video => {
 
@@ -325,11 +441,21 @@ function renderVideos(list = videos) {
       " views";
 
 
+    const category =
+      document.createElement("p");
+
+    category.textContent =
+      video.category ||
+      "Uncategorized";
+
+
     details.appendChild(title);
 
     details.appendChild(creator);
 
     details.appendChild(views);
+
+    details.appendChild(category);
 
 
     info.appendChild(avatar);
@@ -349,8 +475,107 @@ function renderVideos(list = videos) {
 
 
     grid.appendChild(card);
+
   });
+
 }
+
+
+/* =========================
+   CATEGORY FILTER
+========================= */
+
+function filterCategory(category) {
+
+  currentCategory =
+    category;
+
+
+  document
+    .querySelectorAll(
+      ".categories button"
+    )
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.category ===
+        category
+      );
+
+    });
+
+
+  const search =
+    $("searchInput")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  let filtered =
+    videos;
+
+
+  if (category !== "All") {
+
+    filtered =
+      filtered.filter(video =>
+        (video.category || "")
+          .toLowerCase() ===
+        category.toLowerCase()
+      );
+
+  }
+
+
+  if (search) {
+
+    filtered =
+      filtered.filter(video =>
+
+        (video.title || "")
+          .toLowerCase()
+          .includes(search)
+
+        ||
+
+        (video.creator || "")
+          .toLowerCase()
+          .includes(search)
+
+      );
+
+  }
+
+
+  renderVideos(filtered);
+
+}
+
+
+/* =========================
+   CATEGORY BUTTONS
+========================= */
+
+document
+  .querySelectorAll(
+    ".categories button"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        filterCategory(
+          button.dataset.category
+        );
+
+      }
+    );
+
+  });
 
 
 /* =========================
@@ -366,25 +591,47 @@ function searchVideos() {
       .trim();
 
 
-  if (!search) {
-    renderVideos(videos);
-    return;
+  let results =
+    videos;
+
+
+  if (
+    currentCategory !==
+    "All"
+  ) {
+
+    results =
+      results.filter(video =>
+        (video.category || "")
+          .toLowerCase() ===
+        currentCategory.toLowerCase()
+      );
+
   }
 
 
-  const results =
-    videos.filter(video =>
-      (video.title || "")
-        .toLowerCase()
-        .includes(search) ||
+  if (search) {
 
-      (video.creator || "")
-        .toLowerCase()
-        .includes(search)
-    );
+    results =
+      results.filter(video =>
+
+        (video.title || "")
+          .toLowerCase()
+          .includes(search)
+
+        ||
+
+        (video.creator || "")
+          .toLowerCase()
+          .includes(search)
+
+      );
+
+  }
 
 
   renderVideos(results);
+
 }
 
 
@@ -399,7 +646,9 @@ $("searchInput").addEventListener(
   event => {
 
     if (event.key === "Enter") {
+
       searchVideos();
+
     }
 
   }
@@ -411,14 +660,18 @@ $("searchInput").addEventListener(
 ========================= */
 
 function openLogin() {
+
   $("loginModal").style.display =
     "flex";
+
 }
 
 
 function openSignup() {
+
   $("signupModal").style.display =
     "flex";
+
 }
 
 
@@ -429,6 +682,7 @@ function closeModals() {
 
   $("signupModal").style.display =
     "none";
+
 }
 
 
@@ -495,13 +749,20 @@ $("emailSignupButton").addEventListener(
   async () => {
 
     const name =
-      $("signupName").value.trim();
+      $("signupName")
+        .value
+        .trim();
+
 
     const email =
-      $("signupEmail").value.trim();
+      $("signupEmail")
+        .value
+        .trim();
+
 
     const password =
-      $("signupPassword").value;
+      $("signupPassword")
+        .value;
 
 
     if (!name || !email || !password) {
@@ -525,12 +786,14 @@ $("emailSignupButton").addEventListener(
           );
 
 
-      await firebaseFunctions.updateProfile(
-        userCredential.user,
-        {
-          displayName: name
-        }
-      );
+      await firebaseFunctions
+        .updateProfile(
+          userCredential.user,
+          {
+            displayName:
+              name
+          }
+        );
 
 
       alert(
@@ -570,10 +833,14 @@ $("emailLoginButton").addEventListener(
   async () => {
 
     const email =
-      $("loginEmail").value.trim();
+      $("loginEmail")
+        .value
+        .trim();
+
 
     const password =
-      $("loginPassword").value;
+      $("loginPassword")
+        .value;
 
 
     if (!email || !password) {
@@ -692,7 +959,9 @@ document.addEventListener(
     ) {
 
       $("profileMenu")
-        .classList.remove("show");
+        .classList.remove(
+          "show"
+        );
 
     }
 
@@ -710,13 +979,16 @@ $("logoutButton").addEventListener(
 
     try {
 
-      await firebaseFunctions.signOut(
-        firebaseAuth
-      );
+      await firebaseFunctions
+        .signOut(
+          firebaseAuth
+        );
 
 
       $("profileMenu")
-        .classList.remove("show");
+        .classList.remove(
+          "show"
+        );
 
 
       showHome();
@@ -792,7 +1064,9 @@ $("myChannelButton").addEventListener(
 
 
     $("profileMenu")
-      .classList.remove("show");
+      .classList.remove(
+        "show"
+      );
 
   }
 );
@@ -834,7 +1108,9 @@ $("uploadButton").addEventListener(
 
 
     $("profileMenu")
-      .classList.remove("show");
+      .classList.remove(
+        "show"
+      );
 
   }
 );
@@ -907,6 +1183,11 @@ $("uploadVideoButton").addEventListener(
         .trim();
 
 
+    const category =
+      $("videoCategory")
+        .value;
+
+
     if (!file) {
 
       alert(
@@ -922,6 +1203,18 @@ $("uploadVideoButton").addEventListener(
       alert(
         "Please enter a video title."
       );
+
+      return;
+    }
+
+
+    if (!window.currentUser) {
+
+      alert(
+        "Please login before uploading."
+      );
+
+      openLogin();
 
       return;
     }
@@ -982,11 +1275,15 @@ $("uploadVideoButton").addEventListener(
           title,
 
         creator:
-          window.currentUser?.displayName ||
+          window.currentUser
+            ?.displayName ||
           "MiniTube User",
 
         description:
           description,
+
+        category:
+          category,
 
         url:
           data.secure_url,
@@ -1022,12 +1319,34 @@ $("uploadVideoButton").addEventListener(
 
       $("videoDescription").value = "";
 
+      $("videoCategory").value =
+        "Gaming";
+
       $("videoFile").value = "";
 
       $("videoPreview").src = "";
 
       $("videoPreview").style.display =
         "none";
+
+
+      currentCategory =
+        "All";
+
+
+      document
+        .querySelectorAll(
+          ".categories button"
+        )
+        .forEach(button => {
+
+          button.classList.toggle(
+            "active",
+            button.dataset.category ===
+            "All"
+          );
+
+        });
 
 
       renderVideos();
@@ -1041,7 +1360,9 @@ $("uploadVideoButton").addEventListener(
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        error
+      );
 
 
       $("uploadStatus").textContent =
@@ -1089,7 +1410,9 @@ $("likeButton").addEventListener(
   "click",
   () => {
 
-    if (!currentVideo) return;
+    if (!currentVideo) {
+      return;
+    }
 
 
     const id =
@@ -1107,15 +1430,19 @@ $("likeButton").addEventListener(
 
 
     currentVideo.likes =
-      (currentVideo.likes || 0) + 1;
+      (currentVideo.likes || 0) +
+      1;
 
 
-    likedVideos[id] = true;
+    likedVideos[id] =
+      true;
 
 
     localStorage.setItem(
       "minitubeLikes",
-      JSON.stringify(likedVideos)
+      JSON.stringify(
+        likedVideos
+      )
     );
 
 
@@ -1137,7 +1464,9 @@ $("shareButton").addEventListener(
   "click",
   async () => {
 
-    if (!currentVideo) return;
+    if (!currentVideo) {
+      return;
+    }
 
 
     const shareData = {
@@ -1208,7 +1537,7 @@ function loadComments(videoId) {
   list.innerHTML = "";
 
 
-  if (comments.length === 0) {
+  if (!comments.length) {
 
     list.innerHTML =
       "<p class='no-comments'>No comments yet. Be the first! 💬</p>";
@@ -1221,7 +1550,9 @@ function loadComments(videoId) {
     comment => {
 
       const item =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
 
       item.className =
@@ -1229,7 +1560,9 @@ function loadComments(videoId) {
 
 
       const avatar =
-        document.createElement("img");
+        document.createElement(
+          "img"
+        );
 
 
       avatar.className =
@@ -1240,12 +1573,15 @@ function loadComments(videoId) {
         comment.photo ||
         "https://ui-avatars.com/api/?name=" +
         encodeURIComponent(
-          comment.name || "User"
+          comment.name ||
+          "User"
         );
 
 
       const content =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
 
 
       content.className =
@@ -1253,7 +1589,9 @@ function loadComments(videoId) {
 
 
       const author =
-        document.createElement("strong");
+        document.createElement(
+          "strong"
+        );
 
 
       author.textContent =
@@ -1262,7 +1600,9 @@ function loadComments(videoId) {
 
 
       const text =
-        document.createElement("p");
+        document.createElement(
+          "p"
+        );
 
 
       text.textContent =
@@ -1273,7 +1613,6 @@ function loadComments(videoId) {
         author
       );
 
-
       content.appendChild(
         text
       );
@@ -1282,7 +1621,6 @@ function loadComments(videoId) {
       item.appendChild(
         avatar
       );
-
 
       item.appendChild(
         content
@@ -1295,6 +1633,7 @@ function loadComments(videoId) {
 
     }
   );
+
 }
 
 
@@ -1309,7 +1648,9 @@ $("commentInput").addEventListener(
   event => {
 
     if (event.key === "Enter") {
+
       addComment();
+
     }
 
   }
@@ -1318,7 +1659,9 @@ $("commentInput").addEventListener(
 
 function addComment() {
 
-  if (!currentVideo) return;
+  if (!currentVideo) {
+    return;
+  }
 
 
   if (!window.currentUser) {
@@ -1366,17 +1709,20 @@ function addComment() {
   allComments[currentVideo.id].push({
 
     name:
-      window.currentUser.displayName ||
+      window.currentUser
+        .displayName ||
       "MiniTube User",
 
     text:
       text,
 
     photo:
-      window.currentUser.photoURL ||
+      window.currentUser
+        .photoURL ||
       "https://ui-avatars.com/api/?name=" +
       encodeURIComponent(
-        window.currentUser.displayName ||
+        window.currentUser
+          .displayName ||
         "User"
       )
 
@@ -1433,7 +1779,7 @@ window.addEventListener(
    START
 ========================= */
 
-removeDemoVideos();
+prepareVideos();
 
 renderVideos();
 
