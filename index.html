@@ -34,28 +34,18 @@
     <!-- LOGIN / SIGNUP -->
     <div class="header-buttons" id="authButtons">
 
-      <button
-        class="login-btn"
-        id="loginButton"
-      >
+      <button class="login-btn" id="loginButton">
         Login
       </button>
 
-      <button
-        class="signup-btn"
-        id="signupButton"
-      >
+      <button class="signup-btn" id="signupButton">
         Sign Up
       </button>
 
     </div>
 
-
     <!-- PROFILE -->
-    <div
-      class="profile-area"
-      id="profileArea"
-    >
+    <div class="profile-area" id="profileArea">
 
       <img
         id="profilePhoto"
@@ -64,23 +54,13 @@
         alt="Profile"
       >
 
-      <div
-        class="profile-menu"
-        id="profileMenu"
-      >
+      <div class="profile-menu" id="profileMenu">
 
-        <div
-          class="profile-name"
-          id="profileName"
-        >
+        <div class="profile-name" id="profileName">
           MiniTube User
         </div>
 
-        <div
-          class="profile-email"
-          id="profileEmail"
-        ></div>
-
+        <div class="profile-email" id="profileEmail"></div>
 
         <button id="myChannelButton">
           📺 My Channel
@@ -104,35 +84,35 @@
   <!-- CATEGORIES -->
   <div class="categories">
 
-    <button class="active">
+    <button class="active" data-category="All">
       All
     </button>
 
-    <button>
+    <button data-category="Gaming">
       Gaming
     </button>
 
-    <button>
+    <button data-category="Islamic">
       Islamic
     </button>
 
-    <button>
+    <button data-category="Education">
       Education
     </button>
 
-    <button>
+    <button data-category="Entertainment">
       Entertainment
     </button>
 
-    <button>
+    <button data-category="Sports">
       Sports
     </button>
 
-    <button>
+    <button data-category="News">
       News
     </button>
 
-    <button>
+    <button data-category="Music">
       Music
     </button>
 
@@ -197,7 +177,6 @@
       >
         ← Back
       </button>
-
 
       <div class="video-player-box">
 
@@ -286,7 +265,6 @@
             💬 Comments
           </h2>
 
-
           <div class="comment-form">
 
             <input
@@ -300,7 +278,6 @@
             </button>
 
           </div>
-
 
           <div id="commentsList"></div>
 
@@ -333,7 +310,6 @@
           src=""
           alt="Channel"
         >
-
 
         <div class="channel-details">
 
@@ -379,6 +355,7 @@
         </p>
 
 
+        <!-- TITLE -->
         <label class="upload-label">
           Video Title
         </label>
@@ -391,6 +368,7 @@
         >
 
 
+        <!-- DESCRIPTION -->
         <label class="upload-label">
           Description
         </label>
@@ -402,6 +380,48 @@
         ></textarea>
 
 
+        <!-- CATEGORY -->
+        <label class="upload-label">
+          Category
+        </label>
+
+        <select
+          id="videoCategory"
+          class="upload-input"
+        >
+
+          <option value="Gaming">
+            🎮 Gaming
+          </option>
+
+          <option value="Islamic">
+            🕌 Islamic
+          </option>
+
+          <option value="Education">
+            📚 Education
+          </option>
+
+          <option value="Entertainment">
+            🎬 Entertainment
+          </option>
+
+          <option value="Sports">
+            ⚽ Sports
+          </option>
+
+          <option value="News">
+            📰 News
+          </option>
+
+          <option value="Music">
+            🎵 Music
+          </option>
+
+        </select>
+
+
+        <!-- VIDEO -->
         <label class="upload-label">
           Select Video
         </label>
@@ -643,14 +663,11 @@
     const app =
       initializeApp(firebaseConfig);
 
-
     const auth =
       getAuth(app);
 
-
     const googleProvider =
       new GoogleAuthProvider();
-
 
     const db =
       getFirestore(app);
@@ -663,14 +680,11 @@
     window.firebaseAuth =
       auth;
 
-
     window.googleProvider =
       googleProvider;
 
-
     window.db =
       db;
-
 
     window.firebaseFunctions = {
 
@@ -728,27 +742,20 @@
 
         if (user) {
 
-          document
-            .getElementById("authButtons")
-            .style.display = "none";
+          $("authButtons").style.display =
+            "none";
+
+          $("profileArea").style.display =
+            "block";
 
 
-          document
-            .getElementById("profileArea")
-            .style.display = "block";
+          $("profileName").textContent =
+            user.displayName ||
+            "MiniTube User";
 
 
-          document
-            .getElementById("profileName")
-            .textContent =
-              user.displayName ||
-              "MiniTube User";
-
-
-          document
-            .getElementById("profileEmail")
-            .textContent =
-              user.email || "";
+          $("profileEmail").textContent =
+            user.email || "";
 
 
           const photo =
@@ -760,24 +767,17 @@
             );
 
 
-          document
-            .getElementById("profilePhoto")
-            .src =
-              photo;
+          $("profilePhoto").src =
+            photo;
 
 
         } else {
 
-          document
-            .getElementById("authButtons")
-            .style.display =
-              "flex";
+          $("authButtons").style.display =
+            "flex";
 
-
-          document
-            .getElementById("profileArea")
-            .style.display =
-              "none";
+          $("profileArea").style.display =
+            "none";
 
         }
 
