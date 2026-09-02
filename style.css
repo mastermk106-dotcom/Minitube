@@ -1,6 +1,5 @@
 /* =========================================================
-   MINITUBE - COMPLETE STYLE
-   LIGHT BACKGROUND + YOUTUBE-INSPIRED UI
+   MINITUBE - PURE WHITE THEME
 ========================================================= */
 
 * {
@@ -11,19 +10,17 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: #f9f9f9;
-  color: #111;
+  background: #ffffff !important;
+  color: #111111;
   min-height: 100vh;
 }
 
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* HEADER */
 
 header {
   height: 64px;
-  background: #ffffff;
+  background: #ffffff !important;
   border-bottom: 1px solid #e5e5e5;
   display: flex;
   align-items: center;
@@ -37,8 +34,8 @@ header {
 .logo {
   font-size: 22px;
   font-weight: 700;
-  white-space: nowrap;
   color: #111;
+  white-space: nowrap;
 }
 
 .search-area {
@@ -61,10 +58,6 @@ header {
   font-size: 15px;
 }
 
-.search-area input:focus {
-  border-color: #1a73e8;
-}
-
 .search-area button {
   width: 62px;
   height: 42px;
@@ -73,12 +66,10 @@ header {
   background: #f2f2f2;
   color: #111;
   cursor: pointer;
-  font-size: 17px;
 }
 
-.search-area button:hover {
-  background: #e5e5e5;
-}
+
+/* AUTH */
 
 .auth-buttons {
   display: flex;
@@ -88,7 +79,7 @@ header {
 
 .auth-buttons button {
   border: 1px solid #065fd4;
-  background: transparent;
+  background: #fff;
   color: #065fd4;
   border-radius: 20px;
   padding: 9px 17px;
@@ -96,14 +87,8 @@ header {
   font-weight: 600;
 }
 
-.auth-buttons button:hover {
-  background: #e8f0fe;
-}
 
-
-/* =========================================================
-   PROFILE
-========================================================= */
+/* PROFILE */
 
 .profile-area {
   position: relative;
@@ -146,13 +131,12 @@ header {
 .profile-menu button {
   width: 100%;
   border: none;
-  background: transparent;
+  background: #fff;
   color: #111;
   text-align: left;
   padding: 11px 12px;
   border-radius: 7px;
   cursor: pointer;
-  font-size: 14px;
 }
 
 .profile-menu button:hover {
@@ -160,16 +144,14 @@ header {
 }
 
 
-/* =========================================================
-   CATEGORIES
-========================================================= */
+/* CATEGORIES */
 
 .categories {
   display: flex;
   gap: 10px;
   padding: 14px 22px;
   overflow-x: auto;
-  background: #fff;
+  background: #fff !important;
   border-bottom: 1px solid #e5e5e5;
   scrollbar-width: none;
 }
@@ -186,7 +168,6 @@ header {
   border-radius: 9px;
   cursor: pointer;
   white-space: nowrap;
-  font-size: 14px;
 }
 
 .category-btn:hover {
@@ -199,16 +180,15 @@ header {
 }
 
 
-/* =========================================================
-   MAIN
-========================================================= */
+/* MAIN */
 
 main {
   padding: 24px;
+  background: #fff !important;
 }
 
 .hero {
-  background: linear-gradient(135deg, #ffffff, #f1f3f4);
+  background: #fff;
   border: 1px solid #e1e1e1;
   border-radius: 16px;
   padding: 35px;
@@ -216,20 +196,17 @@ main {
 }
 
 .hero h1 {
+  color: #111;
   font-size: 32px;
   margin-bottom: 10px;
-  color: #111;
 }
 
 .hero p {
   color: #666;
-  font-size: 16px;
 }
 
 
-/* =========================================================
-   VIDEO GRID
-========================================================= */
+/* VIDEO GRID */
 
 .video-grid {
   display: grid;
@@ -241,13 +218,12 @@ main {
 }
 
 
-/* =========================================================
-   VIDEO CARD
-========================================================= */
+/* VIDEO CARD */
 
 .video-card {
   cursor: pointer;
   min-width: 0;
+  background: #fff;
 }
 
 .thumbnail-wrapper {
@@ -263,7 +239,7 @@ main {
   display: block;
   object-fit: cover;
   border-radius: 12px;
-  background: #e9e9e9;
+  background: #eee;
 }
 
 .video-info {
@@ -289,10 +265,6 @@ main {
   font-weight: 600;
   line-height: 1.35;
   color: #111;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 .video-creator {
@@ -308,9 +280,7 @@ main {
 }
 
 
-/* =========================================================
-   VIDEO 3-DOT
-========================================================= */
+/* 3 DOT */
 
 .video-more-button {
   position: absolute;
@@ -320,30 +290,18 @@ main {
   height: 36px;
   border: none;
   border-radius: 50%;
-  background: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.95);
   color: #111;
   font-size: 25px;
-  line-height: 30px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 20;
 }
 
-.video-more-button:hover {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.18);
-}
 
-
-/* =========================================================
-   VIDEO MENU
-   HIDDEN UNTIL 3-DOT CLICK
-========================================================= */
+/* VIDEO MENU - HIDDEN */
 
 .video-menu {
-  display: none;
+  display: none !important;
   position: absolute;
   top: 48px;
   right: 8px;
@@ -353,25 +311,23 @@ main {
   border-radius: 10px;
   padding: 6px;
   box-shadow: 0 7px 25px rgba(0,0,0,.2);
-  z-index: 100;
+  z-index: 500;
 }
 
 .video-menu.show {
-  display: block;
+  display: block !important;
 }
 
 .video-menu button {
   display: block;
   width: 100%;
   border: none;
-  background: transparent;
+  background: #fff;
   color: #111;
   text-align: left;
   padding: 10px 12px;
   border-radius: 7px;
   cursor: pointer;
-  font-size: 14px;
-  white-space: nowrap;
 }
 
 .video-menu button:hover {
@@ -383,9 +339,7 @@ main {
 }
 
 
-/* =========================================================
-   EMPTY
-========================================================= */
+/* EMPTY */
 
 .empty-message {
   grid-column: 1 / -1;
@@ -396,19 +350,19 @@ main {
 
 .empty-message h3 {
   color: #111;
-  margin-bottom: 8px;
 }
 
 
-/* =========================================================
-   VIDEO PAGE
-========================================================= */
+/* PAGES */
 
 .video-page,
 .channel-page,
 .upload-page {
   display: none;
 }
+
+
+/* BUTTONS */
 
 .video-page > button,
 .channel-page > button,
@@ -419,14 +373,10 @@ main {
   padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.video-page > button:hover,
-.channel-page > button:hover,
-.upload-page > button:hover {
-  background: #e5e5e5;
-}
+
+/* PLAYER */
 
 .video-player-box {
   width: 100%;
@@ -447,21 +397,17 @@ main {
 .video-page-title {
   max-width: 1100px;
   margin: 20px auto 8px;
-  font-size: 25px;
   color: #111;
 }
 
 .video-page-meta {
   max-width: 1100px;
   margin: auto;
-  color: #606060;
-  font-size: 14px;
+  color: #666;
 }
 
 
-/* =========================================================
-   VIDEO ACTIONS
-========================================================= */
+/* ACTIONS */
 
 .video-actions {
   max-width: 1100px;
@@ -470,6 +416,7 @@ main {
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+  position: relative;
 }
 
 .video-actions button,
@@ -482,26 +429,25 @@ main {
   border-radius: 20px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 14px;
-}
-
-.video-actions button:hover,
-.video-actions a:hover,
-.video-more-page-button:hover {
-  background: #e5e5e5;
-}
-
-.video-more-page-button {
-  font-size: 21px;
-  width: 42px;
-  height: 42px;
-  padding: 0;
 }
 
 
-/* =========================================================
-   CREATOR
-========================================================= */
+/* PAGE MENU */
+
+.video-page .video-actions .video-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  margin: 0 !important;
+  display: none !important;
+}
+
+.video-page .video-actions .video-menu.show {
+  display: block !important;
+}
+
+
+/* CREATOR */
 
 .creator-box {
   max-width: 1100px;
@@ -522,20 +468,15 @@ main {
 }
 
 #creatorName {
-  font-size: 16px;
   color: #111;
 }
 
 #creatorUsername {
   color: #777;
-  font-size: 13px;
-  margin-top: 3px;
 }
 
 
-/* =========================================================
-   DESCRIPTION
-========================================================= */
+/* DESCRIPTION */
 
 .description-box {
   max-width: 1100px;
@@ -545,13 +486,10 @@ main {
   border-radius: 10px;
   color: #333;
   line-height: 1.5;
-  white-space: pre-wrap;
 }
 
 
-/* =========================================================
-   COMMENTS
-========================================================= */
+/* COMMENTS */
 
 .comments-section {
   max-width: 1100px;
@@ -559,8 +497,8 @@ main {
 }
 
 .comments-section h2 {
-  margin-bottom: 16px;
   color: #111;
+  margin-bottom: 16px;
 }
 
 .comment-input-area {
@@ -586,7 +524,6 @@ main {
   border-radius: 22px;
   padding: 0 18px;
   cursor: pointer;
-  font-weight: 600;
 }
 
 .comment {
@@ -600,24 +537,19 @@ main {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  object-fit: cover;
 }
 
 .comment-name {
-  font-weight: 600;
-  margin-bottom: 5px;
   color: #111;
+  font-weight: 600;
 }
 
 .comment-text {
   color: #444;
-  line-height: 1.4;
 }
 
 
-/* =========================================================
-   CHANNEL
-========================================================= */
+/* CHANNEL */
 
 .channel-header {
   max-width: 1100px;
@@ -656,20 +588,15 @@ main {
 .channel-bio {
   color: #444;
   margin-top: 12px;
-  line-height: 1.5;
 }
 
 .channel-link {
-  display: none;
-  margin-top: 10px;
   color: #065fd4;
   text-decoration: none;
 }
 
 
-/* =========================================================
-   UPLOAD
-========================================================= */
+/* UPLOAD */
 
 .upload-page {
   max-width: 850px;
@@ -677,8 +604,6 @@ main {
 }
 
 .upload-page h2 {
-  margin-bottom: 25px;
-  font-size: 27px;
   color: #111;
 }
 
@@ -686,7 +611,6 @@ main {
   display: block;
   color: #444;
   margin: 17px 0 7px;
-  font-size: 14px;
 }
 
 .upload-input,
@@ -699,13 +623,6 @@ main {
   border-radius: 8px;
   padding: 12px;
   outline: none;
-  font-size: 15px;
-}
-
-.upload-input:focus,
-.upload-textarea:focus,
-.upload-select:focus {
-  border-color: #1a73e8;
 }
 
 .upload-textarea {
@@ -721,22 +638,10 @@ main {
   padding: 12px 22px;
   border-radius: 22px;
   cursor: pointer;
-  font-weight: 700;
-}
-
-.upload-button:hover {
-  background: #333;
-}
-
-#uploadStatus {
-  margin-top: 15px;
-  color: #555;
 }
 
 
-/* =========================================================
-   MODALS
-========================================================= */
+/* MODAL */
 
 .modal {
   display: none;
@@ -759,7 +664,7 @@ main {
   max-height: 90vh;
   overflow-y: auto;
   background: #fff;
-  border: 1px solid #ddd;
+  color: #111;
   border-radius: 14px;
   padding: 25px;
   position: relative;
@@ -767,7 +672,6 @@ main {
 }
 
 .modal-box h2 {
-  margin-bottom: 20px;
   color: #111;
 }
 
@@ -783,9 +687,7 @@ main {
 }
 
 
-/* =========================================================
-   AUTH
-========================================================= */
+/* AUTH */
 
 .auth-input {
   width: 100%;
@@ -796,7 +698,6 @@ main {
   border-radius: 8px;
   color: #111;
   padding: 0 13px;
-  outline: none;
 }
 
 .auth-main-button,
@@ -820,20 +721,8 @@ main {
   color: #111;
 }
 
-.google-button:hover {
-  background: #e5e5e5;
-}
 
-.auth-status {
-  margin-top: 14px;
-  color: #555;
-  font-size: 14px;
-}
-
-
-/* =========================================================
-   EDIT PROFILE
-========================================================= */
+/* EDIT PROFILE */
 
 .edit-photo-area {
   text-align: center;
@@ -862,55 +751,10 @@ main {
   display: block;
   margin: 13px 0 6px;
   color: #444;
-  font-size: 14px;
 }
 
 .edit-input,
-.edit-bio {
-  width: 100%;
-  background: #fff;
-  color: #111;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 11px;
-  outline: none;
-}
-
-.edit-bio {
-  min-height: 90px;
-  resize: vertical;
-}
-
-.save-profile-btn {
-  width: 100%;
-  margin-top: 18px;
-  border: none;
-  background: #111;
-  color: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-#profileSaveStatus {
-  margin-top: 12px;
-  color: #555;
-  text-align: center;
-}
-
-
-/* =========================================================
-   EDIT VIDEO
-========================================================= */
-
-.edit-video-label {
-  display: block;
-  margin: 13px 0 6px;
-  color: #444;
-  font-size: 14px;
-}
-
+.edit-bio,
 .edit-video-input,
 .edit-video-textarea,
 .edit-video-select {
@@ -923,12 +767,15 @@ main {
   outline: none;
 }
 
+.edit-bio,
 .edit-video-textarea {
-  min-height: 100px;
+  min-height: 90px;
   resize: vertical;
 }
 
-.edit-video-save {
+.save-profile-btn,
+.edit-video-save,
+.report-submit {
   width: 100%;
   margin-top: 18px;
   border: none;
@@ -941,9 +788,7 @@ main {
 }
 
 
-/* =========================================================
-   REPORT
-========================================================= */
+/* REPORT */
 
 .report-reason {
   width: 100%;
@@ -954,46 +799,10 @@ main {
   border-radius: 8px;
   color: #111;
   padding: 12px;
-  outline: none;
-}
-
-.report-submit {
-  width: 100%;
-  margin-top: 15px;
-  border: none;
-  background: #111;
-  color: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 700;
 }
 
 
-/* =========================================================
-   VIDEO PAGE MENU
-========================================================= */
-
-.video-page .video-actions {
-  position: relative;
-}
-
-.video-page .video-actions .video-menu {
-  position: absolute;
-  top: 48px;
-  right: 0;
-  margin-top: 0 !important;
-  display: none !important;
-}
-
-.video-page .video-actions .video-menu.show {
-  display: block !important;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* RESPONSIVE */
 
 @media (max-width: 800px) {
 
@@ -1004,19 +813,6 @@ main {
 
   .logo {
     font-size: 18px;
-  }
-
-  .search-area {
-    max-width: none;
-  }
-
-  .search-area button {
-    width: 50px;
-  }
-
-  .auth-buttons button {
-    padding: 8px 11px;
-    font-size: 12px;
   }
 
   main {
@@ -1036,20 +832,6 @@ main {
       auto-fill,
       minmax(220px, 1fr)
     );
-    gap: 22px 12px;
-  }
-
-  .video-page-title {
-    font-size: 21px;
-  }
-
-  .channel-profile img {
-    width: 75px;
-    height: 75px;
-  }
-
-  .channel-name {
-    font-size: 21px;
   }
 }
 
@@ -1063,17 +845,7 @@ main {
     padding: 10px;
   }
 
-  .logo {
-    order: 1;
-  }
-
-  .profile-area,
-  .auth-buttons {
-    order: 2;
-  }
-
   .search-area {
-    order: 3;
     flex-basis: 100%;
   }
 
@@ -1085,25 +857,8 @@ main {
     padding: 12px;
   }
 
-  .hero {
-    padding: 20px;
-  }
-
-  .hero h1 {
-    font-size: 22px;
-  }
-
   .video-grid {
     grid-template-columns: 1fr;
-  }
-
-  .video-actions {
-    gap: 7px;
-  }
-
-  .video-actions button,
-  .video-actions a {
-    padding: 9px 13px;
   }
 
   .comment-input-area {
@@ -1112,21 +867,5 @@ main {
 
   .comment-input-area button {
     height: 42px;
-  }
-
-  .channel-header {
-    padding: 18px;
-  }
-
-  .channel-profile {
-    align-items: flex-start;
-  }
-
-  .modal {
-    padding: 12px;
-  }
-
-  .modal-box {
-    padding: 21px;
   }
 }
