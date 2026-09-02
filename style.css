@@ -1,254 +1,164 @@
 /* =========================================================
-   MINITUBE — FINAL UI
-   YouTube-inspired • Modern • Clean • Responsive
+   MINITUBE - COMPLETE STYLE
+   YOUTUBE-INSPIRED • CLEAN • MODERN • RESPONSIVE
 ========================================================= */
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --red: #ff0033;
-  --red-dark: #d9002b;
-  --red-light: #fff0f3;
-
-  --bg: #f8f9fb;
-  --surface: #ffffff;
-  --surface-2: #f1f3f5;
-
-  --text: #151515;
-  --text-2: #60656d;
-  --border: #e3e6ea;
-
-  --shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.14);
-
-  --radius: 14px;
-}
-
-html {
-  scroll-behavior: smooth;
 }
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.45;
+  background: #0f0f0f;
+  color: #ffffff;
+  min-height: 100vh;
 }
+
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 header {
-  height: 68px;
-  background: rgba(255, 255, 255, 0.97);
-  border-bottom: 1px solid var(--border);
-
+  height: 64px;
+  background: #0f0f0f;
+  border-bottom: 1px solid #272727;
   display: flex;
   align-items: center;
-  gap: 22px;
-
-  padding: 0 24px;
-
+  gap: 24px;
+  padding: 0 22px;
   position: sticky;
   top: 0;
   z-index: 1000;
-
-  backdrop-filter: blur(12px);
 }
 
 .logo {
-  font-size: 25px;
-  font-weight: 800;
-  color: var(--red);
+  font-size: 22px;
+  font-weight: 700;
   white-space: nowrap;
-  letter-spacing: -0.8px;
-  cursor: pointer;
-  user-select: none;
+  color: #fff;
 }
-
-.logo:hover {
-  color: var(--red-dark);
-}
-
-/* =========================================================
-   SEARCH
-========================================================= */
 
 .search-area {
   flex: 1;
-  max-width: 680px;
+  max-width: 700px;
+  display: flex;
   margin: auto;
-  display: flex;
 }
 
-#searchInput {
+.search-area input {
   width: 100%;
-  height: 44px;
-
-  border: 1px solid #d7d9dd;
+  height: 42px;
+  border: 1px solid #303030;
   border-right: none;
-
-  border-radius: 24px 0 0 24px;
-
-  padding: 0 20px;
+  border-radius: 22px 0 0 22px;
+  background: #121212;
+  color: #fff;
+  padding: 0 18px;
   outline: none;
-
-  background: #fff;
-  color: var(--text);
-
   font-size: 15px;
-
-  transition: 0.2s;
 }
 
-#searchInput:focus {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(255, 0, 51, 0.08);
+.search-area input:focus {
+  border-color: #3ea6ff;
 }
 
-#searchButton {
-  width: 58px;
-  height: 44px;
-
-  border: 1px solid #d7d9dd;
-  border-radius: 0 24px 24px 0;
-
-  background: #f3f4f6;
-  color: #202124;
-
+.search-area button {
+  width: 62px;
+  height: 42px;
+  border: 1px solid #303030;
+  border-radius: 0 22px 22px 0;
+  background: #272727;
+  color: #fff;
+  cursor: pointer;
   font-size: 17px;
-  cursor: pointer;
-
-  transition: 0.2s;
 }
 
-#searchButton:hover {
-  background: #e8eaed;
+.search-area button:hover {
+  background: #333;
 }
 
-/* =========================================================
-   AUTH
-========================================================= */
-
-#authButtons {
+.auth-buttons {
   display: flex;
-  gap: 9px;
+  gap: 10px;
+  align-items: center;
 }
 
-#loginButton,
-#signupButton {
-  border: 1px solid #d9dce1;
-  background: white;
-
+.auth-buttons button {
+  border: 1px solid #3ea6ff;
+  background: transparent;
+  color: #3ea6ff;
+  border-radius: 20px;
   padding: 9px 17px;
-  border-radius: 22px;
-
-  font-weight: 700;
   cursor: pointer;
-
-  transition: 0.2s;
+  font-weight: 600;
 }
 
-#loginButton:hover {
-  background: #f1f3f5;
+.auth-buttons button:hover {
+  background: #172f3f;
 }
 
-#signupButton {
-  background: var(--red);
-  border-color: var(--red);
-  color: white;
-}
-
-#signupButton:hover {
-  background: var(--red-dark);
-}
 
 /* =========================================================
    PROFILE
 ========================================================= */
 
-#profileArea {
+.profile-area {
   position: relative;
 }
 
-#profileButton {
+.profile-button {
+  width: 42px;
+  height: 42px;
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: 3px;
+  padding: 0;
 }
 
-#headerProfilePhoto {
+.profile-button img {
   width: 40px;
   height: 40px;
-
   border-radius: 50%;
   object-fit: cover;
-
-  border: 2px solid var(--red);
-
-  transition: 0.2s;
 }
 
-#profileButton:hover #headerProfilePhoto {
-  transform: scale(1.06);
-}
-
-/* =========================================================
-   PROFILE MENU
-========================================================= */
-
-#profileMenu {
+.profile-menu {
   position: absolute;
+  top: 52px;
   right: 0;
-  top: 54px;
-
-  width: 230px;
-
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-
-  box-shadow: var(--shadow-hover);
-
-  padding: 8px;
-
-  z-index: 1100;
-
+  width: 190px;
+  background: #212121;
+  border: 1px solid #383838;
+  border-radius: 10px;
+  padding: 7px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
   display: none;
+  z-index: 2000;
 }
 
-#profileMenu.show {
+.profile-menu.show {
   display: block;
 }
 
-#profileMenu button {
+.profile-menu button {
   width: 100%;
-
-  padding: 12px 14px;
-
-  background: transparent;
   border: none;
-  border-radius: 10px;
-
+  background: transparent;
+  color: #fff;
   text-align: left;
-
-  font-size: 14px;
-  font-weight: 600;
-
+  padding: 11px 12px;
+  border-radius: 7px;
   cursor: pointer;
-  transition: 0.18s;
+  font-size: 14px;
 }
 
-#profileMenu button:hover {
-  background: var(--red-light);
-  color: var(--red);
+.profile-menu button:hover {
+  background: #333;
 }
+
 
 /* =========================================================
    CATEGORIES
@@ -257,14 +167,10 @@ header {
 .categories {
   display: flex;
   gap: 10px;
-
-  padding: 16px 24px;
-
+  padding: 14px 22px;
   overflow-x: auto;
+  border-bottom: 1px solid #272727;
   scrollbar-width: none;
-
-  background: white;
-  border-bottom: 1px solid var(--border);
 }
 
 .categories::-webkit-scrollbar {
@@ -272,81 +178,56 @@ header {
 }
 
 .category-btn {
-  flex-shrink: 0;
-
-  border: 1px solid #dfe2e6;
-  background: #f4f5f7;
-
-  color: #222;
-
-  padding: 8px 17px;
-
-  border-radius: 20px;
-
-  font-size: 14px;
-  font-weight: 700;
-
+  border: none;
+  background: #272727;
+  color: #fff;
+  padding: 9px 15px;
+  border-radius: 9px;
   cursor: pointer;
-
-  transition: 0.2s;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
 .category-btn:hover {
-  background: #e8eaed;
-  transform: translateY(-1px);
+  background: #3a3a3a;
 }
 
 .category-btn.active {
-  background: var(--red);
-  color: white;
-  border-color: var(--red);
-
-  box-shadow: 0 4px 12px rgba(255, 0, 51, 0.22);
+  background: #fff;
+  color: #000;
 }
 
+
 /* =========================================================
-   MAIN / PAGES
+   MAIN
 ========================================================= */
 
 main {
-  max-width: 1600px;
-  margin: auto;
-  padding: 25px;
+  padding: 24px;
 }
-
-#homePage,
-#videoPage,
-#channelPage,
-#uploadPage {
-  animation: pageFade 0.2s ease;
-}
-
-/* =========================================================
-   HERO
-========================================================= */
 
 .hero {
-  background: linear-gradient(135deg, #ffffff, #fff4f6);
-
-  border: 1px solid var(--border);
-  border-radius: 18px;
-
-  padding: 32px;
-
+  background: linear-gradient(
+    135deg,
+    #181818,
+    #252525
+  );
+  border: 1px solid #303030;
+  border-radius: 16px;
+  padding: 35px;
   margin-bottom: 28px;
-
-  box-shadow: var(--shadow);
 }
 
 .hero h1 {
-  font-size: 30px;
-  font-weight: 800;
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  color: var(--text-2);
-  margin-top: 7px;
+  color: #aaa;
+  font-size: 16px;
 }
+
 
 /* =========================================================
    VIDEO GRID
@@ -354,702 +235,476 @@ main {
 
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 28px 20px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(260px, 1fr)
+  );
+  gap: 28px 18px;
 }
+
 
 /* =========================================================
    VIDEO CARD
 ========================================================= */
 
 .video-card {
-  position: relative;
-
-  background: transparent;
-
-  border-radius: var(--radius);
-
   cursor: pointer;
-
-  transition: transform 0.2s ease;
+  min-width: 0;
 }
-
-.video-card:hover {
-  transform: translateY(-4px);
-}
-
-/* =========================================================
-   THUMBNAIL
-========================================================= */
 
 .thumbnail-wrapper {
   position: relative;
-
   width: 100%;
   aspect-ratio: 16 / 9;
-
-  overflow: hidden;
-
-  border-radius: 13px;
-
-  background: #111;
-
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  overflow: visible;
 }
 
 .thumbnail-wrapper video {
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
-
-  transition: transform 0.35s ease;
+  border-radius: 12px;
+  background: #181818;
 }
 
 .video-card:hover .thumbnail-wrapper video {
-  transform: scale(1.04);
+  border-radius: 10px;
 }
-
-/* =========================================================
-   DURATION
-========================================================= */
-
-.video-duration {
-  position: absolute;
-
-  right: 8px;
-  bottom: 8px;
-
-  background: rgba(0, 0, 0, 0.82);
-  color: white;
-
-  padding: 3px 7px;
-
-  border-radius: 5px;
-
-  font-size: 12px;
-  font-weight: 700;
-}
-
-/* =========================================================
-   THREE DOT
-========================================================= */
-
-.video-more-button {
-  position: absolute;
-
-  right: 7px;
-  top: 7px;
-
-  width: 34px;
-  height: 34px;
-
-  border: none;
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.65);
-  color: white;
-
-  cursor: pointer;
-
-  font-size: 20px;
-  line-height: 1;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 10;
-
-  transition: 0.2s;
-}
-
-.video-more-button:hover {
-  background: var(--red);
-  transform: scale(1.08);
-}
-
-/* =========================================================
-   VIDEO MENU
-========================================================= */
-
-.video-menu {
-  position: absolute;
-
-  right: 8px;
-  top: 48px;
-
-  width: 175px;
-
-  background: white;
-
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
-  box-shadow: var(--shadow-hover);
-
-  padding: 6px;
-
-  z-index: 200;
-}
-
-.video-menu button {
-  width: 100%;
-
-  border: none;
-  background: transparent;
-
-  padding: 10px 12px;
-
-  border-radius: 8px;
-
-  text-align: left;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.15s;
-}
-
-.video-menu button:hover {
-  background: #f3f4f6;
-}
-
-.video-menu button:last-child:hover {
-  background: #fff0f0;
-  color: #d90000;
-}
-
-/* =========================================================
-   VIDEO INFO
-========================================================= */
 
 .video-info {
   display: flex;
   gap: 12px;
-
-  padding: 11px 4px;
+  margin-top: 11px;
 }
 
-.video-avatar,
-.creator-avatar {
-  width: 39px;
-  height: 39px;
-
-  min-width: 39px;
-
+.video-avatar {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   border-radius: 50%;
-
   object-fit: cover;
+}
 
-  background: #ddd;
+.video-text {
+  min-width: 0;
 }
 
 .video-title {
-  font-size: 15px;
-  font-weight: 700;
-
+  font-size: 16px;
+  font-weight: 600;
   line-height: 1.35;
-
+  color: #fff;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-
   overflow: hidden;
 }
 
 .video-creator {
-  color: var(--text-2);
-
-  font-size: 13px;
-  margin-top: 4px;
+  color: #aaa;
+  margin-top: 6px;
+  font-size: 14px;
 }
 
 .video-meta {
-  color: var(--text-2);
-
-  font-size: 12px;
-  margin-top: 3px;
+  color: #888;
+  margin-top: 4px;
+  font-size: 13px;
 }
+
+
+/* =========================================================
+   VIDEO 3-DOT BUTTON
+========================================================= */
+
+.video-more-button {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 25px;
+  line-height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.video-more-button:hover {
+  background: rgba(50, 50, 50, 0.95);
+}
+
+
+/* =========================================================
+   VIDEO MENU
+   IMPORTANT:
+   HIDDEN UNTIL 3-DOT CLICK
+========================================================= */
+
+.video-menu {
+  display: none;
+  position: absolute;
+  top: 48px;
+  right: 8px;
+  min-width: 150px;
+  background: #212121;
+  border: 1px solid #3b3b3b;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.55);
+  z-index: 100;
+}
+
+.video-menu.show {
+  display: block;
+}
+
+.video-menu button {
+  display: block;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.video-menu button:hover {
+  background: #333;
+}
+
+.video-menu button.danger {
+  color: #ff6b6b;
+}
+
+
+/* =========================================================
+   EMPTY MESSAGE
+========================================================= */
+
+.empty-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #aaa;
+}
+
+.empty-message h3 {
+  color: #fff;
+  margin-bottom: 8px;
+}
+
 
 /* =========================================================
    VIDEO PAGE
 ========================================================= */
 
-.video-page {
-  max-width: 1250px;
-  margin: auto;
-  padding: 25px;
+.video-page,
+.channel-page,
+.upload-page {
+  display: none;
 }
 
-#backHomeButton,
-#channelBackButton,
-#uploadBackButton {
-  border: 1px solid var(--border);
-
-  background: white;
-  color: var(--text);
-
-  padding: 9px 17px;
-
-  border-radius: 22px;
-
-  font-size: 14px;
-  font-weight: 700;
-
+.video-page > button,
+.channel-page > button,
+.upload-page > button {
+  border: none;
+  background: #272727;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
-
-  margin-bottom: 20px;
-
-  transition: 0.2s;
+  font-size: 14px;
 }
 
-#backHomeButton:hover,
-#channelBackButton:hover,
-#uploadBackButton:hover {
-  background: var(--red);
-  border-color: var(--red);
-  color: white;
+.video-page > button:hover,
+.channel-page > button:hover,
+.upload-page > button:hover {
+  background: #3a3a3a;
 }
-
-/* =========================================================
-   PLAYER
-========================================================= */
 
 .video-player-box {
-  position: relative;
-
   width: 100%;
-
+  max-width: 1100px;
+  margin: auto;
   background: #000;
-
-  border-radius: 15px;
-
+  border-radius: 12px;
   overflow: hidden;
-
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
-#mainVideo {
+.video-player-box video {
   width: 100%;
-  max-height: 700px;
-
+  max-height: 650px;
   display: block;
-
   background: #000;
 }
 
-/* =========================================================
-   VIDEO TITLE / META
-========================================================= */
-
-#videoPageTitle {
+.video-page-title {
+  max-width: 1100px;
+  margin: 20px auto 8px;
   font-size: 25px;
-  font-weight: 800;
-
-  margin-top: 20px;
 }
 
-#videoPageMeta {
-  color: var(--text-2);
-
-  margin-top: 6px;
+.video-page-meta {
+  max-width: 1100px;
+  margin: auto;
+  color: #aaa;
   font-size: 14px;
 }
+
 
 /* =========================================================
    VIDEO ACTIONS
 ========================================================= */
 
 .video-actions {
+  max-width: 1100px;
+  margin: 18px auto;
   display: flex;
   gap: 10px;
-
-  margin: 17px 0;
-
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .video-actions button,
-#likeButton,
-#shareButton,
-#downloadButton {
-  border: 1px solid #dfe2e6;
-
-  background: white;
-
-  color: #222;
-
-  padding: 9px 17px;
-
-  border-radius: 22px;
-
-  font-size: 14px;
-  font-weight: 700;
-
+.video-actions a,
+.video-more-page-button {
+  border: none;
+  background: #272727;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 20px;
   cursor: pointer;
-
-  transition: 0.2s;
-
   text-decoration: none;
+  font-size: 14px;
 }
 
-#likeButton:hover {
-  background: #ffe8ed;
-  border-color: var(--red);
-  color: var(--red);
+.video-actions button:hover,
+.video-actions a:hover,
+.video-more-page-button:hover {
+  background: #3a3a3a;
 }
 
-#likeButton.liked {
-  background: var(--red);
-  color: white;
-  border-color: var(--red);
-}
-
-#shareButton:hover,
-#downloadButton:hover {
-  background: #edf0f3;
-}
-
-/* =========================================================
-   PAGE VIDEO MENU
-========================================================= */
-
-.video-page-menu-wrap {
-  position: relative;
-  display: inline-flex;
-}
-
-.video-page-more {
+.video-more-page-button {
+  font-size: 21px;
   width: 42px;
   height: 42px;
-
-  border: 1px solid #dfe2e6;
-  border-radius: 50%;
-
-  background: white;
-
-  font-size: 20px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
+  padding: 0;
 }
 
-.video-page-more:hover {
-  background: var(--red);
-  color: white;
-  border-color: var(--red);
-}
-
-.video-page-menu {
-  position: absolute;
-
-  right: 0;
-  top: 49px;
-
-  width: 180px;
-
-  background: white;
-
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
-  box-shadow: var(--shadow-hover);
-
-  padding: 6px;
-
-  z-index: 500;
-}
-
-.video-page-menu button {
-  width: 100%;
-
-  border: none;
-  background: transparent;
-
-  padding: 11px 12px;
-
-  border-radius: 8px;
-
-  text-align: left;
-
-  font-size: 13px;
-  font-weight: 600;
-
-  cursor: pointer;
-}
-
-.video-page-menu button:hover {
-  background: #f3f4f6;
-}
 
 /* =========================================================
-   CREATOR
+   CREATOR BOX
 ========================================================= */
 
 .creator-box {
+  max-width: 1100px;
+  margin: 15px auto;
+  padding: 14px 0;
   display: flex;
-  align-items: center;
   gap: 13px;
-
-  padding: 16px;
-
-  background: white;
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  margin-top: 10px;
-
-  box-shadow: var(--shadow);
+  align-items: center;
+  border-top: 1px solid #272727;
+  border-bottom: 1px solid #272727;
 }
 
-#creatorPhoto {
-  width: 48px;
-  height: 48px;
-
-  min-width: 48px;
-
+.creator-box img {
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   object-fit: cover;
 }
 
 #creatorName {
-  font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 #creatorUsername {
-  color: var(--text-2);
+  color: #999;
   font-size: 13px;
+  margin-top: 3px;
 }
+
 
 /* =========================================================
    DESCRIPTION
 ========================================================= */
 
-#videoDescription {
-  margin-top: 14px;
-
-  background: white;
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  padding: 17px;
-
-  color: #35383d;
-
+.description-box {
+  max-width: 1100px;
+  margin: 16px auto;
+  padding: 16px;
+  background: #181818;
+  border-radius: 10px;
+  color: #ddd;
+  line-height: 1.5;
   white-space: pre-wrap;
-
-  box-shadow: var(--shadow);
 }
+
 
 /* =========================================================
    COMMENTS
 ========================================================= */
 
 .comments-section {
-  margin-top: 28px;
-
-  background: white;
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  padding: 20px;
-
-  box-shadow: var(--shadow);
+  max-width: 1100px;
+  margin: 28px auto;
 }
 
 .comments-section h2 {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .comment-input-area {
   display: flex;
   gap: 10px;
-  align-items: flex-end;
+  margin-bottom: 20px;
 }
 
-#commentInput {
-  width: 100%;
-  min-height: 52px;
-
-  resize: vertical;
-
-  border: 1px solid #d9dce1;
-
-  border-radius: 12px;
-
-  padding: 12px;
-
+.comment-input-area input {
+  flex: 1;
+  background: #121212;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 22px;
+  padding: 12px 16px;
   outline: none;
-
-  font-family: inherit;
-
-  transition: 0.2s;
 }
 
-#commentInput:focus {
-  border-color: var(--red);
-
-  box-shadow: 0 0 0 3px rgba(255, 0, 51, 0.08);
-}
-
-#commentButton {
-  flex-shrink: 0;
-
-  background: var(--red);
-  color: white;
-
+.comment-input-area button {
   border: none;
-
-  padding: 11px 19px;
-
-  border-radius: 21px;
-
-  font-weight: 700;
-
+  background: #fff;
+  color: #000;
+  border-radius: 22px;
+  padding: 0 18px;
   cursor: pointer;
-
-  transition: 0.2s;
-}
-
-#commentButton:hover {
-  background: var(--red-dark);
+  font-weight: 600;
 }
 
 .comment {
+  display: flex;
+  gap: 12px;
   padding: 14px 0;
-
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid #272727;
 }
 
-.comment:last-child {
-  border-bottom: none;
+.comment img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
 }
+
+.comment-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  color: #ddd;
+  line-height: 1.4;
+}
+
 
 /* =========================================================
-   CHANNEL
+   CHANNEL PAGE
 ========================================================= */
 
-.channel-page {
-  max-width: 1250px;
+.channel-header {
+  max-width: 1100px;
   margin: auto;
+  background: #181818;
+  border-radius: 14px;
   padding: 25px;
+  margin-bottom: 28px;
 }
 
-.channel-header {
-  background: white;
-
-  border: 1px solid var(--border);
-
-  border-radius: 18px;
-
-  padding: 30px;
-
+.channel-profile {
   display: flex;
   align-items: center;
-
-  gap: 22px;
-
-  margin-bottom: 25px;
-
-  box-shadow: var(--shadow);
+  gap: 20px;
 }
 
-#channelPhoto {
-  width: 105px;
-  height: 105px;
-
+.channel-profile img {
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
-
   object-fit: cover;
-
-  border: 4px solid var(--red);
 }
 
-#channelName {
-  font-size: 28px;
-  font-weight: 800;
-}
-
-#channelUsername {
-  color: var(--text-2);
-  margin-top: 4px;
-}
-
-#channelBio {
-  margin-top: 9px;
-  color: #444;
-}
-
-#channelLink {
-  display: inline-block;
-
-  margin-top: 9px;
-
-  color: var(--red);
-
+.channel-name {
+  font-size: 26px;
   font-weight: 700;
+}
 
+.channel-username {
+  color: #aaa;
+  margin-top: 5px;
+}
+
+.channel-bio {
+  color: #ccc;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.channel-link {
+  display: none;
+  margin-top: 10px;
+  color: #3ea6ff;
   text-decoration: none;
 }
 
-#channelLink:hover {
-  text-decoration: underline;
-}
 
 /* =========================================================
-   UPLOAD
+   UPLOAD PAGE
 ========================================================= */
 
 .upload-page {
-  max-width: 800px;
+  max-width: 850px;
   margin: auto;
-  padding: 25px;
 }
 
 .upload-page h2 {
-  margin-bottom: 22px;
+  margin-bottom: 25px;
+  font-size: 27px;
 }
 
 .upload-label {
   display: block;
-
-  margin: 14px 0 7px;
-
+  color: #ccc;
+  margin: 17px 0 7px;
   font-size: 14px;
-  font-weight: 700;
 }
 
 .upload-input,
 .upload-textarea,
 .upload-select {
   width: 100%;
-
-  padding: 12px 14px;
-
-  border: 1px solid #d9dce1;
-
-  border-radius: 10px;
-
+  background: #181818;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px;
   outline: none;
+  font-size: 15px;
+}
 
-  font-family: inherit;
-
-  background: white;
-
-  transition: 0.2s;
+.upload-input:focus,
+.upload-textarea:focus,
+.upload-select:focus {
+  border-color: #3ea6ff;
 }
 
 .upload-textarea {
@@ -1057,72 +712,40 @@ main {
   resize: vertical;
 }
 
-.upload-input:focus,
-.upload-textarea:focus,
-.upload-select:focus {
-  border-color: var(--red);
-
-  box-shadow: 0 0 0 3px rgba(255, 0, 51, 0.08);
-}
-
-#uploadVideoButton {
-  width: 100%;
-
-  margin-top: 20px;
-
+.upload-button {
+  margin-top: 22px;
   border: none;
-
-  background: var(--red);
-
-  color: white;
-
-  padding: 13px;
-
-  border-radius: 10px;
-
-  font-size: 15px;
-
-  font-weight: 800;
-
+  background: #fff;
+  color: #000;
+  padding: 12px 22px;
+  border-radius: 22px;
   cursor: pointer;
-
-  transition: 0.2s;
+  font-weight: 700;
 }
 
-#uploadVideoButton:hover {
-  background: var(--red-dark);
-  transform: translateY(-1px);
+.upload-button:hover {
+  background: #ddd;
 }
 
 #uploadStatus {
-  margin-top: 14px;
-
-  font-weight: 700;
-
-  text-align: center;
+  margin-top: 15px;
+  color: #aaa;
 }
 
+
 /* =========================================================
-   MODALS — IMPORTANT FIX
+   MODALS
 ========================================================= */
 
 .modal {
-  position: fixed;
-
-  inset: 0;
-
-  background: rgba(0, 0, 0, 0.58);
-
   display: none;
-
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
   align-items: center;
   justify-content: center;
-
   padding: 20px;
-
-  z-index: 3000;
-
-  backdrop-filter: blur(4px);
+  z-index: 5000;
 }
 
 .modal.show {
@@ -1130,498 +753,371 @@ main {
 }
 
 .modal-box {
-  position: relative;
-
   width: 100%;
   max-width: 430px;
-
   max-height: 90vh;
-
   overflow-y: auto;
-
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 27px;
-
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-
-  animation: modalIn 0.2s ease;
-}
-
-@keyframes modalIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  background: #212121;
+  border: 1px solid #383838;
+  border-radius: 14px;
+  padding: 25px;
+  position: relative;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
 }
 
 .modal-box h2 {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .close-modal {
   position: absolute;
-
-  top: 12px;
-  right: 14px;
-
-  width: 34px;
-  height: 34px;
-
+  top: 10px;
+  right: 12px;
   border: none;
-  border-radius: 50%;
-
-  background: #f0f2f4;
-
-  color: #222;
-
-  font-size: 23px;
-
-  line-height: 1;
-
+  background: transparent;
+  color: #fff;
+  font-size: 28px;
   cursor: pointer;
-
-  transition: 0.2s;
 }
 
-.close-modal:hover {
-  background: var(--red);
-  color: white;
-}
-
-.modal-box input,
-.modal-box textarea,
-.modal-box select {
-  width: 100%;
-
-  padding: 12px 14px;
-
-  margin-bottom: 12px;
-
-  border: 1px solid #d9dce1;
-
-  border-radius: 10px;
-
-  outline: none;
-
-  font-family: inherit;
-}
-
-.modal-box input:focus,
-.modal-box textarea:focus,
-.modal-box select:focus {
-  border-color: var(--red);
-
-  box-shadow: 0 0 0 3px rgba(255, 0, 51, 0.08);
-}
 
 /* =========================================================
-   PROFILE EDIT
-========================================================= */
-
-.edit-photo-area {
-  text-align: center;
-  margin-bottom: 18px;
-}
-
-#editProfilePreview {
-  display: block;
-
-  width: 95px;
-  height: 95px;
-
-  border-radius: 50%;
-
-  object-fit: cover;
-
-  margin: 0 auto 15px;
-
-  border: 3px solid var(--red);
-}
-
-.change-photo-btn {
-  border: 1px solid #d9dce1;
-
-  background: #f0f2f4;
-
-  color: #222;
-
-  padding: 9px 15px;
-
-  border-radius: 20px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-}
-
-.change-photo-btn:hover {
-  background: #e3e6e9;
-}
-
-.edit-label {
-  display: block;
-
-  margin-bottom: 6px;
-
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.edit-input,
-.edit-bio {
-  width: 100%;
-
-  padding: 11px 13px;
-
-  border: 1px solid #d9dce1;
-
-  border-radius: 10px;
-
-  outline: none;
-
-  font-family: inherit;
-
-  margin-bottom: 13px;
-}
-
-.edit-bio {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.save-profile-btn {
-  width: 100%;
-
-  padding: 12px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: var(--red);
-
-  color: white;
-
-  font-weight: 800;
-
-  cursor: pointer;
-}
-
-.save-profile-btn:hover {
-  background: var(--red-dark);
-}
-
-#profileSaveStatus {
-  margin-top: 10px;
-  text-align: center;
-  font-weight: 700;
-}
-
-/* =========================================================
-   AUTH MODALS
+   AUTH
 ========================================================= */
 
 .auth-input {
-  display: block;
+  width: 100%;
+  height: 44px;
+  margin-bottom: 12px;
+  background: #121212;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  padding: 0 13px;
+  outline: none;
 }
 
 .auth-main-button,
 .google-button {
   width: 100%;
-
-  padding: 12px;
-
-  margin-top: 5px;
-
-  border-radius: 10px;
-
-  font-weight: 800;
-
+  height: 44px;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-
-  transition: 0.2s;
+  margin-top: 8px;
+  font-weight: 600;
 }
 
 .auth-main-button {
-  border: none;
-
-  background: var(--red);
-
-  color: white;
-}
-
-.auth-main-button:hover {
-  background: var(--red-dark);
+  background: #fff;
+  color: #000;
 }
 
 .google-button {
-  background: white;
-
-  color: #222;
-
-  border: 1px solid #d9dce1;
+  background: #272727;
+  color: #fff;
 }
 
 .google-button:hover {
-  background: #f3f4f6;
+  background: #333;
 }
 
 .auth-status {
-  margin-top: 12px;
-
-  text-align: center;
-
+  margin-top: 14px;
+  color: #aaa;
   font-size: 14px;
+}
 
+
+/* =========================================================
+   EDIT PROFILE
+========================================================= */
+
+.edit-photo-area {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.edit-profile-preview {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.change-photo-btn {
+  border: none;
+  background: #333;
+  color: #fff;
+  padding: 9px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.edit-label {
+  display: block;
+  margin: 13px 0 6px;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.edit-input,
+.edit-bio {
+  width: 100%;
+  background: #121212;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 11px;
+  outline: none;
+}
+
+.edit-bio {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.save-profile-btn {
+  width: 100%;
+  margin-top: 18px;
+  border: none;
+  background: #fff;
+  color: #000;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
   font-weight: 700;
 }
 
-/* =========================================================
-   EDIT VIDEO / REPORT
-========================================================= */
-
-#editVideoModal,
-#reportModal {
-  z-index: 3100;
-}
-
-/* =========================================================
-   EMPTY
-========================================================= */
-
-.empty-message {
-  grid-column: 1 / -1;
-
+#profileSaveStatus {
+  margin-top: 12px;
+  color: #aaa;
   text-align: center;
-
-  padding: 70px 20px;
-
-  background: white;
-
-  border: 1px dashed #d5d8dc;
-
-  border-radius: 16px;
-
-  color: var(--text-2);
-
-  font-size: 17px;
 }
+
 
 /* =========================================================
-   GENERAL
+   EDIT VIDEO
 ========================================================= */
 
-button {
-  font-family: inherit;
+.edit-video-label {
+  display: block;
+  margin: 13px 0 6px;
+  color: #ccc;
+  font-size: 14px;
 }
 
-button:active {
-  transform: scale(0.97);
+.edit-video-input,
+.edit-video-textarea,
+.edit-video-select {
+  width: 100%;
+  background: #121212;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 11px;
+  outline: none;
 }
 
-a {
-  color: inherit;
+.edit-video-textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
-img {
-  max-width: 100%;
+.edit-video-save {
+  width: 100%;
+  margin-top: 18px;
+  border: none;
+  background: #fff;
+  color: #000;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
 }
+
 
 /* =========================================================
-   SCROLLBAR
+   REPORT
 ========================================================= */
 
-::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+.report-reason {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  background: #121212;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  padding: 12px;
+  outline: none;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f2f4;
+.report-submit {
+  width: 100%;
+  margin-top: 15px;
+  border: none;
+  background: #fff;
+  color: #000;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #c5c8cc;
-  border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #aeb2b7;
-}
 
 /* =========================================================
-   RESPONSIVE — TABLET
+   VIDEO PAGE MENU
 ========================================================= */
 
-@media (max-width: 1100px) {
-  .video-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.video-page .video-actions {
+  position: relative;
+}
+
+.video-page .video-actions .video-menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  margin-top: 0 !important;
+  display: none !important;
+}
+
+.video-page .video-actions .video-menu.show {
+  display: block !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
 
   header {
-    gap: 14px;
-    padding: 0 17px;
-  }
-
-  main {
-    padding: 20px;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — MOBILE
-========================================================= */
-
-@media (max-width: 760px) {
-  header {
-    height: auto;
-
-    min-height: 62px;
-
-    padding: 10px 12px;
-
-    flex-wrap: wrap;
-
     gap: 10px;
+    padding: 0 12px;
   }
 
   .logo {
+    font-size: 18px;
+  }
+
+  .search-area {
+    max-width: none;
+  }
+
+  .search-area button {
+    width: 50px;
+  }
+
+  .auth-buttons button {
+    padding: 8px 11px;
+    font-size: 12px;
+  }
+
+  main {
+    padding: 16px;
+  }
+
+  .hero {
+    padding: 25px;
+  }
+
+  .hero h1 {
+    font-size: 25px;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(220px, 1fr)
+    );
+    gap: 22px 12px;
+  }
+
+  .video-page-title {
     font-size: 21px;
+  }
+
+  .channel-profile img {
+    width: 75px;
+    height: 75px;
+  }
+
+  .channel-name {
+    font-size: 21px;
+  }
+}
+
+
+@media (max-width: 550px) {
+
+  header {
+    height: auto;
+    min-height: 60px;
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+
+  .logo {
+    order: 1;
+  }
+
+  .profile-area,
+  .auth-buttons {
+    order: 2;
   }
 
   .search-area {
     order: 3;
-
     flex-basis: 100%;
-
-    max-width: none;
-  }
-
-  #authButtons {
-    margin-left: auto;
-  }
-
-  #loginButton,
-  #signupButton {
-    padding: 8px 12px;
-    font-size: 12px;
   }
 
   .categories {
-    padding: 12px;
-    gap: 7px;
-  }
-
-  .category-btn {
-    padding: 7px 13px;
-    font-size: 12px;
+    padding: 10px;
   }
 
   main {
-    padding: 14px;
+    padding: 12px;
   }
 
   .hero {
-    padding: 22px;
+    padding: 20px;
   }
 
   .hero h1 {
-    font-size: 23px;
+    font-size: 22px;
   }
 
-  .video-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px 10px;
-  }
-
-  .video-info {
-    gap: 8px;
-  }
-
-  .video-avatar {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-  }
-
-  .video-title {
-    font-size: 13px;
-  }
-
-  .video-creator,
-  .video-meta {
-    font-size: 11px;
-  }
-
-  .video-page,
-  .channel-page,
-  .upload-page {
-    padding: 14px;
-  }
-
-  #videoPageTitle {
-    font-size: 20px;
-  }
-
-  .channel-header {
-    padding: 20px;
-
-    flex-direction: column;
-
-    text-align: center;
-  }
-
-  #channelPhoto {
-    width: 90px;
-    height: 90px;
-  }
-
-  #channelName {
-    font-size: 23px;
-  }
-
-  .comment-input-area {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  #commentButton {
-    width: 100%;
-  }
-}
-
-/* =========================================================
-   RESPONSIVE — SMALL PHONE
-========================================================= */
-
-@media (max-width: 480px) {
   .video-grid {
     grid-template-columns: 1fr;
   }
 
-  .thumbnail-wrapper {
-    border-radius: 11px;
+  .video-actions {
+    gap: 7px;
   }
 
-  .video-info {
-    padding: 9px 2px;
+  .video-actions button,
+  .video-actions a {
+    padding: 9px 13px;
   }
 
-  #authButtons {
-    gap: 5px;
+  .comment-input-area {
+    flex-direction: column;
   }
 
-  #loginButton,
-  #signupButton {
-    padding: 7px 10px;
+  .comment-input-area button {
+    height: 42px;
+  }
+
+  .channel-header {
+    padding: 18px;
+  }
+
+  .channel-profile {
+    align-items: flex-start;
   }
 
   .modal {
@@ -1630,31 +1126,5 @@ img {
 
   .modal-box {
     padding: 21px;
-  }
-
-  .video-actions {
-    gap: 7px;
-  }
-
-  .video-actions button,
-  #likeButton,
-  #shareButton,
-  #downloadButton {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-}
-
-/* =========================================================
-   PAGE ANIMATION
-========================================================= */
-
-@keyframes pageFade {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
   }
 }
