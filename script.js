@@ -331,12 +331,6 @@ async function saveUserProfile() {
       }
     }
 
-    /*
-      IMPORTANT:
-      Update existing local videos without
-      removing ANY video.
-    */
-
     videos = videos.map(video => {
       if (
         video.ownerId ===
@@ -466,6 +460,9 @@ function hideAllPages() {
 function showHome() {
   hideAllPages();
 
+  closeAllVideoMenus();
+  closePageMenu();
+
   if ($("homePage")) {
     $("homePage").style.display =
       "block";
@@ -480,6 +477,8 @@ function showHome() {
 function showVideoPage() {
   hideAllPages();
 
+  closeAllVideoMenus();
+
   if ($("videoPage")) {
     $("videoPage").style.display =
       "block";
@@ -490,6 +489,8 @@ function showVideoPage() {
 function showChannelPage() {
   hideAllPages();
 
+  closeAllVideoMenus();
+
   if ($("channelPage")) {
     $("channelPage").style.display =
       "block";
@@ -499,6 +500,8 @@ function showChannelPage() {
 
 function showUploadPage() {
   hideAllPages();
+
+  closeAllVideoMenus();
 
   if ($("uploadPage")) {
     $("uploadPage").style.display =
@@ -610,7 +613,7 @@ function isVideoOwner(video) {
 
 
 /* =========================================================
-   VIDEO MENUS
+   VIDEO MENUS - FIXED
 ========================================================= */
 
 function closeAllVideoMenus() {
@@ -619,11 +622,26 @@ function closeAllVideoMenus() {
     .forEach(menu => {
       menu.classList.remove("show");
     });
+
+  /*
+    Safety:
+    Remove old inline display values
+    from card menus only.
+  */
+
+  document
+    .querySelectorAll(
+      ".thumbnail-wrapper .video-menu"
+    )
+    .forEach(menu => {
+      menu.style.removeProperty("display");
+    });
 }
 
 
 function toggleVideoMenu(event, id) {
   if (event) {
+    event.preventDefault();
     event.stopPropagation();
   }
 
@@ -649,6 +667,7 @@ function videoMenuAction(
   id
 ) {
   if (event) {
+    event.preventDefault();
     event.stopPropagation();
   }
 
@@ -699,6 +718,8 @@ function renderVideos(list = videos) {
     $("videoGrid");
 
   if (!grid) return;
+
+  closeAllVideoMenus();
 
   grid.innerHTML = "";
 
@@ -783,6 +804,7 @@ function renderVideos(list = videos) {
           class="video-more-button"
           type="button"
           onclick="toggleVideoMenu(event,'${escapeAttribute(video.id)}')"
+          aria-label="More options"
         >
           ⋮
         </button>
@@ -838,11 +860,6 @@ function renderVideos(list = videos) {
       "click",
       event => {
 
-        /*
-          Don't open video when clicking
-          the 3-dot menu or its buttons.
-        */
-
         if (
           event.target.closest(
             ".video-more-button"
@@ -890,12 +907,6 @@ function escapeAttribute(value) {
 
 async function openVideo(video) {
 
-  /*
-    IMPORTANT:
-    Never open an invalid video.
-    Also don't destroy the home page first.
-  */
-
   if (!video) {
     alert("Video not found.");
     return;
@@ -910,8 +921,17 @@ async function openVideo(video) {
 
   currentVideo = video;
 
+  /*
+    Keep global currentVideo updated.
+    This fixes the video-page menu.
+  */
+
+  window.currentVideo =
+    currentVideo;
+
   closeAllVideoMenus();
   closeProfileMenu();
+  closePageMenu();
 
   const mainVideo =
     $("mainVideo");
@@ -920,10 +940,6 @@ async function openVideo(video) {
     alert("Video player not found.");
     return;
   }
-
-  /*
-    Set video source BEFORE changing page.
-  */
 
   mainVideo.pause();
   mainVideo.removeAttribute("src");
@@ -1003,6 +1019,9 @@ async function openVideo(video) {
 
     currentVideo =
       videos[index];
+
+    window.currentVideo =
+      currentVideo;
   }
 
   saveVideos();
@@ -1073,7 +1092,7 @@ async function syncVideoToFirebase(
 
 
 /* =========================================================
-   VIDEO PAGE 3-DOT
+   VIDEO PAGE 3-DOT - FIXED
 ========================================================= */
 
 function createVideoPageMenu() {
@@ -1115,21 +1134,28 @@ function createVideoPageMenu() {
   menu.className =
     "video-menu";
 
+  /*
+    IMPORTANT:
+    Do NOT use inline display here.
+    CSS controls hidden/show state.
+  */
+
   menu.style.position =
     "relative";
 
-  menu.style.display =
-    "none";
-
   menu.style.marginTop =
     "5px";
+
+  menu.innerHTML = "";
 
   actions.appendChild(menu);
 
   button.addEventListener(
     "click",
     event => {
+      event.preventDefault();
       event.stopPropagation();
+
       openPageVideoMenu();
     }
   );
@@ -1144,6 +1170,21 @@ function openPageVideoMenu() {
     return;
   }
 
+  const wasOpen =
+    menu.classList.contains("show");
+
+  /*
+    Close all other menus first.
+  */
+
+  closeAllVideoMenus();
+
+  menu.classList.remove("show");
+
+  if (wasOpen) {
+    return;
+  }
+
   const owner =
     isVideoOwner(
       currentVideo
@@ -1155,7 +1196,7 @@ function openPageVideoMenu() {
         ? `
           <button
             type="button"
-            onclick="openEditVideo(currentVideo); closePageMenu();"
+            onclick="openEditVideo(window.currentVideo); closePageMenu();"
           >
             ✏️ Edit
           </button>
@@ -1163,7 +1204,7 @@ function openPageVideoMenu() {
           <button
             type="button"
             class="danger"
-            onclick="deleteVideo(currentVideo); closePageMenu();"
+            onclick="deleteVideo(window.currentVideo); closePageMenu();"
           >
             🗑️ Delete
           </button>
@@ -1173,24 +1214,23 @@ function openPageVideoMenu() {
 
     <button
       type="button"
-      onclick="openReport(currentVideo); closePageMenu();"
+      onclick="openReport(window.currentVideo); closePageMenu();"
     >
       🚩 Report
     </button>
   `;
 
-  menu.style.display =
-    menu.style.display === "block"
-      ? "none"
-      : "block";
+  menu.classList.add("show");
 }
 
 
 function closePageMenu() {
-  if ($("videoPageMenu")) {
-    $("videoPageMenu").style.display =
-      "none";
-  }
+  const menu =
+    $("videoPageMenu");
+
+  if (!menu) return;
+
+  menu.classList.remove("show");
 }
 
 
@@ -1207,6 +1247,9 @@ function openEditVideo(video) {
     );
     return;
   }
+
+  closeAllVideoMenus();
+  closePageMenu();
 
   let modal =
     $("editVideoModal");
@@ -1382,7 +1425,21 @@ async function saveEditedVideo() {
     currentVideo =
       video;
 
+    window.currentVideo =
+      currentVideo;
+
     updateVideoMeta(video);
+
+    if ($("videoPageTitle")) {
+      $("videoPageTitle").textContent =
+        video.title;
+    }
+
+    if ($("videoDescription")) {
+      $("videoDescription").textContent =
+        video.description ||
+        "No description.";
+    }
   }
 }
 
@@ -1409,6 +1466,9 @@ async function deleteVideo(video) {
   if (!confirmDelete) {
     return;
   }
+
+  closeAllVideoMenus();
+  closePageMenu();
 
   video.deleted = true;
 
@@ -1443,6 +1503,7 @@ async function deleteVideo(video) {
       String(video.id)
   ) {
     currentVideo = null;
+    window.currentVideo = null;
 
     if ($("mainVideo")) {
       $("mainVideo").pause();
@@ -1466,6 +1527,9 @@ async function deleteVideo(video) {
 
 function openReport(video) {
   if (!video) return;
+
+  closeAllVideoMenus();
+  closePageMenu();
 
   let modal =
     $("reportModal");
@@ -2012,8 +2076,13 @@ async function logout() {
 
   currentUser = null;
   currentProfile = null;
+  currentVideo = null;
+
+  window.currentUser = null;
+  window.currentVideo = null;
 
   closeProfileMenu();
+  closePageMenu();
 
   if ($("authButtons")) {
     $("authButtons").style.display =
@@ -2024,8 +2093,6 @@ async function logout() {
     $("profileArea").style.display =
       "none";
   }
-
-  currentVideo = null;
 
   showHome();
 }
@@ -2101,12 +2168,6 @@ async function openMyChannel() {
         "none";
     }
   }
-
-  /*
-    IMPORTANT:
-    Only show videos belonging
-    to current user.
-  */
 
   const myVideos =
     videos.filter(video =>
@@ -2370,12 +2431,6 @@ async function uploadVideo() {
     };
 
 
-    /*
-      SAVE LOCALLY FIRST
-      so video NEVER disappears
-      if Firebase has a problem.
-    */
-
     videos = [
       newVideo,
       ...videos
@@ -2383,10 +2438,6 @@ async function uploadVideo() {
 
     saveVideos();
 
-
-    /*
-      SAVE TO FIRESTORE
-    */
 
     if (firebaseReady()) {
       try {
@@ -2426,11 +2477,6 @@ async function uploadVideo() {
       $("videoDescriptionInput").value =
         "";
     }
-
-    /*
-      Don't reload Firebase here.
-      We already have the new video.
-    */
 
     setTimeout(() => {
       showHome();
@@ -2696,15 +2742,9 @@ function addComment() {
 
 /* =========================================================
    FIRESTORE LOAD
-   IMPORTANT FIX
 ========================================================= */
 
 async function loadVideosFromFirebase() {
-
-  /*
-    Prevent multiple Firebase loads
-    from overwriting the current UI.
-  */
 
   if (firebaseLoading) {
     return firebaseLoading;
@@ -2755,17 +2795,8 @@ async function loadVideosFromFirebase() {
         );
 
 
-        /*
-          IMPORTANT:
-          Never replace local videos blindly.
-        */
-
         const localMap =
           new Map();
-
-        /*
-          First keep ALL local videos.
-        */
 
         videos.forEach(
           video => {
@@ -2781,16 +2812,6 @@ async function loadVideosFromFirebase() {
           }
         );
 
-
-        /*
-          Then merge Firestore.
-
-          If Firestore has a valid URL,
-          it can update the local record.
-
-          If Firestore record has no URL,
-          keep the local version.
-        */
 
         firestoreVideos.forEach(
           firestoreVideo => {
@@ -2810,10 +2831,6 @@ async function loadVideosFromFirebase() {
                 firestoreVideo
               )
             ) {
-              /*
-                Keep local working video.
-              */
-
               return;
             }
 
@@ -2824,11 +2841,6 @@ async function loadVideosFromFirebase() {
                 firestoreVideo
               )
             ) {
-              /*
-                Merge both.
-                Firestore fields update
-                newer information.
-              */
 
               localMap.set(
                 id,
@@ -2854,13 +2866,6 @@ async function loadVideosFromFirebase() {
             localMap.values()
           );
 
-
-        /*
-          Remove only exact duplicate IDs.
-          Never remove videos just because
-          Firebase doesn't have them.
-        */
-
         saveVideos();
 
         firebaseVideosLoaded =
@@ -2876,11 +2881,6 @@ async function loadVideosFromFirebase() {
           "Could not load Firestore videos:",
           error
         );
-
-        /*
-          Firebase error =
-          local videos stay visible.
-        */
 
         renderVideos(
           filterByCategory(videos)
@@ -2951,7 +2951,6 @@ async function migrateLocalVideos() {
 
 /* =========================================================
    AUTH STATE
-   IMPORTANT FIX
 ========================================================= */
 
 function startFirebaseAuth() {
@@ -2997,11 +2996,6 @@ function startFirebaseAuth() {
 
         await loadUserProfile();
 
-        /*
-          Migrate local videos only.
-          Never delete anything.
-        */
-
         await migrateLocalVideos();
 
       } else {
@@ -3020,20 +3014,8 @@ function startFirebaseAuth() {
       }
 
 
-      /*
-        Load Firebase videos once.
-      */
-
       await loadVideosFromFirebase();
 
-
-      /*
-        CRITICAL FIX:
-        Don't force user back to Home
-        every time Firebase auth changes.
-
-        Only show Home when app starts.
-      */
 
       if (!appStarted) {
         appStarted = true;
@@ -3273,7 +3255,18 @@ function setupEvents() {
   $("backHomeButton")
     ?.addEventListener(
       "click",
-      showHome
+      () => {
+        currentVideo = null;
+        window.currentVideo = null;
+
+        if ($("mainVideo")) {
+          $("mainVideo").pause();
+          $("mainVideo").removeAttribute("src");
+          $("mainVideo").load();
+        }
+
+        showHome();
+      }
     );
 
   $("channelBackButton")
@@ -3380,6 +3373,17 @@ function setupEvents() {
 
       if (
         !event.target.closest(
+          "#videoPageMoreButton"
+        ) &&
+        !event.target.closest(
+          "#videoPageMenu"
+        )
+      ) {
+        closePageMenu();
+      }
+
+      if (
+        !event.target.closest(
           "#profileArea"
         )
       ) {
@@ -3393,7 +3397,6 @@ function setupEvents() {
 
 /* =========================================================
    GLOBAL FUNCTIONS
-   For HTML onclick buttons
 ========================================================= */
 
 window.toggleVideoMenu =
@@ -3423,11 +3426,17 @@ window.closeReport =
 window.submitReport =
   submitReport;
 
-window.currentVideo =
-  currentVideo;
-
 window.closePageMenu =
   closePageMenu;
+
+/*
+  IMPORTANT:
+  Don't store currentVideo as a one-time snapshot.
+  Keep it synchronized.
+*/
+
+window.currentVideo =
+  null;
 
 
 /* =========================================================
@@ -3435,11 +3444,6 @@ window.closePageMenu =
 ========================================================= */
 
 function initMiniTube() {
-
-  /*
-    IMPORTANT:
-    Existing local videos are NEVER deleted.
-  */
 
   setupEvents();
 
