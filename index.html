@@ -11,799 +11,655 @@
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
+<!-- ================= HEADER ================= -->
 
-    <div class="logo">
-      <span class="logo-icon">▶</span>
-      <span>MiniTube</span>
+<header>
+
+  <div class="logo">▶ MiniTube</div>
+
+  <div class="search-area">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search MiniTube..."
+    >
+    <button id="searchButton">🔍</button>
+  </div>
+
+  <div class="auth-buttons" id="authButtons">
+    <button id="loginButton">Login</button>
+    <button id="signupButton">Sign Up</button>
+  </div>
+
+  <div class="profile-area" id="profileArea" style="display:none;">
+
+    <button class="profile-button" id="profileButton">
+      <img id="headerProfilePhoto"
+           src="https://ui-avatars.com/api/?name=User"
+           alt="Profile">
+    </button>
+
+    <div class="profile-menu" id="profileMenu">
+
+      <button id="editProfileButton">
+        ✏️ Edit Profile
+      </button>
+
+      <button id="myChannelButton">
+        👤 My Channel
+      </button>
+
+      <button id="uploadButton">
+        ⬆️ Upload Video
+      </button>
+
+      <button id="logoutButton">
+        🚪 Logout
+      </button>
+
     </div>
 
-    <div class="search-box">
+  </div>
+
+</header>
+
+
+<!-- ================= CATEGORIES ================= -->
+
+<div class="categories">
+
+  <button class="category-btn active" data-category="All">
+    All
+  </button>
+
+  <button class="category-btn" data-category="Gaming">
+    Gaming
+  </button>
+
+  <button class="category-btn" data-category="Islamic">
+    Islamic
+  </button>
+
+  <button class="category-btn" data-category="Education">
+    Education
+  </button>
+
+  <button class="category-btn" data-category="Entertainment">
+    Entertainment
+  </button>
+
+  <button class="category-btn" data-category="Sports">
+    Sports
+  </button>
+
+  <button class="category-btn" data-category="News">
+    News
+  </button>
+
+  <button class="category-btn" data-category="Music">
+    Music
+  </button>
+
+</div>
+
+
+<!-- ================= HOME ================= -->
+
+<main id="homePage">
+
+  <section class="hero">
+
+    <h1>Welcome to MiniTube 🎬</h1>
+
+    <p>
+      Watch, upload and share your favorite videos.
+    </p>
+
+  </section>
+
+  <div id="videoGrid" class="video-grid"></div>
+
+</main>
+
+
+<!-- ================= VIDEO PAGE ================= -->
+
+<main id="videoPage" class="video-page">
+
+  <button id="backHomeButton">
+    ← Back
+  </button>
+
+  <br><br>
+
+  <div class="video-player-box">
+
+    <video
+      id="mainVideo"
+      controls
+      playsinline
+    ></video>
+
+  </div>
+
+  <h1
+    id="videoPageTitle"
+    class="video-page-title"
+  ></h1>
+
+  <div
+    id="videoPageMeta"
+    class="video-page-meta"
+  ></div>
+
+  <div class="video-actions">
+
+    <button id="likeButton">
+      👍 Like <span id="likeCount">0</span>
+    </button>
+
+    <button id="shareButton">
+      🔗 Share
+    </button>
+
+    <a
+      id="downloadButton"
+      href="#"
+      download
+      target="_blank"
+    >
+      ⬇️ Download
+    </a>
+
+  </div>
+
+  <div class="creator-box">
+
+    <img
+      id="creatorPhoto"
+      src="https://ui-avatars.com/api/?name=User"
+      alt="Creator"
+    >
+
+    <div>
+      <strong id="creatorName"></strong>
+      <div id="creatorUsername"></div>
+    </div>
+
+  </div>
+
+  <div
+    id="videoDescription"
+    class="description-box"
+  ></div>
+
+
+  <!-- COMMENTS -->
+
+  <section class="comments-section">
+
+    <h2>Comments</h2>
+
+    <div class="comment-input-area">
 
       <input
+        id="commentInput"
         type="text"
-        id="searchInput"
-        placeholder="Search MiniTube..."
+        placeholder="Write a comment..."
       >
 
-      <button id="searchButton">🔍</button>
-
-    </div>
-
-    <!-- AUTH -->
-    <div class="header-buttons" id="authButtons">
-
-      <button class="login-btn" id="loginButton">
-        Login
-      </button>
-
-      <button class="signup-btn" id="signupButton">
-        Sign Up
+      <button id="commentButton">
+        Comment
       </button>
 
     </div>
 
+    <div id="commentsList"></div>
 
-    <!-- PROFILE -->
-    <div class="profile-area" id="profileArea">
+  </section>
+
+</main>
+
+
+<!-- ================= CHANNEL ================= -->
+
+<main id="channelPage" class="channel-page">
+
+  <button id="channelBackButton">
+    ← Back
+  </button>
+
+  <br><br>
+
+  <div class="channel-header">
+
+    <div class="channel-profile">
 
       <img
-        id="profilePhoto"
-        class="profile-photo"
-        src=""
+        id="channelPhoto"
+        src="https://ui-avatars.com/api/?name=User"
+        alt="Channel"
+      >
+
+      <div>
+
+        <div
+          id="channelName"
+          class="channel-name"
+        ></div>
+
+        <div
+          id="channelUsername"
+          class="channel-username"
+        ></div>
+
+        <div
+          id="channelBio"
+          class="channel-bio"
+        ></div>
+
+        <a
+          id="channelLink"
+          class="channel-link"
+          href="#"
+          target="_blank"
+        ></a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <h2>My Videos</h2>
+
+  <br>
+
+  <div
+    id="channelVideoGrid"
+    class="video-grid"
+  ></div>
+
+</main>
+
+
+<!-- ================= UPLOAD PAGE ================= -->
+
+<main id="uploadPage" class="upload-page">
+
+  <button id="uploadBackButton">
+    ← Back
+  </button>
+
+  <br><br>
+
+  <h2>Upload Video 🎬</h2>
+
+  <label class="upload-label">
+    Video File
+  </label>
+
+  <input
+    type="file"
+    id="videoFile"
+    class="upload-input"
+    accept="video/*"
+  >
+
+  <label class="upload-label">
+    Title
+  </label>
+
+  <input
+    type="text"
+    id="videoTitle"
+    class="upload-input"
+    placeholder="Video title"
+  >
+
+  <label class="upload-label">
+    Description
+  </label>
+
+  <textarea
+    id="videoDescriptionInput"
+    class="upload-textarea"
+    placeholder="Video description"
+  ></textarea>
+
+  <label class="upload-label">
+    Category
+  </label>
+
+  <select
+    id="videoCategory"
+    class="upload-select"
+  >
+
+    <option value="Gaming">Gaming</option>
+    <option value="Islamic">Islamic</option>
+    <option value="Education">Education</option>
+    <option value="Entertainment">Entertainment</option>
+    <option value="Sports">Sports</option>
+    <option value="News">News</option>
+    <option value="Music">Music</option>
+
+  </select>
+
+  <button
+    id="uploadVideoButton"
+    class="upload-button"
+  >
+    Upload Video
+  </button>
+
+  <div id="uploadStatus"></div>
+
+</main>
+
+
+<!-- ================= EDIT PROFILE MODAL ================= -->
+
+<div
+  id="editProfileModal"
+  class="modal"
+>
+
+  <div class="modal-box profile-edit-box">
+
+    <button
+      class="close-modal"
+      id="closeEditProfile"
+    >
+      ×
+    </button>
+
+    <h2>Edit Profile</h2>
+
+    <div class="edit-photo-area">
+
+      <img
+        id="editProfilePreview"
+        class="edit-profile-preview"
+        src="https://ui-avatars.com/api/?name=User"
         alt="Profile"
       >
 
-      <div class="profile-menu" id="profileMenu">
+      <input
+        type="file"
+        id="profileImageFile"
+        accept="image/*"
+        hidden
+      >
 
-        <div class="profile-name" id="profileName">
-          MiniTube User
-        </div>
-
-        <div class="profile-username" id="profileUsername">
-          @username
-        </div>
-
-        <div class="profile-email" id="profileEmail"></div>
-
-        <button id="editProfileButton">
-          ✏️ Edit Profile
-        </button>
-
-        <button id="myChannelButton">
-          📺 My Channel
-        </button>
-
-        <button id="uploadButton">
-          ⬆️ Upload Video
-        </button>
-
-        <button id="logoutButton">
-          🚪 Logout
-        </button>
-
-      </div>
+      <button
+        class="change-photo-btn"
+        id="changePhotoButton"
+      >
+        Change Photo
+      </button>
 
     </div>
 
-  </header>
+    <label class="edit-label">
+      Username
+    </label>
 
-
-  <!-- CATEGORIES -->
-  <div class="categories">
-
-    <button class="active" data-category="All">All</button>
-
-    <button data-category="Gaming">Gaming</button>
-
-    <button data-category="Islamic">Islamic</button>
-
-    <button data-category="Education">Education</button>
-
-    <button data-category="Entertainment">Entertainment</button>
-
-    <button data-category="Sports">Sports</button>
-
-    <button data-category="News">News</button>
-
-    <button data-category="Music">Music</button>
-
-  </div>
-
-
-  <main>
-
-    <!-- HOME -->
-    <div id="homePage">
-
-      <section class="hero">
-
-        <h1>
-          Welcome to MiniTube 🎬
-        </h1>
-
-        <p>
-          Watch, upload and share your favorite videos.
-          Create your own channel and become a MiniTube creator.
-        </p>
-
-        <button
-          class="start-btn"
-          id="getStartedButton"
-        >
-          Get Started
-        </button>
-
-      </section>
-
-
-      <section class="video-section">
-
-        <div class="section-title">
-          <h2>🔥 Recommended Videos</h2>
-        </div>
-
-        <div
-          class="video-grid"
-          id="videoGrid"
-        ></div>
-
-      </section>
-
-    </div>
-
-
-    <!-- VIDEO PAGE -->
-    <section
-      class="video-page"
-      id="videoPage"
+    <input
+      id="editUsername"
+      class="edit-input"
+      type="text"
+      placeholder="@username"
     >
 
-      <button
-        class="back-btn"
-        id="backFromVideoButton"
-      >
-        ← Back
-      </button>
+    <label class="edit-label">
+      Channel Name
+    </label>
 
-
-      <div class="video-player-box">
-
-        <video
-          id="mainVideo"
-          controls
-          playsinline
-          preload="metadata"
-        ></video>
-
-      </div>
-
-
-      <div class="video-page-info">
-
-        <h1 id="mainVideoTitle">
-          Video Title
-        </h1>
-
-
-        <div class="video-actions">
-
-          <button id="likeButton">
-            👍 <span id="likeCount">0</span>
-          </button>
-
-          <button id="shareButton">
-            🔗 Share
-          </button>
-
-          <a
-            id="downloadButton"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            download
-          >
-            ⬇️ Download
-          </a>
-
-        </div>
-
-
-        <div class="creator-box">
-
-          <img
-            id="videoCreatorPhoto"
-            class="creator-avatar-img"
-            src=""
-            alt="Creator"
-          >
-
-          <div>
-
-            <h3 id="mainVideoCreator">
-              MiniTube User
-            </h3>
-
-            <p id="mainVideoViews">
-              0 views
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="description-box">
-
-          <h3>Description</h3>
-
-          <p id="mainVideoDescription">
-            No description available.
-          </p>
-
-        </div>
-
-
-        <div class="comments-section">
-
-          <h2>💬 Comments</h2>
-
-          <div class="comment-form">
-
-            <input
-              type="text"
-              id="commentInput"
-              placeholder="Write a comment..."
-            >
-
-            <button id="commentButton">
-              Comment
-            </button>
-
-          </div>
-
-          <div id="commentsList"></div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- CHANNEL PAGE -->
-    <section
-      class="channel-page"
-      id="channelPage"
+    <input
+      id="editChannelName"
+      class="edit-input"
+      type="text"
+      placeholder="Channel name"
     >
 
-      <button
-        class="back-btn"
-        id="backFromChannelButton"
-      >
-        ← Back
-      </button>
+    <label class="edit-label">
+      Bio
+    </label>
 
+    <textarea
+      id="editBio"
+      class="edit-bio"
+      placeholder="Tell people about yourself..."
+    ></textarea>
 
-      <div class="channel-header">
+    <label class="edit-label">
+      Link
+    </label>
 
-        <img
-          id="channelPhoto"
-          class="channel-photo"
-          src=""
-          alt="Channel"
-        >
-
-
-        <div class="channel-details">
-
-          <h1 id="channelName">
-            MiniTube User
-          </h1>
-
-          <h3
-            id="channelUsername"
-            class="channel-username"
-          >
-            @username
-          </h3>
-
-          <p id="channelEmail"></p>
-
-          <p
-            id="channelBio"
-            class="channel-bio"
-          >
-            No bio added yet.
-          </p>
-
-          <a
-            id="channelLink"
-            class="channel-link"
-            href="#"
-            target="_blank"
-            rel="noopener"
-            style="display:none"
-          ></a>
-
-          <p class="channel-stats">
-            🎬 MiniTube Creator
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- UPLOAD PAGE -->
-    <section
-      class="upload-page"
-      id="uploadPage"
+    <input
+      id="editLink"
+      class="edit-input"
+      type="text"
+      placeholder="https://..."
     >
 
-      <button
-        class="back-btn"
-        id="backFromUploadButton"
-      >
-        ← Back
-      </button>
+    <button
+      id="saveProfileButton"
+      class="save-profile-btn"
+    >
+      Save Profile
+    </button>
 
-
-      <div class="upload-box">
-
-        <h1>Upload Video 🎬</h1>
-
-        <p class="upload-note">
-          Upload your video to MiniTube.
-        </p>
-
-
-        <label class="upload-label">
-          Video Title
-        </label>
-
-        <input
-          id="videoTitle"
-          class="upload-input"
-          type="text"
-          placeholder="Enter video title"
-        >
-
-
-        <label class="upload-label">
-          Description
-        </label>
-
-        <textarea
-          id="videoDescription"
-          class="upload-input description-input"
-          placeholder="Enter video description"
-        ></textarea>
-
-
-        <label class="upload-label">
-          Category
-        </label>
-
-        <select
-          id="videoCategory"
-          class="upload-input"
-        >
-
-          <option value="Gaming">🎮 Gaming</option>
-          <option value="Islamic">🕌 Islamic</option>
-          <option value="Education">📚 Education</option>
-          <option value="Entertainment">🎬 Entertainment</option>
-          <option value="Sports">⚽ Sports</option>
-          <option value="News">📰 News</option>
-          <option value="Music">🎵 Music</option>
-
-        </select>
-
-
-        <label class="upload-label">
-          Select Video
-        </label>
-
-        <input
-          id="videoFile"
-          type="file"
-          accept="video/*"
-        >
-
-
-        <video
-          id="videoPreview"
-          class="video-preview"
-          controls
-          preload="metadata"
-          style="display:none"
-        ></video>
-
-
-        <button
-          class="upload-btn"
-          id="uploadVideoButton"
-        >
-          ⬆️ Upload Video
-        </button>
-
-        <p id="uploadStatus"></p>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- EDIT PROFILE MODAL -->
-  <div
-    class="modal"
-    id="editProfileModal"
-  >
-
-    <div class="modal-box profile-edit-box">
-
-      <button
-        class="close"
-        id="closeEditProfileButton"
-      >
-        ×
-      </button>
-
-      <h2>✏️ Edit Profile</h2>
-
-
-      <div class="edit-photo-area">
-
-        <img
-          id="editProfilePreview"
-          class="edit-profile-preview"
-          src=""
-          alt="Profile"
-        >
-
-        <label class="change-photo-btn">
-
-          🖼️ Choose Profile Picture
-
-          <input
-            type="file"
-            id="profileImageFile"
-            accept="image/*"
-            hidden
-          >
-
-        </label>
-
-      </div>
-
-
-      <label class="edit-label">
-        Username
-      </label>
-
-      <input
-        id="editUsername"
-        class="edit-input"
-        type="text"
-        placeholder="e.g. mastermk"
-        maxlength="30"
-      >
-
-
-      <label class="edit-label">
-        Channel Name
-      </label>
-
-      <input
-        id="editChannelName"
-        class="edit-input"
-        type="text"
-        placeholder="Your channel name"
-        maxlength="50"
-      >
-
-
-      <label class="edit-label">
-        Bio
-      </label>
-
-      <textarea
-        id="editBio"
-        class="edit-input edit-bio"
-        placeholder="Tell people about your channel..."
-        maxlength="160"
-      ></textarea>
-
-
-      <label class="edit-label">
-        Website / Link
-      </label>
-
-      <input
-        id="editLink"
-        class="edit-input"
-        type="url"
-        placeholder="https://example.com"
-      >
-
-
-      <button
-        class="save-profile-btn"
-        id="saveProfileButton"
-      >
-        💾 Save Profile
-      </button>
-
-      <p id="profileSaveStatus"></p>
-
-    </div>
+    <div id="profileSaveStatus"></div>
 
   </div>
 
-
-  <!-- LOGIN MODAL -->
-  <div
-    class="modal"
-    id="loginModal"
-  >
-
-    <div class="modal-box">
-
-      <button
-        class="close"
-        id="closeLoginButton"
-      >
-        ×
-      </button>
-
-      <h2>Login to MiniTube</h2>
-
-      <input
-        id="loginEmail"
-        type="email"
-        placeholder="Email"
-      >
-
-      <input
-        id="loginPassword"
-        type="password"
-        placeholder="Password"
-      >
-
-      <button
-        class="modal-btn"
-        id="emailLoginButton"
-      >
-        Login
-      </button>
-
-      <button
-        class="modal-btn google-btn"
-        id="googleLoginButton"
-      >
-        🔵 Continue with Google
-      </button>
-
-      <p>
-        Don't have an account?
-        <span id="goToSignup">Sign Up</span>
-      </p>
-
-    </div>
-
-  </div>
+</div>
 
 
-  <!-- SIGNUP MODAL -->
-  <div
-    class="modal"
-    id="signupModal"
-  >
+<!-- ================= LOGIN MODAL ================= -->
 
-    <div class="modal-box">
+<div
+  id="loginModal"
+  class="modal"
+>
 
-      <button
-        class="close"
-        id="closeSignupButton"
-      >
-        ×
-      </button>
+  <div class="modal-box auth-box">
 
-      <h2>Create MiniTube Account</h2>
+    <button
+      class="close-modal"
+      id="closeLogin"
+    >
+      ×
+    </button>
 
-      <input
-        id="signupName"
-        type="text"
-        placeholder="Your Name"
-      >
+    <h2>Login</h2>
 
-      <input
-        id="signupEmail"
-        type="email"
-        placeholder="Email"
-      >
+    <input
+      id="loginEmail"
+      class="auth-input"
+      type="email"
+      placeholder="Email"
+    >
 
-      <input
-        id="signupPassword"
-        type="password"
-        placeholder="Create Password"
-      >
+    <input
+      id="loginPassword"
+      class="auth-input"
+      type="password"
+      placeholder="Password"
+    >
 
-      <button
-        class="modal-btn"
-        id="emailSignupButton"
-      >
-        Create Account
-      </button>
+    <button
+      id="emailLoginButton"
+      class="auth-main-button"
+    >
+      Login
+    </button>
 
-      <button
-        class="modal-btn google-btn"
-        id="googleSignupButton"
-      >
-        🔵 Continue with Google
-      </button>
+    <button
+      id="googleLoginButton"
+      class="google-button"
+    >
+      Continue with Google
+    </button>
 
-      <p>
-        Already have an account?
-        <span id="goToLogin">Login</span>
-      </p>
-
-    </div>
+    <div
+      id="loginStatus"
+      class="auth-status"
+    ></div>
 
   </div>
 
-
-  <!-- FIREBASE -->
-  <script type="module">
-
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut,
-      updateProfile
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      getDocs,
-      doc,
-      getDoc,
-      setDoc,
-      updateDoc,
-      increment,
-      query,
-      orderBy,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+</div>
 
 
-    const firebaseConfig = {
+<!-- ================= SIGNUP MODAL ================= -->
 
-      apiKey:
-        "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
+<div
+  id="signupModal"
+  class="modal"
+>
 
-      authDomain:
-        "minitube-9317a.firebaseapp.com",
+  <div class="modal-box auth-box">
 
-      projectId:
-        "minitube-9317a",
+    <button
+      class="close-modal"
+      id="closeSignup"
+    >
+      ×
+    </button>
 
-      storageBucket:
-        "minitube-9317a.firebasestorage.app",
+    <h2>Create Account</h2>
 
-      messagingSenderId:
-        "176876768704",
+    <input
+      id="signupName"
+      class="auth-input"
+      type="text"
+      placeholder="Your name"
+    >
 
-      appId:
-        "1:176876768704:web:051bd6a6ba27325e22cc25"
+    <input
+      id="signupEmail"
+      class="auth-input"
+      type="email"
+      placeholder="Email"
+    >
 
-    };
+    <input
+      id="signupPassword"
+      class="auth-input"
+      type="password"
+      placeholder="Password"
+    >
 
+    <button
+      id="emailSignupButton"
+      class="auth-main-button"
+    >
+      Sign Up
+    </button>
 
-    const app =
-      initializeApp(firebaseConfig);
+    <button
+      id="googleSignupButton"
+      class="google-button"
+    >
+      Continue with Google
+    </button>
 
-    const auth =
-      getAuth(app);
+    <div
+      id="signupStatus"
+      class="auth-status"
+    ></div>
 
-    const googleProvider =
-      new GoogleAuthProvider();
+  </div>
 
-    const db =
-      getFirestore(app);
-
-
-    window.firebaseAuth = auth;
-    window.googleProvider = googleProvider;
-    window.db = db;
-
-
-    window.firebaseFunctions = {
-
-      signInWithPopup,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      onAuthStateChanged,
-      signOut,
-      updateProfile,
-
-      collection,
-      addDoc,
-      getDocs,
-      doc,
-      getDoc,
-      setDoc,
-      updateDoc,
-      increment,
-      query,
-      orderBy,
-      serverTimestamp,
-
-      db
-
-    };
+</div>
 
 
-    onAuthStateChanged(
-      auth,
-      user => {
+<!-- Firebase -->
 
-        window.currentUser = user;
+<script type="module">
 
-        if (user) {
+  import {
+    initializeApp
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
-          $("authButtons").style.display = "none";
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-          $("profileArea").style.display = "block";
-
-          $("profileName").textContent =
-            user.displayName ||
-            "MiniTube User";
-
-          $("profileEmail").textContent =
-            user.email || "";
-
-          $("profilePhoto").src =
-            user.photoURL ||
-            "https://ui-avatars.com/api/?name=" +
-            encodeURIComponent(
-              user.displayName ||
-              "M"
-            );
-
-          loadUserProfile();
-
-        } else {
-
-          $("authButtons").style.display = "flex";
-
-          $("profileArea").style.display = "none";
-
-        }
-
-      }
-    );
-
-  </script>
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    increment,
+    query,
+    orderBy,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-  <script src="script.js"></script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
+    authDomain: "minitube-9317a.firebaseapp.com",
+    projectId: "minitube-9317a",
+    storageBucket: "minitube-9317a.firebasestorage.app",
+    messagingSenderId: "176876768704",
+    appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const auth = getAuth(app);
+
+  const db = getFirestore(app);
+
+  const googleProvider = new GoogleAuthProvider();
+
+
+  window.firebaseFunctions = {
+
+    auth,
+    db,
+    googleProvider,
+
+    signInWithPopup,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut,
+    updateProfile,
+
+    collection,
+    addDoc,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    increment,
+    query,
+    orderBy,
+    serverTimestamp
+  };
+
+</script>
+
+<script src="script.js"></script>
 
 </body>
 </html>
