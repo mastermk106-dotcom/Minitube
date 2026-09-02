@@ -10,335 +10,340 @@ body {
   color: #111;
 }
 
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
 
-/* =========================
-   HEADER
-========================= */
+button {
+  cursor: pointer;
+}
 
-.header {
-  height: 70px;
-  background: white;
+/* ================= HEADER ================= */
+
+header {
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 5%;
-  border-bottom: 1px solid #ddd;
+  padding: 0 25px;
+  gap: 25px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: bold;
   color: #ff0000;
+  white-space: nowrap;
 }
 
-.logo-icon {
-  background: #ff0000;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 8px;
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-box {
+.search-area {
+  flex: 1;
   display: flex;
-  width: 40%;
+  max-width: 700px;
+  margin: auto;
 }
 
-.search-box input {
+.search-area input {
   width: 100%;
-  padding: 12px 18px;
+  padding: 11px 16px;
   border: 1px solid #ccc;
   border-radius: 25px 0 0 25px;
   outline: none;
   font-size: 15px;
 }
 
-.search-box button {
+.search-area button {
   width: 55px;
-  border: none;
-  background: #eee;
+  border: 1px solid #ccc;
+  border-left: none;
+  background: #f8f8f8;
   border-radius: 0 25px 25px 0;
-  cursor: pointer;
   font-size: 18px;
 }
 
-
-/* =========================
-   HEADER BUTTONS
-========================= */
-
-.header-buttons {
+.auth-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
-.header-buttons button,
-.start-btn,
-.modal-btn {
-  border: none;
-  padding: 11px 18px;
-  border-radius: 22px;
-  cursor: pointer;
-  font-weight: bold;
+.auth-buttons button {
+  padding: 9px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
 }
 
-.login-btn {
-  background: #eee;
-}
-
-.signup-btn,
-.start-btn,
-.modal-btn {
+#signupButton {
   background: #ff0000;
   color: white;
+  border-color: #ff0000;
 }
 
-
-/* =========================
-   PROFILE
-========================= */
+/* ================= PROFILE ================= */
 
 .profile-area {
-  display: none;
   position: relative;
 }
 
-.profile-photo {
-  width: 44px;
-  height: 44px;
+.profile-button {
+  border: none;
+  background: transparent;
+}
+
+.profile-button img {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
-  cursor: pointer;
-  border: 2px solid #eee;
 }
 
 .profile-menu {
   display: none;
   position: absolute;
   right: 0;
-  top: 55px;
-  width: 245px;
+  top: 48px;
+  width: 220px;
   background: white;
   border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.18);
-  border: 1px solid #eee;
+  box-shadow: 0 5px 25px rgba(0,0,0,.2);
+  padding: 10px;
+  z-index: 2000;
 }
 
 .profile-menu.show {
   display: block;
 }
 
-.profile-name {
-  font-size: 17px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.profile-username {
-  font-size: 14px;
-  color: #ff0000;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.profile-email {
-  font-size: 13px;
-  color: #666;
-  margin-bottom: 12px;
-  word-break: break-word;
-}
-
 .profile-menu button {
   width: 100%;
-  padding: 10px;
-  margin-top: 6px;
+  padding: 12px;
   border: none;
-  border-radius: 8px;
-  background: #f1f1f1;
-  cursor: pointer;
+  background: white;
   text-align: left;
-  font-weight: bold;
+  border-radius: 8px;
 }
 
 .profile-menu button:hover {
-  background: #e5e5e5;
+  background: #f1f1f1;
 }
 
-
-/* =========================
-   CATEGORIES
-========================= */
+/* ================= CATEGORIES ================= */
 
 .categories {
+  background: white;
+  padding: 12px 25px;
   display: flex;
   gap: 10px;
-  padding: 18px 5%;
   overflow-x: auto;
-  background: white;
+  border-bottom: 1px solid #ddd;
 }
 
-.categories button {
+.category-btn {
   border: none;
-  padding: 9px 17px;
-  border-radius: 20px;
   background: #eee;
-  cursor: pointer;
+  padding: 9px 16px;
+  border-radius: 20px;
   white-space: nowrap;
 }
 
-.categories button.active {
+.category-btn.active {
   background: #111;
   color: white;
 }
 
+/* ================= MAIN ================= */
 
-/* =========================
-   HERO
-========================= */
+main {
+  padding: 25px;
+}
 
 .hero {
-  margin: 25px 5%;
-  padding: 55px;
-  border-radius: 20px;
   background: linear-gradient(135deg, #111, #444);
   color: white;
+  padding: 35px;
+  border-radius: 15px;
+  margin-bottom: 30px;
 }
 
 .hero h1 {
-  font-size: 42px;
-  margin-bottom: 15px;
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .hero p {
-  max-width: 650px;
-  font-size: 17px;
-  line-height: 1.6;
-  margin-bottom: 25px;
+  color: #ddd;
 }
 
-
-/* =========================
-   VIDEOS
-========================= */
-
-.video-section {
-  padding: 10px 5% 50px;
-}
-
-.section-title {
-  margin-bottom: 20px;
-}
+/* ================= VIDEO GRID ================= */
 
 .video-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  gap: 25px 18px;
 }
 
 .video-card {
   background: white;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
-  transition: 0.2s;
+  transition: .2s;
+  min-width: 0;
 }
 
 .video-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
-.thumbnail {
-  height: 180px;
-  background: linear-gradient(135deg, #222, #666);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 45px;
+.thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  border-radius: 12px;
   overflow: hidden;
 }
 
-.thumbnail video {
+.thumbnail-wrapper video {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+.thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #222;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.video-more-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,.7);
+  color: white;
+  font-size: 22px;
+  z-index: 20;
+}
+
+.video-more-button:hover {
+  background: rgba(0,0,0,.9);
+}
+
+.video-menu {
+  display: none;
+  position: absolute;
+  right: 8px;
+  top: 48px;
+  width: 170px;
+  background: white;
+  color: #111;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,.25);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.video-menu.show {
+  display: block;
+}
+
+.video-menu button {
+  width: 100%;
+  border: none;
+  background: white;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.video-menu button:hover {
+  background: #f1f1f1;
+}
+
+.video-menu .danger {
+  color: #d00000;
+}
+
 .video-info {
   display: flex;
   gap: 12px;
-  padding: 14px;
+  padding: 12px 5px;
 }
 
-.video-info h3 {
-  font-size: 16px;
-  margin-bottom: 7px;
-}
-
-.video-info p {
-  color: #666;
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.channel-avatar-img {
-  min-width: 40px;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+.video-avatar {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
+.video-text {
+  min-width: 0;
+}
 
-/* =========================
-   VIDEO PAGE
-========================= */
+.video-title {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.35;
+  margin-bottom: 6px;
+}
+
+.video-creator {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.video-meta {
+  color: #777;
+  font-size: 13px;
+}
+
+/* ================= VIDEO PAGE ================= */
 
 .video-page {
   display: none;
-  padding: 30px 5% 60px;
 }
 
 .video-player-box {
   background: #000;
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
-  max-width: 1100px;
-  margin: 0 auto;
 }
 
 .video-player-box video {
-  display: block;
   width: 100%;
   max-height: 650px;
-  background: #000;
+  display: block;
 }
 
-.video-page-info {
-  max-width: 1100px;
-  margin: 20px auto;
+.video-page-title {
+  font-size: 25px;
+  margin: 18px 0 10px;
 }
 
-.video-page-info h1 {
-  font-size: 28px;
+.video-page-meta {
+  color: #666;
   margin-bottom: 15px;
 }
-
-
-/* =========================
-   VIDEO ACTIONS
-========================= */
 
 .video-actions {
   display: flex;
@@ -350,295 +355,240 @@ body {
 .video-actions button,
 .video-actions a {
   border: none;
-  padding: 11px 18px;
-  border-radius: 22px;
   background: #eee;
-  color: #111;
+  padding: 10px 16px;
+  border-radius: 22px;
   text-decoration: none;
-  cursor: pointer;
-  font-weight: bold;
+  color: #111;
 }
 
-.video-actions a:hover,
-.video-actions button:hover {
+.video-actions button:hover,
+.video-actions a:hover {
   background: #ddd;
 }
 
-
-/* =========================
-   CREATOR
-========================= */
-
-.creator-box {
-  background: white;
-  border-radius: 14px;
-  padding: 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.video-more-page-button {
+  margin-left: auto;
 }
 
-.creator-avatar-img {
-  width: 50px;
-  height: 50px;
-  min-width: 50px;
+.creator-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.creator-box img {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.creator-box h3 {
-  margin-bottom: 5px;
-}
-
-.creator-box p {
-  color: #666;
-  font-size: 14px;
-}
-
-
-/* =========================
-   DESCRIPTION
-========================= */
-
 .description-box {
   background: white;
-  margin-top: 15px;
-  padding: 20px;
-  border-radius: 14px;
+  padding: 18px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  white-space: pre-wrap;
 }
 
-.description-box h3 {
-  margin-bottom: 10px;
-}
-
-.description-box p {
-  color: #555;
-  line-height: 1.6;
-}
-
-
-/* =========================
-   COMMENTS
-========================= */
+/* ================= COMMENTS ================= */
 
 .comments-section {
   background: white;
-  margin-top: 15px;
   padding: 20px;
-  border-radius: 14px;
+  border-radius: 12px;
 }
 
-.comments-section h2 {
+.comment-input-area {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0 25px;
+}
+
+.comment-input-area input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+}
+
+.comment-input-area button {
+  border: none;
+  background: #111;
+  color: white;
+  padding: 0 20px;
+  border-radius: 22px;
+}
+
+.comment {
+  display: flex;
+  gap: 12px;
   margin-bottom: 18px;
 }
 
-.comment-form {
+.comment img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.comment-text {
+  color: #444;
+}
+
+/* ================= CHANNEL ================= */
+
+.channel-page {
+  display: none;
+}
+
+.channel-header {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.channel-profile {
   display: flex;
-  gap: 10px;
+  gap: 20px;
+  align-items: center;
+}
+
+.channel-profile img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.channel-name {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.channel-username {
+  color: #777;
+  margin-top: 5px;
+}
+
+.channel-bio {
+  margin-top: 12px;
+}
+
+.channel-link {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+/* ================= UPLOAD ================= */
+
+.upload-page {
+  display: none;
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.upload-page h2 {
   margin-bottom: 20px;
 }
 
-.comment-form input {
-  flex: 1;
+.upload-label {
+  display: block;
+  font-weight: bold;
+  margin: 15px 0 7px;
+}
+
+.upload-input,
+.upload-textarea,
+.upload-select {
+  width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
 }
 
-.comment-form button {
-  border: none;
-  background: #ff0000;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.comment-item {
-  display: flex;
-  gap: 12px;
-  padding: 14px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.comment-avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.comment-content {
-  flex: 1;
-}
-
-.comment-content strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.comment-content p {
-  color: #555;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.no-comments {
-  color: #777;
-  padding: 15px 0;
-}
-
-
-/* =========================
-   CHANNEL PAGE
-========================= */
-
-.channel-page {
-  display: none;
-  padding: 30px 5% 60px;
-}
-
-.back-btn {
-  border: none;
-  background: white;
-  padding: 11px 18px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-bottom: 25px;
-}
-
-.channel-header {
-  background: white;
-  border-radius: 18px;
-  padding: 30px;
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-}
-
-.channel-photo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #eee;
-}
-
-.channel-details h1 {
-  font-size: 32px;
-  margin-bottom: 8px;
-}
-
-.channel-details p {
-  color: #666;
-  margin-top: 7px;
-}
-
-.channel-username {
-  color: #ff0000;
-  margin-bottom: 10px;
-}
-
-.channel-bio {
-  max-width: 650px;
-  line-height: 1.5;
-}
-
-.channel-link {
-  margin-top: 10px;
-  color: #065fd4;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.channel-stats {
-  font-weight: bold;
-}
-
-
-/* =========================
-   UPLOAD PAGE
-========================= */
-
-.upload-page {
-  display: none;
-  padding: 30px 5% 60px;
-}
-
-.upload-box {
-  max-width: 650px;
-  margin: 0 auto;
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-}
-
-.upload-box h1 {
-  margin-bottom: 10px;
-}
-
-.upload-note {
-  color: #666;
-  margin-bottom: 25px;
-}
-
-.upload-label {
-  display: block;
-  font-weight: bold;
-  margin: 15px 0 8px;
-}
-
-.upload-input,
-#videoFile {
-  width: 100%;
-}
-
-.upload-input {
-  padding: 13px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.description-input {
-  min-height: 120px;
+.upload-textarea {
+  min-height: 130px;
   resize: vertical;
 }
 
-.video-preview {
-  width: 100%;
-  max-height: 400px;
-  margin-top: 15px;
-  background: #000;
-  border-radius: 10px;
-}
-
-.upload-btn {
-  width: 100%;
+.upload-button {
   margin-top: 20px;
-  border: none;
+  width: 100%;
   padding: 13px;
+  border: none;
   background: #ff0000;
   color: white;
-  border-radius: 25px;
-  cursor: pointer;
+  border-radius: 8px;
   font-weight: bold;
-  font-size: 15px;
 }
 
+#uploadStatus {
+  margin-top: 15px;
+}
 
-/* =========================
-   EDIT PROFILE
-========================= */
+/* ================= MODALS ================= */
 
-.profile-edit-box {
-  max-width: 470px;
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  padding: 20px;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  position: relative;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+.modal-box h2 {
+  margin-bottom: 18px;
+}
+
+.close-modal {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  border: none;
+  background: transparent;
+  font-size: 25px;
+}
+
+/* ================= PROFILE EDIT ================= */
+
+.profile-edit-box {
+  max-width: 500px;
 }
 
 .edit-photo-area {
@@ -647,37 +597,35 @@ body {
 }
 
 .edit-profile-preview {
-  width: 105px;
-  height: 105px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
-  margin: 0 auto 12px;
-  border: 3px solid #eee;
+  margin: auto;
 }
 
 .change-photo-btn {
-  display: inline-block;
+  margin-top: 10px;
+  border: none;
   background: #eee;
-  padding: 10px 15px;
+  padding: 8px 15px;
   border-radius: 20px;
-  cursor: pointer;
-  font-weight: bold;
 }
 
 .edit-label {
   display: block;
   font-weight: bold;
-  margin: 13px 0 7px;
+  margin: 12px 0 6px;
 }
 
-.edit-input {
+.edit-input,
+.edit-bio {
   width: 100%;
-  padding: 12px;
+  padding: 11px;
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
-  font-size: 15px;
 }
 
 .edit-bio {
@@ -687,176 +635,186 @@ body {
 
 .save-profile-btn {
   width: 100%;
+  margin-top: 18px;
+  padding: 12px;
   border: none;
   background: #ff0000;
   color: white;
-  padding: 13px;
-  border-radius: 25px;
-  margin-top: 20px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
-}
-
-.save-profile-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-#profileSaveStatus {
-  text-align: center;
-  margin-top: 12px;
-  color: #555;
-  font-weight: bold;
-}
-
-
-/* =========================
-   MODALS
-========================= */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.65);
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modal-box {
-  width: 90%;
-  max-width: 420px;
-  background: white;
-  padding: 30px;
-  border-radius: 18px;
-  position: relative;
-}
-
-.modal-box h2 {
-  margin-bottom: 20px;
-}
-
-.modal-box input {
-  width: 100%;
-  padding: 13px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
   border-radius: 8px;
 }
 
-.modal-btn {
-  width: 100%;
-  margin-top: 5px;
-}
-
-.google-btn {
-  background: #333;
-}
-
-.modal-box p {
+#profileSaveStatus {
+  margin-top: 10px;
   text-align: center;
-  margin-top: 18px;
-  color: #666;
 }
 
-.modal-box p span {
-  color: #ff0000;
-  cursor: pointer;
+/* ================= EDIT VIDEO ================= */
+
+.edit-video-box {
+  max-width: 520px;
+}
+
+.edit-video-label {
+  display: block;
   font-weight: bold;
+  margin: 13px 0 6px;
 }
 
-.close {
-  position: absolute;
-  right: 15px;
-  top: 10px;
+.edit-video-input,
+.edit-video-textarea,
+.edit-video-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.edit-video-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.edit-video-save {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
   border: none;
-  background: none;
-  font-size: 28px;
-  cursor: pointer;
+  background: #111;
+  color: white;
+  border-radius: 8px;
 }
 
+/* ================= REPORT ================= */
 
-/* =========================
-   MOBILE
-========================= */
+.report-box {
+  max-width: 450px;
+}
+
+.report-reason {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+.report-submit {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  border: none;
+  background: #d00000;
+  color: white;
+  border-radius: 8px;
+}
+
+/* ================= LOGIN ================= */
+
+.auth-box {
+  max-width: 400px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.auth-main-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #ff0000;
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.google-button {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 8px;
+}
+
+.auth-status {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ================= EMPTY ================= */
+
+.empty-message {
+  background: white;
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px;
+  color: #777;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1100px) {
+  .video-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
 
 @media (max-width: 900px) {
+  header {
+    padding: 0 15px;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
 
   .video-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .search-box {
-    width: 35%;
-  }
-
 }
 
-
 @media (max-width: 600px) {
-
-  .header {
-    height: auto;
-    padding: 15px;
+  header {
     flex-wrap: wrap;
-    gap: 12px;
+    height: auto;
+    padding: 12px;
   }
 
-  .search-box {
-    width: 100%;
+  .search-area {
     order: 3;
+    flex-basis: 100%;
   }
 
-  .header-buttons {
-    margin-left: auto;
-  }
-
-  .logo {
-    font-size: 21px;
-  }
-
-  .hero {
-    padding: 30px 20px;
-  }
-
-  .hero h1 {
-    font-size: 30px;
+  main {
+    padding: 15px;
   }
 
   .video-grid {
     grid-template-columns: 1fr;
   }
 
-  .channel-header {
+  .hero {
+    padding: 25px;
+  }
+
+  .hero h1 {
+    font-size: 25px;
+  }
+
+  .channel-profile {
     flex-direction: column;
     text-align: center;
   }
 
-  .channel-details h1 {
-    font-size: 26px;
+  .video-page-title {
+    font-size: 20px;
   }
-
-  .profile-menu {
-    right: 0;
-  }
-
-  .video-page-info h1 {
-    font-size: 22px;
-  }
-
-  .comment-form {
-    flex-direction: column;
-  }
-
-  .comment-form button {
-    width: 100%;
-  }
-
-  .profile-edit-box {
-    width: 94%;
-    padding: 25px 20px;
-  }
-
 }
