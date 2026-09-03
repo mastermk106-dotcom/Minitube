@@ -4,16 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MiniTube</title>
+  <title>MiniTube – Watch, Discover & Share Videos</title>
+
+  <meta
+    name="description"
+    content="MiniTube is a video sharing platform where you can watch, discover and share videos across Gaming, Islamic, Education, Entertainment, Sports, News and Music."
+  >
+
+  <meta name="robots" content="index, follow">
+
+  <link
+    rel="canonical"
+    href="https://mastermk106-dotcom.github.io/Minitube/"
+  >
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MiniTube – Watch, Discover & Share Videos">
+  <meta
+    property="og:description"
+    content="Watch, discover and share amazing videos on MiniTube."
+  >
+  <meta
+    property="og:url"
+    content="https://mastermk106-dotcom.github.io/Minitube/"
+  >
+
+  <meta name="twitter:card" content="summary">
+  <meta
+    name="twitter:title"
+    content="MiniTube – Watch, Discover & Share Videos"
+  >
+  <meta
+    name="twitter:description"
+    content="Watch, discover and share amazing videos on MiniTube."
+  >
 
   <link rel="stylesheet" href="style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "MiniTube",
+    "url": "https://mastermk106-dotcom.github.io/Minitube/",
+    "description": "A video sharing platform where users can watch, discover and share videos."
+  }
+  </script>
 </head>
 
 <body>
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
 
 <header>
 
@@ -44,9 +83,6 @@
 
   </div>
 
-
-  <!-- AUTH BUTTONS -->
-
   <div class="auth-buttons" id="authButtons">
 
     <button id="loginButton">
@@ -58,9 +94,6 @@
     </button>
 
   </div>
-
-
-  <!-- PROFILE -->
 
   <div class="profile-area" id="profileArea" style="display:none;">
 
@@ -75,7 +108,6 @@
         alt="Profile"
       >
     </button>
-
 
     <div class="profile-menu" id="profileMenu">
 
@@ -127,11 +159,6 @@
 
 </header>
 
-
-<!-- =====================================================
-     CATEGORIES
-===================================================== -->
-
 <nav class="categories">
 
   <button class="category-btn active" data-category="All">
@@ -168,17 +195,7 @@
 
 </nav>
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
 <main>
-
-
-  <!-- ===================================================
-       HOME
-  ==================================================== -->
 
   <section id="homePage">
 
@@ -193,25 +210,51 @@
       <div>
         <h1>Welcome to MiniTube</h1>
         <p>
-          Watch, discover and share amazing videos.
+          Watch, discover and share amazing videos on MiniTube.
+          Explore Gaming, Islamic, Education, Entertainment, Sports,
+          News and Music.
         </p>
       </div>
 
     </div>
-
 
     <div
       class="video-grid"
       id="videoGrid"
     ></div>
 
+    <!-- Search-engine friendly introduction -->
+
+    <section class="seo-content">
+
+      <h2>Discover videos on MiniTube</h2>
+
+      <p>
+        MiniTube is a video sharing platform designed for watching,
+        discovering and sharing videos online. Explore different
+        categories and find content that interests you.
+      </p>
+
+      <h2>Explore MiniTube categories</h2>
+
+      <p>
+        Browse Gaming, Islamic, Education, Entertainment, Sports,
+        News and Music videos. Use the search feature to quickly
+        find videos and discover new creators.
+      </p>
+
+      <h2>Watch and share videos</h2>
+
+      <p>
+        MiniTube lets viewers watch videos, interact with creators,
+        leave comments and share interesting content with others.
+        Creators can also upload their own videos and build their
+        channels on the platform.
+      </p>
+
+    </section>
+
   </section>
-
-
-
-  <!-- ===================================================
-       VIDEO PAGE
-  ==================================================== -->
 
   <section
     id="videoPage"
@@ -229,7 +272,6 @@
 
     </button>
 
-
     <div class="video-player-box">
 
       <video
@@ -240,20 +282,15 @@
 
     </div>
 
-
     <h1
       id="videoPageTitle"
       class="video-page-title"
     ></h1>
 
-
     <div
       id="videoPageMeta"
       class="video-page-meta"
     ></div>
-
-
-    <!-- ACTIONS -->
 
     <div class="video-actions">
 
@@ -270,7 +307,6 @@
 
       </button>
 
-
       <button id="shareButton">
 
         <svg viewBox="0 0 24 24">
@@ -284,7 +320,6 @@
         <span>Share</span>
 
       </button>
-
 
       <a
         id="downloadButton"
@@ -302,7 +337,6 @@
 
       </a>
 
-
       <button
         class="video-more-page-button"
         id="videoPageMoreButton"
@@ -318,9 +352,6 @@
       </button>
 
     </div>
-
-
-    <!-- CREATOR -->
 
     <div class="creator-box">
 
@@ -340,16 +371,10 @@
 
     </div>
 
-
-    <!-- DESCRIPTION -->
-
     <div
       class="description-box"
       id="videoDescription"
     ></div>
-
-
-    <!-- COMMENTS -->
 
     <div class="comments-section">
 
@@ -376,12 +401,6 @@
 
   </section>
 
-
-
-  <!-- ===================================================
-       CHANNEL PAGE
-  ==================================================== -->
-
   <section
     id="channelPage"
     class="channel-page"
@@ -400,7 +419,6 @@
       <span>Back</span>
 
     </button>
-
 
     <div class="channel-header">
 
@@ -443,19 +461,12 @@
 
     </div>
 
-
     <div
       class="video-grid"
       id="channelVideoGrid"
     ></div>
 
   </section>
-
-
-
-  <!-- ===================================================
-       UPLOAD PAGE
-  ==================================================== -->
 
   <section
     id="uploadPage"
@@ -476,7 +487,6 @@
 
     </button>
 
-
     <div class="upload-header">
 
       <div class="upload-title-icon">
@@ -495,7 +505,6 @@
 
     </div>
 
-
     <label class="upload-label">
       Video file
     </label>
@@ -506,7 +515,6 @@
       type="file"
       accept="video/*"
     >
-
 
     <label class="upload-label">
       Title
@@ -519,7 +527,6 @@
       placeholder="Enter video title"
     >
 
-
     <label class="upload-label">
       Description
     </label>
@@ -529,7 +536,6 @@
       class="upload-textarea"
       placeholder="Tell viewers about your video..."
     ></textarea>
-
 
     <label class="upload-label">
       Category
@@ -550,7 +556,6 @@
 
     </select>
 
-
     <button
       id="uploadVideoButton"
       class="upload-button"
@@ -566,7 +571,6 @@
 
     </button>
 
-
     <div
       id="uploadStatus"
       class="upload-status"
@@ -575,12 +579,6 @@
   </section>
 
 </main>
-
-
-
-<!-- =====================================================
-     EDIT PROFILE MODAL
-===================================================== -->
 
 <div
   class="modal"
@@ -600,9 +598,7 @@
       </svg>
     </button>
 
-
     <h2>Edit Profile</h2>
-
 
     <div class="edit-photo-area">
 
@@ -629,7 +625,6 @@
 
     </div>
 
-
     <label class="edit-label">
       Username
     </label>
@@ -639,7 +634,6 @@
       class="edit-input"
       type="text"
     >
-
 
     <label class="edit-label">
       Channel name
@@ -651,7 +645,6 @@
       type="text"
     >
 
-
     <label class="edit-label">
       Bio
     </label>
@@ -660,7 +653,6 @@
       id="editBio"
       class="edit-bio"
     ></textarea>
-
 
     <label class="edit-label">
       Link
@@ -673,14 +665,12 @@
       placeholder="https://example.com"
     >
 
-
     <button
       id="saveProfileButton"
       class="save-profile-btn"
     >
       Save changes
     </button>
-
 
     <div
       id="profileSaveStatus"
@@ -690,12 +680,6 @@
   </div>
 
 </div>
-
-
-
-<!-- =====================================================
-     LOGIN MODAL
-===================================================== -->
 
 <div
   class="modal"
@@ -715,7 +699,6 @@
       </svg>
     </button>
 
-
     <div class="modal-heading-icon">
 
       <svg viewBox="0 0 24 24">
@@ -725,9 +708,7 @@
 
     </div>
 
-
     <h2>Sign in</h2>
-
 
     <input
       id="loginEmail"
@@ -737,7 +718,6 @@
       autocomplete="email"
     >
 
-
     <input
       id="loginPassword"
       class="auth-input"
@@ -746,14 +726,12 @@
       autocomplete="current-password"
     >
 
-
     <button
       id="emailLoginButton"
       class="auth-main-button"
     >
       Sign in
     </button>
-
 
     <button
       id="googleLoginButton"
@@ -765,7 +743,6 @@
 
     </button>
 
-
     <div
       id="loginStatus"
       class="auth-status"
@@ -774,12 +751,6 @@
   </div>
 
 </div>
-
-
-
-<!-- =====================================================
-     SIGNUP MODAL
-===================================================== -->
 
 <div
   class="modal"
@@ -799,7 +770,6 @@
       </svg>
     </button>
 
-
     <div class="modal-heading-icon">
 
       <svg viewBox="0 0 24 24">
@@ -811,9 +781,7 @@
 
     </div>
 
-
     <h2>Create account</h2>
-
 
     <input
       id="signupName"
@@ -823,7 +791,6 @@
       autocomplete="name"
     >
 
-
     <input
       id="signupEmail"
       class="auth-input"
@@ -831,7 +798,6 @@
       placeholder="Email"
       autocomplete="email"
     >
-
 
     <input
       id="signupPassword"
@@ -841,14 +807,12 @@
       autocomplete="new-password"
     >
 
-
     <button
       id="emailSignupButton"
       class="auth-main-button"
     >
       Create account
     </button>
-
 
     <button
       id="googleSignupButton"
@@ -860,7 +824,6 @@
 
     </button>
 
-
     <div
       id="signupStatus"
       class="auth-status"
@@ -869,12 +832,6 @@
   </div>
 
 </div>
-
-
-
-<!-- =====================================================
-     FIREBASE
-===================================================== -->
 
 <script type="module">
 
@@ -909,7 +866,6 @@
     increment
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-
   const firebaseConfig = {
     apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
     authDomain: "minitube-9317a.firebaseapp.com",
@@ -919,7 +875,6 @@
     appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
   };
 
-
   const app = initializeApp(firebaseConfig);
 
   const auth = getAuth(app);
@@ -927,7 +882,6 @@
   const db = getFirestore(app);
 
   const googleProvider = new GoogleAuthProvider();
-
 
   window.firebaseFunctions = {
 
@@ -967,7 +921,6 @@
   };
 
 </script>
-
 
 <script src="script.js"></script>
 
