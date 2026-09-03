@@ -1,7 +1,7 @@
 /* =========================================================
    MINITUBE - COMPLETE FIXED SCRIPT
    VIDEO + FIREBASE + PROFILE + CHANNEL + UPLOAD
-   3-DOT + AUTH + SEARCH + COMMENTS + LIKES
+   SVG ICONS + AUTH + SEARCH + COMMENTS + LIKES
 ========================================================= */
 
 const $ = (id) => document.getElementById(id);
@@ -31,6 +31,79 @@ let currentUser = null;
 let appStarted = false;
 let firebaseVideosLoaded = false;
 let firebaseLoading = null;
+
+
+/* =========================================================
+   SVG ICONS
+========================================================= */
+
+const ICONS = {
+
+  more: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="5" cy="12" r="1.7"></circle>
+      <circle cx="12" cy="12" r="1.7"></circle>
+      <circle cx="19" cy="12" r="1.7"></circle>
+    </svg>
+  `,
+
+  edit: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 20h4L19 9l-4-4L4 16v4z"></path>
+      <path d="M13.5 6.5l4 4"></path>
+    </svg>
+  `,
+
+  delete: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16"></path>
+      <path d="M9 7V4h6v3"></path>
+      <path d="M7 7l1 14h8l1-14"></path>
+      <path d="M10 11v6"></path>
+      <path d="M14 11v6"></path>
+    </svg>
+  `,
+
+  report: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 21V4"></path>
+      <path d="M6 5c3-2 5 2 8 0s5 0 5 0v9s-2-2-5 0-5-2-8 0"></path>
+    </svg>
+  `,
+
+  like: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 10v10H4V10h3z"></path>
+      <path d="M7 10l4-7c.4-.7 1.5-.4 1.5.4V8h5.2c1.3 0 2.1 1.2 1.7 2.4l-1.5 6.3c-.3 1.1-1.2 1.8-2.3 1.8H7"></path>
+    </svg>
+  `,
+
+  liked: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 10v10H4V10h3z"></path>
+      <path d="M7 10l4-7c.4-.7 1.5-.4 1.5.4V8h5.2c1.3 0 2.1 1.2 1.7 2.4l-1.5 6.3c-.3 1.1-1.2 1.8-2.3 1.8H7"></path>
+    </svg>
+  `,
+
+  share: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="18" cy="5" r="2.5"></circle>
+      <circle cx="6" cy="12" r="2.5"></circle>
+      <circle cx="18" cy="19" r="2.5"></circle>
+      <path d="M8.3 10.8l7.4-4.5"></path>
+      <path d="M8.3 13.2l7.4 4.5"></path>
+    </svg>
+  `,
+
+  download: `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 4v11"></path>
+      <path d="M7 11l5 5 5-5"></path>
+      <path d="M5 20h14"></path>
+    </svg>
+  `
+
+};
 
 
 /* =========================================================
@@ -77,6 +150,7 @@ function saveComments() {
 ========================================================= */
 
 function defaultProfile() {
+
   const user = currentUser;
 
   return {
@@ -106,30 +180,45 @@ function defaultProfile() {
 
 
 async function loadUserProfile() {
+
   if (!currentUser || !firebaseReady()) {
-    currentProfile = defaultProfile();
+
+    currentProfile =
+      defaultProfile();
+
     updateProfileUI();
+
     return;
   }
 
-  const fb = getFirebase();
+  const fb =
+    getFirebase();
 
   try {
-    const profileRef = fb.doc(
-      fb.db,
-      "profiles",
-      currentUser.uid
-    );
 
-    const snap = await fb.getDoc(profileRef);
+    const profileRef =
+      fb.doc(
+        fb.db,
+        "profiles",
+        currentUser.uid
+      );
+
+    const snap =
+      await fb.getDoc(
+        profileRef
+      );
 
     if (snap.exists()) {
+
       currentProfile = {
         ...defaultProfile(),
         ...snap.data()
       };
+
     } else {
-      currentProfile = defaultProfile();
+
+      currentProfile =
+        defaultProfile();
 
       await fb.setDoc(
         profileRef,
@@ -140,18 +229,22 @@ async function loadUserProfile() {
     updateProfileUI();
 
   } catch (error) {
+
     console.error(
       "Profile load error:",
       error
     );
 
-    currentProfile = defaultProfile();
+    currentProfile =
+      defaultProfile();
+
     updateProfileUI();
   }
 }
 
 
 function updateProfileUI() {
+
   if (!currentProfile) return;
 
   const photo =
@@ -159,23 +252,28 @@ function updateProfileUI() {
     defaultProfile().photo;
 
   if ($("headerProfilePhoto")) {
-    $("headerProfilePhoto").src = photo;
+    $("headerProfilePhoto").src =
+      photo;
   }
 
   if ($("channelPhoto")) {
-    $("channelPhoto").src = photo;
+    $("channelPhoto").src =
+      photo;
   }
 
   if ($("editProfilePreview")) {
-    $("editProfilePreview").src = photo;
+    $("editProfilePreview").src =
+      photo;
   }
 }
 
 
 function normalizeLink(link) {
+
   if (!link) return "";
 
-  link = link.trim();
+  link =
+    link.trim();
 
   if (
     link.startsWith("http://") ||
@@ -193,6 +291,7 @@ function normalizeLink(link) {
 ========================================================= */
 
 async function saveUserProfile() {
+
   if (!currentUser) {
     alert("Please login first.");
     return;
@@ -209,24 +308,29 @@ async function saveUserProfile() {
     "MiniTube User";
 
   const bio =
-    $("editBio")?.value.trim() || "";
+    $("editBio")?.value.trim() ||
+    "";
 
   const link =
-    $("editLink")?.value.trim() || "";
+    $("editLink")?.value.trim() ||
+    "";
 
   const status =
     $("profileSaveStatus");
 
   if (!channelName) {
+
     if (status) {
       status.textContent =
         "Channel name is required.";
     }
+
     return;
   }
 
   if (status) {
-    status.textContent = "Saving...";
+    status.textContent =
+      "Saving...";
   }
 
   let photo =
@@ -234,11 +338,15 @@ async function saveUserProfile() {
     defaultProfile().photo;
 
   const imageFile =
-    $("profileImageFile")?.files?.[0];
+    $("profileImageFile")
+      ?.files?.[0];
 
   if (imageFile) {
+
     try {
-      const formData = new FormData();
+
+      const formData =
+        new FormData();
 
       formData.append(
         "file",
@@ -250,13 +358,14 @@ async function saveUserProfile() {
         "minituber"
       );
 
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dvvsxjid/image/upload",
-        {
-          method: "POST",
-          body: formData
-        }
-      );
+      const response =
+        await fetch(
+          "https://api.cloudinary.com/v1_1/dvvsxjid/image/upload",
+          {
+            method: "POST",
+            body: formData
+          }
+        );
 
       const result =
         await response.json();
@@ -272,6 +381,7 @@ async function saveUserProfile() {
         result.secure_url;
 
     } catch (error) {
+
       console.error(error);
 
       if (status) {
@@ -285,18 +395,30 @@ async function saveUserProfile() {
 
   currentProfile = {
     ...currentProfile,
-    uid: currentUser.uid,
-    email: currentUser.email || "",
+
+    uid:
+      currentUser.uid,
+
+    email:
+      currentUser.email || "",
+
     username,
+
     channelName,
+
     bio,
+
     link,
+
     photo
   };
 
   try {
+
     if (firebaseReady()) {
-      const fb = getFirebase();
+
+      const fb =
+        getFirebase();
 
       await fb.setDoc(
         fb.doc(
@@ -314,15 +436,22 @@ async function saveUserProfile() {
         fb.updateProfile &&
         fb.auth?.currentUser
       ) {
+
         try {
+
           await fb.updateProfile(
             fb.auth.currentUser,
             {
-              displayName: channelName,
-              photoURL: photo
+              displayName:
+                channelName,
+
+              photoURL:
+                photo
             }
           );
+
         } catch (profileError) {
+
           console.log(
             "Firebase auth profile update skipped:",
             profileError.message
@@ -331,21 +460,27 @@ async function saveUserProfile() {
       }
     }
 
-    videos = videos.map(video => {
-      if (
-        video.ownerId ===
-        currentUser.uid
-      ) {
-        return {
-          ...video,
-          creator: channelName,
-          creatorUsername: username,
-          creatorPhoto: photo
-        };
-      }
+    videos =
+      videos.map(video => {
 
-      return video;
-    });
+        if (
+          video.ownerId ===
+          currentUser.uid
+        ) {
+
+          return {
+            ...video,
+            creator:
+              channelName,
+            creatorUsername:
+              username,
+            creatorPhoto:
+              photo
+          };
+        }
+
+        return video;
+      });
 
     saveVideos();
 
@@ -353,18 +488,20 @@ async function saveUserProfile() {
 
     if (status) {
       status.textContent =
-        "Profile saved successfully! ✅";
+        "Profile saved successfully!";
     }
 
     renderVideos(
       filterByCategory(videos)
     );
 
-    setTimeout(() => {
-      closeEditProfile();
-    }, 700);
+    setTimeout(
+      closeEditProfile,
+      700
+    );
 
   } catch (error) {
+
     console.error(error);
 
     if (status) {
@@ -380,6 +517,7 @@ async function saveUserProfile() {
 ========================================================= */
 
 function openEditProfile() {
+
   if (!currentUser) {
     alert("Please login first.");
     return;
@@ -423,7 +561,8 @@ function openEditProfile() {
   }
 
   if ($("profileSaveStatus")) {
-    $("profileSaveStatus").textContent = "";
+    $("profileSaveStatus").textContent =
+      "";
   }
 
   $("editProfileModal")
@@ -432,6 +571,7 @@ function openEditProfile() {
 
 
 function closeEditProfile() {
+
   $("editProfileModal")
     ?.classList.remove("show");
 }
@@ -442,22 +582,28 @@ function closeEditProfile() {
 ========================================================= */
 
 function hideAllPages() {
+
   [
     "homePage",
     "videoPage",
     "channelPage",
     "uploadPage"
   ].forEach(id => {
-    const page = $(id);
+
+    const page =
+      $(id);
 
     if (page) {
-      page.style.display = "none";
+      page.style.display =
+        "none";
     }
+
   });
 }
 
 
 function showHome() {
+
   hideAllPages();
 
   closeAllVideoMenus();
@@ -475,6 +621,7 @@ function showHome() {
 
 
 function showVideoPage() {
+
   hideAllPages();
 
   closeAllVideoMenus();
@@ -487,6 +634,7 @@ function showVideoPage() {
 
 
 function showChannelPage() {
+
   hideAllPages();
 
   closeAllVideoMenus();
@@ -499,6 +647,7 @@ function showChannelPage() {
 
 
 function showUploadPage() {
+
   hideAllPages();
 
   closeAllVideoMenus();
@@ -509,7 +658,8 @@ function showUploadPage() {
   }
 
   if ($("uploadStatus")) {
-    $("uploadStatus").textContent = "";
+    $("uploadStatus").textContent =
+      "";
   }
 }
 
@@ -519,9 +669,12 @@ function showUploadPage() {
 ========================================================= */
 
 function formatViews(number) {
-  number = Number(number) || 0;
+
+  number =
+    Number(number) || 0;
 
   if (number >= 1000000) {
+
     return (
       (number / 1000000)
         .toFixed(1)
@@ -531,6 +684,7 @@ function formatViews(number) {
   }
 
   if (number >= 1000) {
+
     return (
       (number / 1000)
         .toFixed(1)
@@ -544,14 +698,21 @@ function formatViews(number) {
 
 
 function formatDuration(seconds) {
-  if (!seconds || isNaN(seconds)) {
+
+  if (
+    !seconds ||
+    isNaN(seconds)
+  ) {
     return "";
   }
 
-  seconds = Math.floor(seconds);
+  seconds =
+    Math.floor(seconds);
 
   const mins =
-    Math.floor(seconds / 60);
+    Math.floor(
+      seconds / 60
+    );
 
   const secs =
     seconds % 60;
@@ -559,7 +720,10 @@ function formatDuration(seconds) {
   return (
     mins +
     ":" +
-    String(secs).padStart(2, "0")
+    String(secs).padStart(
+      2,
+      "0"
+    )
   );
 }
 
@@ -569,15 +733,18 @@ function formatDuration(seconds) {
 ========================================================= */
 
 function isValidVideo(video) {
+
   return !!(
     video &&
-    typeof video.url === "string" &&
+    typeof video.url ===
+      "string" &&
     video.url.trim()
   );
 }
 
 
 function findVideo(id) {
+
   return videos.find(
     video =>
       String(video.id) ===
@@ -587,7 +754,11 @@ function findVideo(id) {
 
 
 function isVideoOwner(video) {
-  if (!currentUser || !video) {
+
+  if (
+    !currentUser ||
+    !video
+  ) {
     return false;
   }
 
@@ -613,34 +784,44 @@ function isVideoOwner(video) {
 
 
 /* =========================================================
-   VIDEO MENUS - FIXED
+   VIDEO MENUS
 ========================================================= */
 
 function closeAllVideoMenus() {
-  document
-    .querySelectorAll(".video-menu.show")
-    .forEach(menu => {
-      menu.classList.remove("show");
-    });
 
-  /*
-    Safety:
-    Remove old inline display values
-    from card menus only.
-  */
+  document
+    .querySelectorAll(
+      ".video-menu.show"
+    )
+    .forEach(menu => {
+
+      menu.classList.remove(
+        "show"
+      );
+
+    });
 
   document
     .querySelectorAll(
       ".thumbnail-wrapper .video-menu"
     )
     .forEach(menu => {
-      menu.style.removeProperty("display");
+
+      menu.style.removeProperty(
+        "display"
+      );
+
     });
 }
 
 
-function toggleVideoMenu(event, id) {
+function toggleVideoMenu(
+  event,
+  id
+) {
+
   if (event) {
+
     event.preventDefault();
     event.stopPropagation();
   }
@@ -651,12 +832,16 @@ function toggleVideoMenu(event, id) {
   if (!menu) return;
 
   const wasOpen =
-    menu.classList.contains("show");
+    menu.classList.contains(
+      "show"
+    );
 
   closeAllVideoMenus();
 
   if (!wasOpen) {
-    menu.classList.add("show");
+    menu.classList.add(
+      "show"
+    );
   }
 }
 
@@ -666,7 +851,9 @@ function videoMenuAction(
   action,
   id
 ) {
+
   if (event) {
+
     event.preventDefault();
     event.stopPropagation();
   }
@@ -682,10 +869,13 @@ function videoMenuAction(
   }
 
   if (action === "edit") {
+
     if (!isVideoOwner(video)) {
+
       alert(
         "You can only edit your own videos."
       );
+
       return;
     }
 
@@ -693,10 +883,13 @@ function videoMenuAction(
   }
 
   if (action === "delete") {
+
     if (!isVideoOwner(video)) {
+
       alert(
         "You can only delete your own videos."
       );
+
       return;
     }
 
@@ -713,7 +906,10 @@ function videoMenuAction(
    RENDER VIDEOS
 ========================================================= */
 
-function renderVideos(list = videos) {
+function renderVideos(
+  list = videos
+) {
+
   const grid =
     $("videoGrid");
 
@@ -734,6 +930,7 @@ function renderVideos(list = videos) {
       : [];
 
   if (!filtered.length) {
+
     grid.innerHTML = `
       <div class="empty-message">
         <h3>No videos found</h3>
@@ -745,8 +942,11 @@ function renderVideos(list = videos) {
   }
 
   filtered.forEach(video => {
+
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     card.className =
       "video-card";
@@ -754,7 +954,8 @@ function renderVideos(list = videos) {
     const photo =
       video.creatorPhoto ||
       `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        video.creator || "User"
+        video.creator ||
+          "User"
       )}&background=random`;
 
     const owner =
@@ -763,12 +964,16 @@ function renderVideos(list = videos) {
     let menuButtons = "";
 
     if (owner) {
+
       menuButtons += `
         <button
           type="button"
           onclick="videoMenuAction(event,'edit','${escapeAttribute(video.id)}')"
         >
-          ✏️ Edit
+          <span class="menu-action-icon">
+            ${ICONS.edit}
+          </span>
+          <span>Edit</span>
         </button>
 
         <button
@@ -776,7 +981,10 @@ function renderVideos(list = videos) {
           class="danger"
           onclick="videoMenuAction(event,'delete','${escapeAttribute(video.id)}')"
         >
-          🗑️ Delete
+          <span class="menu-action-icon">
+            ${ICONS.delete}
+          </span>
+          <span>Delete</span>
         </button>
       `;
     }
@@ -786,7 +994,10 @@ function renderVideos(list = videos) {
         type="button"
         onclick="videoMenuAction(event,'report','${escapeAttribute(video.id)}')"
       >
-        🚩 Report
+        <span class="menu-action-icon">
+          ${ICONS.report}
+        </span>
+        <span>Report</span>
       </button>
     `;
 
@@ -806,7 +1017,7 @@ function renderVideos(list = videos) {
           onclick="toggleVideoMenu(event,'${escapeAttribute(video.id)}')"
           aria-label="More options"
         >
-          ⋮
+          ${ICONS.more}
         </button>
 
         <div
@@ -843,7 +1054,9 @@ function renderVideos(list = videos) {
           </div>
 
           <div class="video-meta">
-            ${formatViews(video.views)} views
+            ${formatViews(
+              video.views
+            )} views
             •
             ${escapeHtml(
               video.category ||
@@ -885,19 +1098,42 @@ function renderVideos(list = videos) {
 ========================================================= */
 
 function escapeHtml(value) {
+
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 }
 
 
 function escapeAttribute(value) {
+
   return String(value ?? "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'");
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    );
 }
 
 
@@ -913,18 +1149,16 @@ async function openVideo(video) {
   }
 
   if (!isValidVideo(video)) {
+
     alert(
       "This video does not have a valid video URL."
     );
+
     return;
   }
 
-  currentVideo = video;
-
-  /*
-    Keep global currentVideo updated.
-    This fixes the video-page menu.
-  */
+  currentVideo =
+    video;
 
   window.currentVideo =
     currentVideo;
@@ -937,12 +1171,18 @@ async function openVideo(video) {
     $("mainVideo");
 
   if (!mainVideo) {
-    alert("Video player not found.");
+
+    alert(
+      "Video player not found."
+    );
+
     return;
   }
 
   mainVideo.pause();
-  mainVideo.removeAttribute("src");
+  mainVideo.removeAttribute(
+    "src"
+  );
 
   mainVideo.src =
     String(video.url);
@@ -952,12 +1192,14 @@ async function openVideo(video) {
   showVideoPage();
 
   if ($("videoPageTitle")) {
+
     $("videoPageTitle").textContent =
       video.title ||
       "Untitled Video";
   }
 
   if ($("videoDescription")) {
+
     $("videoDescription").textContent =
       video.description ||
       "No description.";
@@ -966,7 +1208,8 @@ async function openVideo(video) {
   const creatorPhoto =
     video.creatorPhoto ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      video.creator || "User"
+      video.creator ||
+        "User"
     )}&background=random`;
 
   if ($("creatorPhoto")) {
@@ -975,12 +1218,14 @@ async function openVideo(video) {
   }
 
   if ($("creatorName")) {
+
     $("creatorName").textContent =
       video.creator ||
       "Unknown";
   }
 
   if ($("creatorUsername")) {
+
     $("creatorUsername").textContent =
       video.creatorUsername
         ? "@" +
@@ -989,6 +1234,7 @@ async function openVideo(video) {
   }
 
   if ($("downloadButton")) {
+
     $("downloadButton").href =
       video.url;
   }
@@ -997,12 +1243,11 @@ async function openVideo(video) {
 
   loadComments(video.id);
 
-  /*
-    VIEW COUNT
-  */
-
   video.views =
-    (Number(video.views) || 0) + 1;
+    (
+      Number(video.views) ||
+      0
+    ) + 1;
 
   const index =
     videos.findIndex(
@@ -1012,9 +1257,11 @@ async function openVideo(video) {
     );
 
   if (index !== -1) {
+
     videos[index] = {
       ...videos[index],
-      views: video.views
+      views:
+        video.views
     };
 
     currentVideo =
@@ -1040,13 +1287,20 @@ async function openVideo(video) {
 }
 
 
-function updateVideoMeta(video) {
+function updateVideoMeta(
+  video
+) {
+
   if (!video) return;
 
   if ($("videoPageMeta")) {
+
     $("videoPageMeta").textContent =
-      `${formatViews(video.views)} views • ${
-        video.category || "All"
+      `${formatViews(
+        video.views
+      )} views • ${
+        video.category ||
+        "All"
       }`;
   }
 }
@@ -1060,6 +1314,7 @@ async function syncVideoToFirebase(
   video,
   extra = {}
 ) {
+
   if (
     !firebaseReady() ||
     !video?.id
@@ -1068,6 +1323,7 @@ async function syncVideoToFirebase(
   }
 
   try {
+
     const fb =
       getFirebase();
 
@@ -1083,6 +1339,7 @@ async function syncVideoToFirebase(
     );
 
   } catch (error) {
+
     console.log(
       "Firebase video sync skipped:",
       error.message
@@ -1092,10 +1349,11 @@ async function syncVideoToFirebase(
 
 
 /* =========================================================
-   VIDEO PAGE 3-DOT - FIXED
+   VIDEO PAGE 3-DOT MENU
 ========================================================= */
 
 function createVideoPageMenu() {
+
   if (
     document.getElementById(
       "videoPageMenu"
@@ -1112,47 +1370,53 @@ function createVideoPageMenu() {
   if (!actions) return;
 
   const button =
-    document.createElement("button");
+    document.createElement(
+      "button"
+    );
 
-  button.type = "button";
+  button.type =
+    "button";
+
   button.className =
     "video-more-page-button";
 
   button.id =
     "videoPageMoreButton";
 
-  button.textContent = "⋮";
+  button.setAttribute(
+    "aria-label",
+    "More options"
+  );
 
-  actions.appendChild(button);
+  button.innerHTML =
+    ICONS.more;
+
+  actions.appendChild(
+    button
+  );
 
   const menu =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
 
   menu.id =
     "videoPageMenu";
 
   menu.className =
-    "video-menu";
+    "video-menu video-page-menu";
 
-  /*
-    IMPORTANT:
-    Do NOT use inline display here.
-    CSS controls hidden/show state.
-  */
+  menu.innerHTML =
+    "";
 
-  menu.style.position =
-    "relative";
-
-  menu.style.marginTop =
-    "5px";
-
-  menu.innerHTML = "";
-
-  actions.appendChild(menu);
+  actions.appendChild(
+    menu
+  );
 
   button.addEventListener(
     "click",
     event => {
+
       event.preventDefault();
       event.stopPropagation();
 
@@ -1163,23 +1427,27 @@ function createVideoPageMenu() {
 
 
 function openPageVideoMenu() {
+
   const menu =
     $("videoPageMenu");
 
-  if (!menu || !currentVideo) {
+  if (
+    !menu ||
+    !currentVideo
+  ) {
     return;
   }
 
   const wasOpen =
-    menu.classList.contains("show");
-
-  /*
-    Close all other menus first.
-  */
+    menu.classList.contains(
+      "show"
+    );
 
   closeAllVideoMenus();
 
-  menu.classList.remove("show");
+  menu.classList.remove(
+    "show"
+  );
 
   if (wasOpen) {
     return;
@@ -1198,7 +1466,10 @@ function openPageVideoMenu() {
             type="button"
             onclick="openEditVideo(window.currentVideo); closePageMenu();"
           >
-            ✏️ Edit
+            <span class="menu-action-icon">
+              ${ICONS.edit}
+            </span>
+            <span>Edit</span>
           </button>
 
           <button
@@ -1206,7 +1477,10 @@ function openPageVideoMenu() {
             class="danger"
             onclick="deleteVideo(window.currentVideo); closePageMenu();"
           >
-            🗑️ Delete
+            <span class="menu-action-icon">
+              ${ICONS.delete}
+            </span>
+            <span>Delete</span>
           </button>
         `
         : ""
@@ -1216,21 +1490,29 @@ function openPageVideoMenu() {
       type="button"
       onclick="openReport(window.currentVideo); closePageMenu();"
     >
-      🚩 Report
+      <span class="menu-action-icon">
+        ${ICONS.report}
+      </span>
+      <span>Report</span>
     </button>
   `;
 
-  menu.classList.add("show");
+  menu.classList.add(
+    "show"
+  );
 }
 
 
 function closePageMenu() {
+
   const menu =
     $("videoPageMenu");
 
   if (!menu) return;
 
-  menu.classList.remove("show");
+  menu.classList.remove(
+    "show"
+  );
 }
 
 
@@ -1238,13 +1520,18 @@ function closePageMenu() {
    EDIT VIDEO
 ========================================================= */
 
-function openEditVideo(video) {
+function openEditVideo(
+  video
+) {
+
   if (!video) return;
 
   if (!isVideoOwner(video)) {
+
     alert(
       "You can only edit your own videos."
     );
+
     return;
   }
 
@@ -1255,8 +1542,11 @@ function openEditVideo(video) {
     $("editVideoModal");
 
   if (!modal) {
+
     modal =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     modal.id =
       "editVideoModal";
@@ -1270,8 +1560,12 @@ function openEditVideo(video) {
         <button
           class="close-modal"
           onclick="closeEditVideo()"
+          aria-label="Close"
         >
-          ×
+          <svg viewBox="0 0 24 24">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
         </button>
 
         <h2>Edit Video</h2>
@@ -1336,19 +1630,26 @@ function openEditVideo(video) {
     video.description || "";
 
   $("editVideoCategory").value =
-    video.category || "Gaming";
+    video.category ||
+    "Gaming";
 
-  modal.classList.add("show");
+  modal.classList.add(
+    "show"
+  );
 }
 
 
 function closeEditVideo() {
+
   $("editVideoModal")
-    ?.classList.remove("show");
+    ?.classList.remove(
+      "show"
+    );
 }
 
 
 async function saveEditedVideo() {
+
   const modal =
     $("editVideoModal");
 
@@ -1359,14 +1660,20 @@ async function saveEditedVideo() {
     findVideo(id);
 
   if (!video) {
-    alert("Video not found.");
+
+    alert(
+      "Video not found."
+    );
+
     return;
   }
 
   if (!isVideoOwner(video)) {
+
     alert(
       "You can only edit your own videos."
     );
+
     return;
   }
 
@@ -1385,7 +1692,9 @@ async function saveEditedVideo() {
   saveVideos();
 
   try {
+
     if (firebaseReady()) {
+
       const fb =
         getFirebase();
 
@@ -1396,15 +1705,20 @@ async function saveEditedVideo() {
           String(video.id)
         ),
         {
-          title: video.title,
+          title:
+            video.title,
+
           description:
             video.description,
+
           category:
             video.category
         }
       );
     }
+
   } catch (error) {
+
     console.log(
       "Firebase edit sync:",
       error.message
@@ -1419,23 +1733,30 @@ async function saveEditedVideo() {
 
   if (
     currentVideo &&
-    String(currentVideo.id) ===
+    String(
+      currentVideo.id
+    ) ===
       String(video.id)
   ) {
+
     currentVideo =
       video;
 
     window.currentVideo =
       currentVideo;
 
-    updateVideoMeta(video);
+    updateVideoMeta(
+      video
+    );
 
     if ($("videoPageTitle")) {
+
       $("videoPageTitle").textContent =
         video.title;
     }
 
     if ($("videoDescription")) {
+
       $("videoDescription").textContent =
         video.description ||
         "No description.";
@@ -1448,13 +1769,18 @@ async function saveEditedVideo() {
    DELETE VIDEO
 ========================================================= */
 
-async function deleteVideo(video) {
+async function deleteVideo(
+  video
+) {
+
   if (!video) return;
 
   if (!isVideoOwner(video)) {
+
     alert(
       "You can only delete your own videos."
     );
+
     return;
   }
 
@@ -1470,12 +1796,15 @@ async function deleteVideo(video) {
   closeAllVideoMenus();
   closePageMenu();
 
-  video.deleted = true;
+  video.deleted =
+    true;
 
   saveVideos();
 
   try {
+
     if (firebaseReady()) {
+
       const fb =
         getFirebase();
 
@@ -1486,11 +1815,14 @@ async function deleteVideo(video) {
           String(video.id)
         ),
         {
-          deleted: true
+          deleted:
+            true
         }
       );
     }
+
   } catch (error) {
+
     console.log(
       "Firebase delete sync:",
       error.message
@@ -1499,21 +1831,34 @@ async function deleteVideo(video) {
 
   if (
     currentVideo &&
-    String(currentVideo.id) ===
+    String(
+      currentVideo.id
+    ) ===
       String(video.id)
   ) {
-    currentVideo = null;
-    window.currentVideo = null;
+
+    currentVideo =
+      null;
+
+    window.currentVideo =
+      null;
 
     if ($("mainVideo")) {
+
       $("mainVideo").pause();
-      $("mainVideo").removeAttribute("src");
+
+      $("mainVideo")
+        .removeAttribute(
+          "src"
+        );
+
       $("mainVideo").load();
     }
 
     showHome();
 
   } else {
+
     renderVideos(
       filterByCategory(videos)
     );
@@ -1525,7 +1870,10 @@ async function deleteVideo(video) {
    REPORT
 ========================================================= */
 
-function openReport(video) {
+function openReport(
+  video
+) {
+
   if (!video) return;
 
   closeAllVideoMenus();
@@ -1535,8 +1883,11 @@ function openReport(video) {
     $("reportModal");
 
   if (!modal) {
+
     modal =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     modal.id =
       "reportModal";
@@ -1550,8 +1901,12 @@ function openReport(video) {
         <button
           class="close-modal"
           onclick="closeReport()"
+          aria-label="Close"
         >
-          ×
+          <svg viewBox="0 0 24 24">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
         </button>
 
         <h2>Report Video</h2>
@@ -1584,19 +1939,26 @@ function openReport(video) {
   modal.dataset.videoId =
     video.id;
 
-  $("reportReason").value = "";
+  $("reportReason").value =
+    "";
 
-  modal.classList.add("show");
+  modal.classList.add(
+    "show"
+  );
 }
 
 
 function closeReport() {
+
   $("reportModal")
-    ?.classList.remove("show");
+    ?.classList.remove(
+      "show"
+    );
 }
 
 
 async function submitReport() {
+
   const modal =
     $("reportModal");
 
@@ -1608,9 +1970,11 @@ async function submitReport() {
       ?.value.trim();
 
   if (!reason) {
+
     alert(
       "Please write a reason."
     );
+
     return;
   }
 
@@ -1618,12 +1982,18 @@ async function submitReport() {
     findVideo(id);
 
   if (!video) {
-    alert("Video not found.");
+
+    alert(
+      "Video not found."
+    );
+
     return;
   }
 
   try {
+
     if (firebaseReady()) {
+
       const fb =
         getFirebase();
 
@@ -1652,12 +2022,13 @@ async function submitReport() {
     }
 
     alert(
-      "Report submitted successfully. ✅"
+      "Report submitted successfully."
     );
 
     closeReport();
 
   } catch (error) {
+
     console.error(error);
 
     alert(
@@ -1672,47 +2043,61 @@ async function submitReport() {
 ========================================================= */
 
 function searchVideos() {
+
   const query =
     $("searchInput")
       ?.value.trim()
-      .toLowerCase() || "";
+      .toLowerCase() ||
+    "";
 
   if (!query) {
+
     renderVideos(
       filterByCategory(videos)
     );
+
     return;
   }
 
   const result =
-    videos.filter(video => {
+    videos.filter(
+      video => {
 
-      if (
-        video.deleted ||
-        !isValidVideo(video)
-      ) {
-        return false;
+        if (
+          video.deleted ||
+          !isValidVideo(video)
+        ) {
+          return false;
+        }
+
+        const text = [
+          video.title,
+          video.creator,
+          video.description,
+          video.category
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return text.includes(
+          query
+        );
       }
+    );
 
-      const text = [
-        video.title,
-        video.creator,
-        video.description,
-        video.category
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return text.includes(query);
-    });
-
-  renderVideos(result);
+  renderVideos(
+    result
+  );
 }
 
 
-function filterByCategory(list) {
+function filterByCategory(
+  list
+) {
+
   if (
-    currentCategory === "All"
+    currentCategory ===
+    "All"
   ) {
     return list;
   }
@@ -1725,18 +2110,25 @@ function filterByCategory(list) {
 }
 
 
-function selectCategory(category) {
+function selectCategory(
+  category
+) {
+
   currentCategory =
     category || "All";
 
   document
-    .querySelectorAll(".category-btn")
+    .querySelectorAll(
+      ".category-btn"
+    )
     .forEach(button => {
+
       button.classList.toggle(
         "active",
         button.dataset.category ===
           currentCategory
       );
+
     });
 
   renderVideos(
@@ -1750,8 +2142,11 @@ function selectCategory(category) {
 ========================================================= */
 
 function openLogin() {
+
   $("loginModal")
-    ?.classList.add("show");
+    ?.classList.add(
+      "show"
+    );
 
   if ($("loginStatus")) {
     $("loginStatus").textContent =
@@ -1761,14 +2156,20 @@ function openLogin() {
 
 
 function closeLogin() {
+
   $("loginModal")
-    ?.classList.remove("show");
+    ?.classList.remove(
+      "show"
+    );
 }
 
 
 function openSignup() {
+
   $("signupModal")
-    ?.classList.add("show");
+    ?.classList.add(
+      "show"
+    );
 
   if ($("signupStatus")) {
     $("signupStatus").textContent =
@@ -1778,8 +2179,11 @@ function openSignup() {
 
 
 function closeSignup() {
+
   $("signupModal")
-    ?.classList.remove("show");
+    ?.classList.remove(
+      "show"
+    );
 }
 
 
@@ -1788,9 +2192,12 @@ function closeSignup() {
 ========================================================= */
 
 async function emailSignup() {
+
   if (!firebaseReady()) {
+
     $("signupStatus").textContent =
       "Firebase is not ready.";
+
     return;
   }
 
@@ -1814,8 +2221,10 @@ async function emailSignup() {
     !email ||
     !password
   ) {
+
     status.textContent =
       "Please fill all fields.";
+
     return;
   }
 
@@ -1823,6 +2232,7 @@ async function emailSignup() {
     "Creating account...";
 
   try {
+
     const fb =
       getFirebase();
 
@@ -1836,7 +2246,8 @@ async function emailSignup() {
     await fb.updateProfile(
       result.user,
       {
-        displayName: name
+        displayName:
+          name
       }
     );
 
@@ -1871,7 +2282,7 @@ async function emailSignup() {
     );
 
     status.textContent =
-      "Account successfully created! 🎉";
+      "Account successfully created!";
 
     setTimeout(
       closeSignup,
@@ -1879,6 +2290,7 @@ async function emailSignup() {
     );
 
   } catch (error) {
+
     console.error(error);
 
     status.textContent =
@@ -1893,9 +2305,12 @@ async function emailSignup() {
 ========================================================= */
 
 async function emailLogin() {
+
   if (!firebaseReady()) {
+
     $("loginStatus").textContent =
       "Firebase is not ready.";
+
     return;
   }
 
@@ -1911,8 +2326,10 @@ async function emailLogin() {
     $("loginStatus");
 
   if (!email || !password) {
+
     status.textContent =
       "Please enter email and password.";
+
     return;
   }
 
@@ -1920,6 +2337,7 @@ async function emailLogin() {
     "Logging in...";
 
   try {
+
     const fb =
       getFirebase();
 
@@ -1930,7 +2348,7 @@ async function emailLogin() {
     );
 
     status.textContent =
-      "Login successful! 👋";
+      "Login successful!";
 
     setTimeout(
       closeLogin,
@@ -1938,6 +2356,7 @@ async function emailLogin() {
     );
 
   } catch (error) {
+
     console.error(error);
 
     status.textContent =
@@ -1952,19 +2371,36 @@ async function emailLogin() {
 ========================================================= */
 
 async function googleLogin() {
+
   if (!firebaseReady()) {
+
     alert(
       "Firebase is not ready."
     );
+
     return;
   }
 
   try {
+
     const fb =
       getFirebase();
 
+    /*
+      IMPORTANT:
+      Use the provider already created
+      inside index.html.
+    */
+
     const provider =
-      new fb.GoogleAuthProvider();
+      fb.googleProvider;
+
+    if (!provider) {
+
+      throw new Error(
+        "Google provider is not available."
+      );
+    }
 
     const result =
       await fb.signInWithPopup(
@@ -1988,6 +2424,7 @@ async function googleLogin() {
       );
 
     if (!snap.exists()) {
+
       await fb.setDoc(
         profileRef,
         {
@@ -2026,6 +2463,7 @@ async function googleLogin() {
     closeSignup();
 
   } catch (error) {
+
     console.error(error);
 
     alert(
@@ -2040,19 +2478,27 @@ async function googleLogin() {
    PROFILE MENU
 ========================================================= */
 
-function toggleProfileMenu(event) {
+function toggleProfileMenu(
+  event
+) {
+
   if (event) {
     event.stopPropagation();
   }
 
   $("profileMenu")
-    ?.classList.toggle("show");
+    ?.classList.toggle(
+      "show"
+    );
 }
 
 
 function closeProfileMenu() {
+
   $("profileMenu")
-    ?.classList.remove("show");
+    ?.classList.remove(
+      "show"
+    );
 }
 
 
@@ -2061,25 +2507,39 @@ function closeProfileMenu() {
 ========================================================= */
 
 async function logout() {
+
   try {
+
     if (
       firebaseReady() &&
       getFirebase().signOut
     ) {
-      await getFirebase().signOut(
-        getFirebase().auth
-      );
+
+      await getFirebase()
+        .signOut(
+          getFirebase().auth
+        );
     }
+
   } catch (error) {
+
     console.error(error);
   }
 
-  currentUser = null;
-  currentProfile = null;
-  currentVideo = null;
+  currentUser =
+    null;
 
-  window.currentUser = null;
-  window.currentVideo = null;
+  currentProfile =
+    null;
+
+  currentVideo =
+    null;
+
+  window.currentUser =
+    null;
+
+  window.currentVideo =
+    null;
 
   closeProfileMenu();
   closePageMenu();
@@ -2103,8 +2563,13 @@ async function logout() {
 ========================================================= */
 
 async function openMyChannel() {
+
   if (!currentUser) {
-    alert("Please login first.");
+
+    alert(
+      "Please login first."
+    );
+
     return;
   }
 
@@ -2130,12 +2595,14 @@ async function openMyChannel() {
   }
 
   if ($("channelName")) {
+
     $("channelName").textContent =
       profile.channelName ||
       "My Channel";
   }
 
   if ($("channelUsername")) {
+
     $("channelUsername").textContent =
       profile.username
         ? "@" +
@@ -2144,6 +2611,7 @@ async function openMyChannel() {
   }
 
   if ($("channelBio")) {
+
     $("channelBio").textContent =
       profile.bio || "";
   }
@@ -2152,7 +2620,9 @@ async function openMyChannel() {
     $("channelLink");
 
   if (link) {
+
     if (profile.link) {
+
       link.href =
         normalizeLink(
           profile.link
@@ -2163,24 +2633,27 @@ async function openMyChannel() {
 
       link.style.display =
         "inline-block";
+
     } else {
+
       link.style.display =
         "none";
     }
   }
 
   const myVideos =
-    videos.filter(video =>
-      !video.deleted &&
-      isValidVideo(video) &&
-      (
-        video.ownerId ===
-          currentUser.uid ||
+    videos.filter(
+      video =>
+        !video.deleted &&
+        isValidVideo(video) &&
         (
-          !video.ownerId &&
-          isVideoOwner(video)
+          video.ownerId ===
+            currentUser.uid ||
+          (
+            !video.ownerId &&
+            isVideoOwner(video)
+          )
         )
-      )
     );
 
   renderChannelVideos(
@@ -2189,13 +2662,17 @@ async function openMyChannel() {
 }
 
 
-function renderChannelVideos(list) {
+function renderChannelVideos(
+  list
+) {
+
   const grid =
     $("channelVideoGrid");
 
   if (!grid) return;
 
-  grid.innerHTML = "";
+  grid.innerHTML =
+    "";
 
   const validList =
     Array.isArray(list)
@@ -2207,6 +2684,7 @@ function renderChannelVideos(list) {
       : [];
 
   if (!validList.length) {
+
     grid.innerHTML = `
       <div class="empty-message">
         <h3>No videos yet</h3>
@@ -2217,74 +2695,80 @@ function renderChannelVideos(list) {
     return;
   }
 
-  validList.forEach(video => {
+  validList.forEach(
+    video => {
 
-    const card =
-      document.createElement("div");
+      const card =
+        document.createElement(
+          "div"
+        );
 
-    card.className =
-      "video-card";
+      card.className =
+        "video-card";
 
-    const photo =
-      video.creatorPhoto ||
-      currentProfile?.photo ||
-      defaultProfile().photo;
+      const photo =
+        video.creatorPhoto ||
+        currentProfile?.photo ||
+        defaultProfile().photo;
 
-    card.innerHTML = `
-      <div class="thumbnail-wrapper">
+      card.innerHTML = `
+        <div class="thumbnail-wrapper">
 
-        <video
-          src="${escapeHtml(video.url)}"
-          preload="metadata"
-          muted
-          playsinline
-        ></video>
-
-      </div>
-
-      <div class="video-info">
-
-        <img
-          class="video-avatar"
-          src="${escapeHtml(photo)}"
-          alt=""
-        >
-
-        <div class="video-text">
-
-          <div class="video-title">
-            ${escapeHtml(
-              video.title ||
-              "Untitled"
-            )}
-          </div>
-
-          <div class="video-creator">
-            ${escapeHtml(
-              video.creator ||
-              currentProfile?.channelName ||
-              "User"
-            )}
-          </div>
-
-          <div class="video-meta">
-            ${formatViews(
-              video.views
-            )} views
-          </div>
+          <video
+            src="${escapeHtml(video.url)}"
+            preload="metadata"
+            muted
+            playsinline
+          ></video>
 
         </div>
 
-      </div>
-    `;
+        <div class="video-info">
 
-    card.addEventListener(
-      "click",
-      () => openVideo(video)
-    );
+          <img
+            class="video-avatar"
+            src="${escapeHtml(photo)}"
+            alt=""
+          >
 
-    grid.appendChild(card);
-  });
+          <div class="video-text">
+
+            <div class="video-title">
+              ${escapeHtml(
+                video.title ||
+                "Untitled"
+              )}
+            </div>
+
+            <div class="video-creator">
+              ${escapeHtml(
+                video.creator ||
+                currentProfile?.channelName ||
+                "User"
+              )}
+            </div>
+
+            <div class="video-meta">
+              ${formatViews(
+                video.views
+              )} views
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      card.addEventListener(
+        "click",
+        () => openVideo(video)
+      );
+
+      grid.appendChild(
+        card
+      );
+    }
+  );
 }
 
 
@@ -2293,10 +2777,13 @@ function renderChannelVideos(list) {
 ========================================================= */
 
 function openUpload() {
+
   if (!currentUser) {
+
     alert(
       "Please login first to upload a video."
     );
+
     return;
   }
 
@@ -2311,8 +2798,13 @@ function openUpload() {
 ========================================================= */
 
 async function uploadVideo() {
+
   if (!currentUser) {
-    alert("Please login first.");
+
+    alert(
+      "Please login first."
+    );
+
     return;
   }
 
@@ -2337,19 +2829,23 @@ async function uploadVideo() {
     $("uploadStatus");
 
   if (!file) {
+
     status.textContent =
       "Please select a video.";
+
     return;
   }
 
   if (!title) {
+
     status.textContent =
       "Please enter video title.";
+
     return;
   }
 
   status.textContent =
-    "Uploading video... ⏳";
+    "Uploading video...";
 
   try {
 
@@ -2379,6 +2875,7 @@ async function uploadVideo() {
       await response.json();
 
     if (!result.secure_url) {
+
       throw new Error(
         result.error?.message ||
         "Cloudinary upload failed."
@@ -2386,6 +2883,7 @@ async function uploadVideo() {
     }
 
     const newVideo = {
+
       id:
         Date.now().toString(),
 
@@ -2430,7 +2928,6 @@ async function uploadVideo() {
         new Date().toISOString()
     };
 
-
     videos = [
       newVideo,
       ...videos
@@ -2438,9 +2935,10 @@ async function uploadVideo() {
 
     saveVideos();
 
-
     if (firebaseReady()) {
+
       try {
+
         const fb =
           getFirebase();
 
@@ -2454,6 +2952,7 @@ async function uploadVideo() {
         );
 
       } catch (firebaseError) {
+
         console.error(
           "Firestore video save failed:",
           firebaseError
@@ -2461,28 +2960,33 @@ async function uploadVideo() {
       }
     }
 
-
     status.textContent =
-      "Video uploaded successfully! 🎉";
+      "Video uploaded successfully!";
 
     if ($("videoFile")) {
-      $("videoFile").value = "";
-    }
-
-    if ($("videoTitle")) {
-      $("videoTitle").value = "";
-    }
-
-    if ($("videoDescriptionInput")) {
-      $("videoDescriptionInput").value =
+      $("videoFile").value =
         "";
     }
 
-    setTimeout(() => {
-      showHome();
-    }, 900);
+    if ($("videoTitle")) {
+      $("videoTitle").value =
+        "";
+    }
+
+    if ($("videoDescriptionInput")) {
+      $("videoDescriptionInput")
+        .value = "";
+    }
+
+    setTimeout(
+      () => {
+        showHome();
+      },
+      900
+    );
 
   } catch (error) {
+
     console.error(error);
 
     status.textContent =
@@ -2499,7 +3003,10 @@ async function uploadVideo() {
    LIKES
 ========================================================= */
 
-function updateLikeUI(video) {
+function updateLikeUI(
+  video
+) {
+
   if (!video) return;
 
   const liked =
@@ -2507,27 +3014,44 @@ function updateLikeUI(video) {
       String(video.id)
     ];
 
-  if ($("likeButton")) {
-    $("likeButton").textContent =
-      liked
-        ? "❤️ Liked"
-        : "👍 Like";
-  }
+  const likeButton =
+    $("likeButton");
 
-  if ($("likeCount")) {
-    $("likeCount").textContent =
-      formatViews(
-        video.likes || 0
-      );
+  if (likeButton) {
+
+    likeButton.innerHTML = `
+      ${
+        liked
+          ? ICONS.liked
+          : ICONS.like
+      }
+
+      <span>
+        ${
+          liked
+            ? "Liked"
+            : "Like"
+        }
+      </span>
+
+      <span id="likeCount">
+        ${formatViews(
+          video.likes || 0
+        )}
+      </span>
+    `;
   }
 }
 
 
 async function toggleLike() {
+
   if (!currentVideo) return;
 
   const id =
-    String(currentVideo.id);
+    String(
+      currentVideo.id
+    );
 
   if (likedVideos[id]) {
 
@@ -2545,7 +3069,8 @@ async function toggleLike() {
 
   } else {
 
-    likedVideos[id] = true;
+    likedVideos[id] =
+      true;
 
     currentVideo.likes =
       (
@@ -2563,6 +3088,7 @@ async function toggleLike() {
     );
 
   if (index !== -1) {
+
     videos[index].likes =
       currentVideo.likes;
   }
@@ -2589,6 +3115,7 @@ async function toggleLike() {
 ========================================================= */
 
 async function shareVideo() {
+
   if (!currentVideo) return;
 
   const url =
@@ -2597,6 +3124,7 @@ async function shareVideo() {
   try {
 
     if (navigator.share) {
+
       await navigator.share({
         title:
           currentVideo.title,
@@ -2615,10 +3143,11 @@ async function shareVideo() {
     );
 
     alert(
-      "Video link copied! ✅"
+      "Video link copied!"
     );
 
   } catch (error) {
+
     console.log(error);
   }
 }
@@ -2628,7 +3157,10 @@ async function shareVideo() {
    COMMENTS
 ========================================================= */
 
-function loadComments(videoId) {
+function loadComments(
+  videoId
+) {
+
   const list =
     $("commentsList");
 
@@ -2639,9 +3171,11 @@ function loadComments(videoId) {
       String(videoId)
     ] || [];
 
-  list.innerHTML = "";
+  list.innerHTML =
+    "";
 
   if (!videoComments.length) {
+
     list.innerHTML = `
       <div class="empty-message">
         No comments yet.
@@ -2651,51 +3185,59 @@ function loadComments(videoId) {
     return;
   }
 
-  videoComments.forEach(comment => {
+  videoComments.forEach(
+    comment => {
 
-    const item =
-      document.createElement("div");
+      const item =
+        document.createElement(
+          "div"
+        );
 
-    item.className =
-      "comment";
+      item.className =
+        "comment";
 
-    const photo =
-      comment.photo ||
-      `https://ui-avatars.com/api/?name=${encodeURIComponent(
-        comment.name ||
-        "User"
-      )}&background=random`;
+      const photo =
+        comment.photo ||
+        `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          comment.name ||
+          "User"
+        )}&background=random`;
 
-    item.innerHTML = `
-      <img
-        src="${escapeHtml(photo)}"
-        alt=""
-      >
+      item.innerHTML = `
+        <img
+          src="${escapeHtml(photo)}"
+          alt=""
+        >
 
-      <div>
+        <div>
 
-        <div class="comment-name">
-          ${escapeHtml(
-            comment.name ||
-            "User"
-          )}
+          <div class="comment-name">
+            ${escapeHtml(
+              comment.name ||
+              "User"
+            )}
+          </div>
+
+          <div class="comment-text">
+            ${escapeHtml(
+              comment.text ||
+              ""
+            )}
+          </div>
+
         </div>
+      `;
 
-        <div class="comment-text">
-          ${escapeHtml(
-            comment.text || ""
-          )}
-        </div>
-
-      </div>
-    `;
-
-    list.appendChild(item);
-  });
+      list.appendChild(
+        item
+      );
+    }
+  );
 }
 
 
 function addComment() {
+
   if (!currentVideo) return;
 
   const input =
@@ -2707,13 +3249,17 @@ function addComment() {
   if (!text) return;
 
   const videoId =
-    String(currentVideo.id);
+    String(
+      currentVideo.id
+    );
 
   if (!comments[videoId]) {
-    comments[videoId] = [];
+    comments[videoId] =
+      [];
   }
 
   comments[videoId].push({
+
     name:
       currentProfile?.channelName ||
       currentUser?.displayName ||
@@ -2732,7 +3278,8 @@ function addComment() {
 
   saveComments();
 
-  input.value = "";
+  input.value =
+    "";
 
   loadComments(
     videoId
@@ -2750,9 +3297,8 @@ async function loadVideosFromFirebase() {
     return firebaseLoading;
   }
 
-  if (
-    !firebaseReady()
-  ) {
+  if (!firebaseReady()) {
+
     renderVideos(
       filterByCategory(videos)
     );
@@ -2788,12 +3334,10 @@ async function loadVideosFromFirebase() {
             firestoreVideos.push({
               id:
                 docSnap.id,
-
               ...data
             });
           }
         );
-
 
         const localMap =
           new Map();
@@ -2811,7 +3355,6 @@ async function loadVideosFromFirebase() {
             );
           }
         );
-
 
         firestoreVideos.forEach(
           firestoreVideo => {
@@ -2860,7 +3403,6 @@ async function loadVideosFromFirebase() {
           }
         );
 
-
         videos =
           Array.from(
             localMap.values()
@@ -2903,6 +3445,7 @@ async function loadVideosFromFirebase() {
 ========================================================= */
 
 async function migrateLocalVideos() {
+
   if (
     !currentUser ||
     !firebaseReady()
@@ -2913,7 +3456,9 @@ async function migrateLocalVideos() {
   const fb =
     getFirebase();
 
-  for (const video of videos) {
+  for (
+    const video of videos
+  ) {
 
     if (
       video.deleted ||
@@ -2981,17 +3526,20 @@ function startFirebaseAuth() {
       window.currentUser =
         currentUser;
 
-
       if (currentUser) {
 
         if ($("authButtons")) {
-          $("authButtons").style.display =
-            "none";
+
+          $("authButtons")
+            .style.display =
+              "none";
         }
 
         if ($("profileArea")) {
-          $("profileArea").style.display =
-            "block";
+
+          $("profileArea")
+            .style.display =
+              "block";
         }
 
         await loadUserProfile();
@@ -3000,25 +3548,31 @@ function startFirebaseAuth() {
 
       } else {
 
-        currentProfile = null;
+        currentProfile =
+          null;
 
         if ($("authButtons")) {
-          $("authButtons").style.display =
-            "flex";
+
+          $("authButtons")
+            .style.display =
+              "flex";
         }
 
         if ($("profileArea")) {
-          $("profileArea").style.display =
-            "none";
+
+          $("profileArea")
+            .style.display =
+              "none";
         }
       }
 
-
       await loadVideosFromFirebase();
 
-
       if (!appStarted) {
-        appStarted = true;
+
+        appStarted =
+          true;
+
         showHome();
       }
 
@@ -3087,7 +3641,9 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       event => {
+
         event?.stopPropagation();
+
         openEditProfile();
       }
     );
@@ -3096,7 +3652,9 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       event => {
+
         event?.stopPropagation();
+
         openMyChannel();
       }
     );
@@ -3105,7 +3663,9 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       event => {
+
         event?.stopPropagation();
+
         openUpload();
       }
     );
@@ -3114,7 +3674,9 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       event => {
+
         event?.stopPropagation();
+
         logout();
       }
     );
@@ -3142,11 +3704,15 @@ function setupEvents() {
         if (!file) return;
 
         const url =
-          URL.createObjectURL(file);
+          URL.createObjectURL(
+            file
+          );
 
         if ($("editProfilePreview")) {
-          $("editProfilePreview").src =
-            url;
+
+          $("editProfilePreview")
+            .src =
+              url;
         }
       }
     );
@@ -3156,6 +3722,7 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       () => {
+
         $("profileImageFile")
           ?.click();
       }
@@ -3185,11 +3752,11 @@ function setupEvents() {
       event => {
 
         if (
-          event.key === "Enter"
+          event.key ===
+          "Enter"
         ) {
           searchVideos();
         }
-
       }
     );
 
@@ -3197,7 +3764,9 @@ function setupEvents() {
   /* CATEGORIES */
 
   document
-    .querySelectorAll(".category-btn")
+    .querySelectorAll(
+      ".category-btn"
+    )
     .forEach(button => {
 
       button.addEventListener(
@@ -3207,10 +3776,8 @@ function setupEvents() {
           selectCategory(
             button.dataset.category
           );
-
         }
       );
-
     });
 
 
@@ -3241,11 +3808,11 @@ function setupEvents() {
       event => {
 
         if (
-          event.key === "Enter"
+          event.key ===
+          "Enter"
         ) {
           addComment();
         }
-
       }
     );
 
@@ -3256,12 +3823,22 @@ function setupEvents() {
     ?.addEventListener(
       "click",
       () => {
-        currentVideo = null;
-        window.currentVideo = null;
+
+        currentVideo =
+          null;
+
+        window.currentVideo =
+          null;
 
         if ($("mainVideo")) {
+
           $("mainVideo").pause();
-          $("mainVideo").removeAttribute("src");
+
+          $("mainVideo")
+            .removeAttribute(
+              "src"
+            );
+
           $("mainVideo").load();
         }
 
@@ -3269,11 +3846,13 @@ function setupEvents() {
       }
     );
 
+
   $("channelBackButton")
     ?.addEventListener(
       "click",
       showHome
     );
+
 
   $("uploadBackButton")
     ?.addEventListener(
@@ -3294,7 +3873,6 @@ function setupEvents() {
         "click",
         closeLogin
       );
-
     });
 
 
@@ -3310,7 +3888,6 @@ function setupEvents() {
         "click",
         closeSignup
       );
-
     });
 
 
@@ -3326,14 +3903,15 @@ function setupEvents() {
         "click",
         closeEditProfile
       );
-
     });
 
 
   /* MODALS */
 
   document
-    .querySelectorAll(".modal")
+    .querySelectorAll(
+      ".modal"
+    )
     .forEach(modal => {
 
       modal.addEventListener(
@@ -3341,16 +3919,16 @@ function setupEvents() {
         event => {
 
           if (
-            event.target === modal
+            event.target ===
+            modal
           ) {
+
             modal.classList.remove(
               "show"
             );
           }
-
         }
       );
-
     });
 
 
@@ -3368,6 +3946,7 @@ function setupEvents() {
           ".video-menu"
         )
       ) {
+
         closeAllVideoMenus();
       }
 
@@ -3379,6 +3958,7 @@ function setupEvents() {
           "#videoPageMenu"
         )
       ) {
+
         closePageMenu();
       }
 
@@ -3387,9 +3967,9 @@ function setupEvents() {
           "#profileArea"
         )
       ) {
+
         closeProfileMenu();
       }
-
     }
   );
 }
@@ -3428,12 +4008,6 @@ window.submitReport =
 
 window.closePageMenu =
   closePageMenu;
-
-/*
-  IMPORTANT:
-  Don't store currentVideo as a one-time snapshot.
-  Keep it synchronized.
-*/
 
 window.currentVideo =
   null;
