@@ -223,38 +223,47 @@
       id="videoGrid"
     ></div>
 
-    <!-- Search-engine friendly introduction -->
+
+    <!-- ================= ABOUT MINITUBE ================= -->
 
     <section class="seo-content">
 
-      <h2>Discover videos on MiniTube</h2>
+      <h2>Welcome to MiniTube</h2>
 
       <p>
-        MiniTube is a video sharing platform designed for watching,
-        discovering and sharing videos online. Explore different
-        categories and find content that interests you.
+        MiniTube is a growing video-sharing platform made for discovering,
+        watching and sharing content you enjoy. Whether you're interested
+        in gaming, education, Islamic content, sports, music or
+        entertainment, MiniTube brings different types of videos together
+        in one simple place.
       </p>
 
-      <h2>Explore MiniTube categories</h2>
+      <h2>Explore. Watch. Discover.</h2>
 
       <p>
-        Browse Gaming, Islamic, Education, Entertainment, Sports,
-        News and Music videos. Use the search feature to quickly
-        find videos and discover new creators.
+        Explore different categories, search for videos and discover new
+        creators. MiniTube is designed to make finding interesting videos
+        simple, enjoyable and easy for everyone.
       </p>
 
-      <h2>Watch and share videos</h2>
+      <h2>Share Your Creativity</h2>
 
       <p>
-        MiniTube lets viewers watch videos, interact with creators,
-        leave comments and share interesting content with others.
-        Creators can also upload their own videos and build their
-        channels on the platform.
+        Have something interesting to share? Creators can upload their own
+        videos, create their channel and share their content with the
+        MiniTube community.
+      </p>
+
+      <p>
+        <strong>MiniTube — Watch, Discover & Share.</strong>
       </p>
 
     </section>
 
   </section>
+
+
+  <!-- ================= VIDEO PAGE ================= -->
 
   <section
     id="videoPage"
@@ -353,6 +362,7 @@
 
     </div>
 
+
     <div class="creator-box">
 
       <img
@@ -371,10 +381,12 @@
 
     </div>
 
+
     <div
       class="description-box"
       id="videoDescription"
     ></div>
+
 
     <div class="comments-section">
 
@@ -400,6 +412,9 @@
     </div>
 
   </section>
+
+
+  <!-- ================= CHANNEL PAGE ================= -->
 
   <section
     id="channelPage"
@@ -467,6 +482,9 @@
     ></div>
 
   </section>
+
+
+  <!-- ================= UPLOAD PAGE ================= -->
 
   <section
     id="uploadPage"
@@ -580,6 +598,9 @@
 
 </main>
 
+
+<!-- ================= EDIT PROFILE ================= -->
+
 <div
   class="modal"
   id="editProfileModal"
@@ -681,6 +702,9 @@
 
 </div>
 
+
+<!-- ================= LOGIN ================= -->
+
 <div
   class="modal"
   id="loginModal"
@@ -751,6 +775,9 @@
   </div>
 
 </div>
+
+
+<!-- ================= SIGN UP ================= -->
 
 <div
   class="modal"
@@ -833,6 +860,9 @@
 
 </div>
 
+
+<!-- ================= FIREBASE ================= -->
+
 <script type="module">
 
   import {
@@ -866,6 +896,7 @@
     increment
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+
   const firebaseConfig = {
     apiKey: "AIzaSyBBc_Ihgyl0-P7u_K6p0GKXkVpT2v5674Q",
     authDomain: "minitube-9317a.firebaseapp.com",
@@ -875,6 +906,7 @@
     appId: "1:176876768704:web:051bd6a6ba27325e22cc25"
   };
 
+
   const app = initializeApp(firebaseConfig);
 
   const auth = getAuth(app);
@@ -882,6 +914,7 @@
   const db = getFirestore(app);
 
   const googleProvider = new GoogleAuthProvider();
+
 
   window.firebaseFunctions = {
 
@@ -921,6 +954,7 @@
   };
 
 </script>
+
 
 <script src="script.js"></script>
 
