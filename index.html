@@ -11,50 +11,114 @@
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header>
 
-  <div class="logo">▶ MiniTube</div>
+  <div class="logo">
+    <span class="logo-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8 5.2v13.6L19 12 8 5.2z"></path>
+      </svg>
+    </span>
+    <span>MiniTube</span>
+  </div>
 
   <div class="search-area">
+
     <input
       type="text"
       id="searchInput"
-      placeholder="Search MiniTube..."
+      placeholder="Search"
+      autocomplete="off"
     >
-    <button id="searchButton">🔍</button>
+
+    <button id="searchButton" aria-label="Search">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="10.8" cy="10.8" r="6.3"></circle>
+        <path d="M16 16l5 5"></path>
+      </svg>
+    </button>
+
   </div>
 
+
+  <!-- AUTH BUTTONS -->
+
   <div class="auth-buttons" id="authButtons">
-    <button id="loginButton">Login</button>
-    <button id="signupButton">Sign Up</button>
+
+    <button id="loginButton">
+      Sign in
+    </button>
+
+    <button id="signupButton">
+      Create account
+    </button>
+
   </div>
+
+
+  <!-- PROFILE -->
 
   <div class="profile-area" id="profileArea" style="display:none;">
 
-    <button class="profile-button" id="profileButton">
-      <img id="headerProfilePhoto"
-           src="https://ui-avatars.com/api/?name=User"
-           alt="Profile">
+    <button
+      class="profile-button"
+      id="profileButton"
+      aria-label="Profile"
+    >
+      <img
+        id="headerProfilePhoto"
+        src=""
+        alt="Profile"
+      >
     </button>
+
 
     <div class="profile-menu" id="profileMenu">
 
       <button id="editProfileButton">
-        ✏️ Edit Profile
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 20h4L19 9l-4-4L4 16v4z"></path>
+            <path d="M13.5 6.5l4 4"></path>
+          </svg>
+        </span>
+        Edit profile
       </button>
 
       <button id="myChannelButton">
-        👤 My Channel
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="3.2"></circle>
+            <path d="M5 20c.7-3.8 3-5.7 7-5.7s6.3 1.9 7 5.7"></path>
+          </svg>
+        </span>
+        My channel
       </button>
 
       <button id="uploadButton">
-        ⬆️ Upload Video
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 16V4"></path>
+            <path d="M7 9l5-5 5 5"></path>
+            <path d="M5 20h14"></path>
+          </svg>
+        </span>
+        Upload video
       </button>
 
       <button id="logoutButton">
-        🚪 Logout
+        <span class="menu-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M10 5H5v14h5"></path>
+            <path d="M14 8l4 4-4 4"></path>
+            <path d="M18 12H9"></path>
+          </svg>
+        </span>
+        Log out
       </button>
 
     </div>
@@ -64,9 +128,11 @@
 </header>
 
 
-<!-- ================= CATEGORIES ================= -->
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
 
-<div class="categories">
+<nav class="categories">
 
   <button class="category-btn active" data-category="All">
     All
@@ -100,306 +166,469 @@
     Music
   </button>
 
-</div>
+</nav>
 
 
-<!-- ================= HOME ================= -->
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
-<main id="homePage">
+<main>
 
-  <section class="hero">
 
-    <h1>Welcome to MiniTube 🎬</h1>
+  <!-- ===================================================
+       HOME
+  ==================================================== -->
 
-    <p>
-      Watch, upload and share your favorite videos.
-    </p>
+  <section id="homePage">
+
+    <div class="hero">
+
+      <div class="hero-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M8 5.2v13.6L19 12 8 5.2z"></path>
+        </svg>
+      </div>
+
+      <div>
+        <h1>Welcome to MiniTube</h1>
+        <p>
+          Watch, discover and share amazing videos.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div
+      class="video-grid"
+      id="videoGrid"
+    ></div>
 
   </section>
 
-  <div id="videoGrid" class="video-grid"></div>
-
-</main>
 
 
-<!-- ================= VIDEO PAGE ================= -->
+  <!-- ===================================================
+       VIDEO PAGE
+  ==================================================== -->
 
-<main id="videoPage" class="video-page">
+  <section
+    id="videoPage"
+    class="video-page"
+  >
 
-  <button id="backHomeButton">
-    ← Back
-  </button>
+    <button id="backHomeButton" class="back-button">
 
-  <br><br>
+      <svg viewBox="0 0 24 24">
+        <path d="M19 12H5"></path>
+        <path d="M11 18l-6-6 6-6"></path>
+      </svg>
 
-  <div class="video-player-box">
+      <span>Back</span>
 
-    <video
-      id="mainVideo"
-      controls
-      playsinline
-    ></video>
-
-  </div>
-
-  <h1
-    id="videoPageTitle"
-    class="video-page-title"
-  ></h1>
-
-  <div
-    id="videoPageMeta"
-    class="video-page-meta"
-  ></div>
-
-  <div class="video-actions">
-
-    <button id="likeButton">
-      👍 Like <span id="likeCount">0</span>
     </button>
 
-    <button id="shareButton">
-      🔗 Share
-    </button>
 
-    <a
-      id="downloadButton"
-      href="#"
-      download
-      target="_blank"
-    >
-      ⬇️ Download
-    </a>
+    <div class="video-player-box">
 
-  </div>
+      <video
+        id="mainVideo"
+        controls
+        playsinline
+      ></video>
 
-  <div class="creator-box">
-
-    <img
-      id="creatorPhoto"
-      src="https://ui-avatars.com/api/?name=User"
-      alt="Creator"
-    >
-
-    <div>
-      <strong id="creatorName"></strong>
-      <div id="creatorUsername"></div>
     </div>
 
-  </div>
 
-  <div
-    id="videoDescription"
-    class="description-box"
-  ></div>
+    <h1
+      id="videoPageTitle"
+      class="video-page-title"
+    ></h1>
 
 
-  <!-- COMMENTS -->
+    <div
+      id="videoPageMeta"
+      class="video-page-meta"
+    ></div>
 
-  <section class="comments-section">
 
-    <h2>Comments</h2>
+    <!-- ACTIONS -->
 
-    <div class="comment-input-area">
+    <div class="video-actions">
 
-      <input
-        id="commentInput"
-        type="text"
-        placeholder="Write a comment..."
+      <button id="likeButton">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M7 10v10H4V10h3z"></path>
+          <path d="M7 10l4-7c.4-.7 1.5-.4 1.5.4V8h5.2c1.3 0 2.1 1.2 1.7 2.4l-1.5 6.3c-.3 1.1-1.2 1.8-2.3 1.8H7"></path>
+        </svg>
+
+        <span>Like</span>
+
+        <span id="likeCount">0</span>
+
+      </button>
+
+
+      <button id="shareButton">
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="18" cy="5" r="2.5"></circle>
+          <circle cx="6" cy="12" r="2.5"></circle>
+          <circle cx="18" cy="19" r="2.5"></circle>
+          <path d="M8.3 10.8l7.4-4.5"></path>
+          <path d="M8.3 13.2l7.4 4.5"></path>
+        </svg>
+
+        <span>Share</span>
+
+      </button>
+
+
+      <a
+        id="downloadButton"
+        href="#"
+        download
       >
 
-      <button id="commentButton">
-        Comment
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4v11"></path>
+          <path d="M7 11l5 5 5-5"></path>
+          <path d="M5 20h14"></path>
+        </svg>
+
+        <span>Download</span>
+
+      </a>
+
+
+      <button
+        class="video-more-page-button"
+        id="videoPageMoreButton"
+        aria-label="More options"
+      >
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="5" cy="12" r="1.7"></circle>
+          <circle cx="12" cy="12" r="1.7"></circle>
+          <circle cx="19" cy="12" r="1.7"></circle>
+        </svg>
+
       </button>
 
     </div>
 
-    <div id="commentsList"></div>
 
-  </section>
+    <!-- CREATOR -->
 
-</main>
-
-
-<!-- ================= CHANNEL ================= -->
-
-<main id="channelPage" class="channel-page">
-
-  <button id="channelBackButton">
-    ← Back
-  </button>
-
-  <br><br>
-
-  <div class="channel-header">
-
-    <div class="channel-profile">
+    <div class="creator-box">
 
       <img
-        id="channelPhoto"
-        src="https://ui-avatars.com/api/?name=User"
-        alt="Channel"
+        id="creatorPhoto"
+        src=""
+        alt="Creator"
       >
 
       <div>
 
-        <div
-          id="channelName"
-          class="channel-name"
-        ></div>
+        <strong id="creatorName"></strong>
 
-        <div
-          id="channelUsername"
-          class="channel-username"
-        ></div>
-
-        <div
-          id="channelBio"
-          class="channel-bio"
-        ></div>
-
-        <a
-          id="channelLink"
-          class="channel-link"
-          href="#"
-          target="_blank"
-        ></a>
+        <div id="creatorUsername"></div>
 
       </div>
 
     </div>
 
-  </div>
 
-  <h2>My Videos</h2>
+    <!-- DESCRIPTION -->
 
-  <br>
-
-  <div
-    id="channelVideoGrid"
-    class="video-grid"
-  ></div>
-
-</main>
+    <div
+      class="description-box"
+      id="videoDescription"
+    ></div>
 
 
-<!-- ================= UPLOAD PAGE ================= -->
+    <!-- COMMENTS -->
 
-<main id="uploadPage" class="upload-page">
+    <div class="comments-section">
 
-  <button id="uploadBackButton">
-    ← Back
-  </button>
+      <h2>Comments</h2>
 
-  <br><br>
+      <div class="comment-input-area">
 
-  <h2>Upload Video 🎬</h2>
+        <input
+          id="commentInput"
+          type="text"
+          placeholder="Add a comment..."
+          autocomplete="off"
+        >
 
-  <label class="upload-label">
-    Video File
-  </label>
+        <button id="commentButton">
+          Comment
+        </button>
 
-  <input
-    type="file"
-    id="videoFile"
-    class="upload-input"
-    accept="video/*"
+      </div>
+
+      <div id="commentsList"></div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- ===================================================
+       CHANNEL PAGE
+  ==================================================== -->
+
+  <section
+    id="channelPage"
+    class="channel-page"
   >
-
-  <label class="upload-label">
-    Title
-  </label>
-
-  <input
-    type="text"
-    id="videoTitle"
-    class="upload-input"
-    placeholder="Video title"
-  >
-
-  <label class="upload-label">
-    Description
-  </label>
-
-  <textarea
-    id="videoDescriptionInput"
-    class="upload-textarea"
-    placeholder="Video description"
-  ></textarea>
-
-  <label class="upload-label">
-    Category
-  </label>
-
-  <select
-    id="videoCategory"
-    class="upload-select"
-  >
-
-    <option value="Gaming">Gaming</option>
-    <option value="Islamic">Islamic</option>
-    <option value="Education">Education</option>
-    <option value="Entertainment">Entertainment</option>
-    <option value="Sports">Sports</option>
-    <option value="News">News</option>
-    <option value="Music">Music</option>
-
-  </select>
-
-  <button
-    id="uploadVideoButton"
-    class="upload-button"
-  >
-    Upload Video
-  </button>
-
-  <div id="uploadStatus"></div>
-
-</main>
-
-
-<!-- ================= EDIT PROFILE MODAL ================= -->
-
-<div
-  id="editProfileModal"
-  class="modal"
->
-
-  <div class="modal-box profile-edit-box">
 
     <button
-      class="close-modal"
-      id="closeEditProfile"
+      id="channelBackButton"
+      class="back-button"
     >
-      ×
+
+      <svg viewBox="0 0 24 24">
+        <path d="M19 12H5"></path>
+        <path d="M11 18l-6-6 6-6"></path>
+      </svg>
+
+      <span>Back</span>
+
     </button>
 
+
+    <div class="channel-header">
+
+      <div class="channel-profile">
+
+        <img
+          id="channelPhoto"
+          src=""
+          alt="Channel"
+        >
+
+        <div>
+
+          <div
+            id="channelName"
+            class="channel-name"
+          ></div>
+
+          <div
+            id="channelUsername"
+            class="channel-username"
+          ></div>
+
+          <div
+            id="channelBio"
+            class="channel-bio"
+          ></div>
+
+          <a
+            id="channelLink"
+            class="channel-link"
+            href="#"
+            target="_blank"
+            rel="noopener"
+          ></a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="video-grid"
+      id="channelVideoGrid"
+    ></div>
+
+  </section>
+
+
+
+  <!-- ===================================================
+       UPLOAD PAGE
+  ==================================================== -->
+
+  <section
+    id="uploadPage"
+    class="upload-page"
+  >
+
+    <button
+      id="uploadBackButton"
+      class="back-button"
+    >
+
+      <svg viewBox="0 0 24 24">
+        <path d="M19 12H5"></path>
+        <path d="M11 18l-6-6 6-6"></path>
+      </svg>
+
+      <span>Back</span>
+
+    </button>
+
+
+    <div class="upload-header">
+
+      <div class="upload-title-icon">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5v-11z"></path>
+          <path d="M10 8.5l6 3.5-6 3.5v-7z"></path>
+        </svg>
+
+      </div>
+
+      <div>
+        <h2>Upload Video</h2>
+        <p>Share your video with MiniTube.</p>
+      </div>
+
+    </div>
+
+
+    <label class="upload-label">
+      Video file
+    </label>
+
+    <input
+      id="videoFile"
+      class="upload-input"
+      type="file"
+      accept="video/*"
+    >
+
+
+    <label class="upload-label">
+      Title
+    </label>
+
+    <input
+      id="videoTitle"
+      class="upload-input"
+      type="text"
+      placeholder="Enter video title"
+    >
+
+
+    <label class="upload-label">
+      Description
+    </label>
+
+    <textarea
+      id="videoDescriptionInput"
+      class="upload-textarea"
+      placeholder="Tell viewers about your video..."
+    ></textarea>
+
+
+    <label class="upload-label">
+      Category
+    </label>
+
+    <select
+      id="videoCategory"
+      class="upload-select"
+    >
+
+      <option value="Gaming">Gaming</option>
+      <option value="Islamic">Islamic</option>
+      <option value="Education">Education</option>
+      <option value="Entertainment">Entertainment</option>
+      <option value="Sports">Sports</option>
+      <option value="News">News</option>
+      <option value="Music">Music</option>
+
+    </select>
+
+
+    <button
+      id="uploadVideoButton"
+      class="upload-button"
+    >
+
+      <svg viewBox="0 0 24 24">
+        <path d="M12 16V4"></path>
+        <path d="M7 9l5-5 5 5"></path>
+        <path d="M5 20h14"></path>
+      </svg>
+
+      <span>Upload Video</span>
+
+    </button>
+
+
+    <div
+      id="uploadStatus"
+      class="upload-status"
+    ></div>
+
+  </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     EDIT PROFILE MODAL
+===================================================== -->
+
+<div
+  class="modal"
+  id="editProfileModal"
+>
+
+  <div class="modal-box">
+
+    <button
+      id="closeEditProfile"
+      class="close-modal"
+      aria-label="Close"
+    >
+      <svg viewBox="0 0 24 24">
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6L6 18"></path>
+      </svg>
+    </button>
+
+
     <h2>Edit Profile</h2>
+
 
     <div class="edit-photo-area">
 
       <img
         id="editProfilePreview"
         class="edit-profile-preview"
-        src="https://ui-avatars.com/api/?name=User"
-        alt="Profile"
+        src=""
+        alt="Profile preview"
       >
 
+      <button
+        id="changePhotoButton"
+        class="change-photo-btn"
+      >
+        Change photo
+      </button>
+
       <input
-        type="file"
         id="profileImageFile"
+        type="file"
         accept="image/*"
         hidden
       >
 
-      <button
-        class="change-photo-btn"
-        id="changePhotoButton"
-      >
-        Change Photo
-      </button>
-
     </div>
+
 
     <label class="edit-label">
       Username
@@ -409,19 +638,19 @@
       id="editUsername"
       class="edit-input"
       type="text"
-      placeholder="@username"
     >
 
+
     <label class="edit-label">
-      Channel Name
+      Channel name
     </label>
 
     <input
       id="editChannelName"
       class="edit-input"
       type="text"
-      placeholder="Channel name"
     >
+
 
     <label class="edit-label">
       Bio
@@ -430,8 +659,8 @@
     <textarea
       id="editBio"
       class="edit-bio"
-      placeholder="Tell people about yourself..."
     ></textarea>
+
 
     <label class="edit-label">
       Link
@@ -441,68 +670,101 @@
       id="editLink"
       class="edit-input"
       type="text"
-      placeholder="https://..."
+      placeholder="https://example.com"
     >
+
 
     <button
       id="saveProfileButton"
       class="save-profile-btn"
     >
-      Save Profile
+      Save changes
     </button>
 
-    <div id="profileSaveStatus"></div>
+
+    <div
+      id="profileSaveStatus"
+      class="profile-save-status"
+    ></div>
 
   </div>
 
 </div>
 
 
-<!-- ================= LOGIN MODAL ================= -->
+
+<!-- =====================================================
+     LOGIN MODAL
+===================================================== -->
 
 <div
-  id="loginModal"
   class="modal"
+  id="loginModal"
 >
 
-  <div class="modal-box auth-box">
+  <div class="modal-box">
 
     <button
-      class="close-modal"
       id="closeLogin"
+      class="close-modal"
+      aria-label="Close"
     >
-      ×
+      <svg viewBox="0 0 24 24">
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6L6 18"></path>
+      </svg>
     </button>
 
-    <h2>Login</h2>
+
+    <div class="modal-heading-icon">
+
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="3"></circle>
+        <path d="M5 20c.8-3.8 3.1-5.7 7-5.7s6.2 1.9 7 5.7"></path>
+      </svg>
+
+    </div>
+
+
+    <h2>Sign in</h2>
+
 
     <input
       id="loginEmail"
       class="auth-input"
       type="email"
       placeholder="Email"
+      autocomplete="email"
     >
+
 
     <input
       id="loginPassword"
       class="auth-input"
       type="password"
       placeholder="Password"
+      autocomplete="current-password"
     >
+
 
     <button
       id="emailLoginButton"
       class="auth-main-button"
     >
-      Login
+      Sign in
     </button>
+
 
     <button
       id="googleLoginButton"
       class="google-button"
     >
+
+      <span class="google-icon">G</span>
       Continue with Google
+
     </button>
+
 
     <div
       id="loginStatus"
@@ -514,58 +776,90 @@
 </div>
 
 
-<!-- ================= SIGNUP MODAL ================= -->
+
+<!-- =====================================================
+     SIGNUP MODAL
+===================================================== -->
 
 <div
-  id="signupModal"
   class="modal"
+  id="signupModal"
 >
 
-  <div class="modal-box auth-box">
+  <div class="modal-box">
 
     <button
-      class="close-modal"
       id="closeSignup"
+      class="close-modal"
+      aria-label="Close"
     >
-      ×
+      <svg viewBox="0 0 24 24">
+        <path d="M6 6l12 12"></path>
+        <path d="M18 6L6 18"></path>
+      </svg>
     </button>
 
-    <h2>Create Account</h2>
+
+    <div class="modal-heading-icon">
+
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="3"></circle>
+        <path d="M5 20c.8-3.8 3.1-5.7 7-5.7s6.2 1.9 7 5.7"></path>
+        <path d="M19 4v5"></path>
+        <path d="M16.5 6.5h5"></path>
+      </svg>
+
+    </div>
+
+
+    <h2>Create account</h2>
+
 
     <input
       id="signupName"
       class="auth-input"
       type="text"
-      placeholder="Your name"
+      placeholder="Name"
+      autocomplete="name"
     >
+
 
     <input
       id="signupEmail"
       class="auth-input"
       type="email"
       placeholder="Email"
+      autocomplete="email"
     >
+
 
     <input
       id="signupPassword"
       class="auth-input"
       type="password"
       placeholder="Password"
+      autocomplete="new-password"
     >
+
 
     <button
       id="emailSignupButton"
       class="auth-main-button"
     >
-      Sign Up
+      Create account
     </button>
+
 
     <button
       id="googleSignupButton"
       class="google-button"
     >
+
+      <span class="google-icon">G</span>
       Continue with Google
+
     </button>
+
 
     <div
       id="signupStatus"
@@ -577,7 +871,10 @@
 </div>
 
 
-<!-- Firebase -->
+
+<!-- =====================================================
+     FIREBASE
+===================================================== -->
 
 <script type="module">
 
@@ -587,10 +884,10 @@
 
   import {
     getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
     onAuthStateChanged,
     signOut,
     updateProfile
@@ -598,17 +895,18 @@
 
   import {
     getFirestore,
+    doc,
+    setDoc,
+    getDoc,
     collection,
     addDoc,
     getDocs,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
-    increment,
     query,
     orderBy,
-    serverTimestamp
+    serverTimestamp,
+    updateDoc,
+    deleteDoc,
+    increment
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -637,27 +935,39 @@
     db,
     googleProvider,
 
-    signInWithPopup,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+
+    signInWithPopup,
+
     onAuthStateChanged,
+
     signOut,
+
     updateProfile,
+
+    doc,
+    setDoc,
+    getDoc,
 
     collection,
     addDoc,
     getDocs,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
-    increment,
+
     query,
     orderBy,
-    serverTimestamp
+
+    serverTimestamp,
+
+    updateDoc,
+    deleteDoc,
+
+    increment
+
   };
 
 </script>
+
 
 <script src="script.js"></script>
 
